@@ -1,0 +1,117 @@
+{% load static %}
+
+<header class="header" id="site-header">
+  <div class="header-container header-top">
+    <div class="logo-wrapper">
+      <a href="" class="header-logo">Luvia Home</a>
+    </div>
+
+    <nav class="user-nav">
+      <ul class="header-menu">
+        {% if not user.is_authenticated %}
+          <li class="header-item">
+            <a href="">Carrinho</a>
+          </li>
+          <li class="header-item">
+            <a href="{% url 'cadastro_login:login' %}">Faça seu login</a>
+          </li>
+          <li class="header-item">
+            <a href="{% url 'cadastro_login:cadastro' %}">Cadastro</a>
+          </li>
+        {% else %}
+          <li class="header-item">
+            <a href="">Carrinho</a>
+          </li>
+          <li class="header-item">
+            <a href="">Meus pedidos</a>
+          </li>
+          <li class="header-item">
+            <a href="{% url 'cadastro_login:atualizar_cadastro' %}">Minhas informações</a>
+          </li>
+          <li class="header-item">
+            <a href="{% url 'cadastro_login:lista_ends' %}">Endereços</a>
+          </li>
+          <li class="header-item">
+            <a href="{% url 'cadastro_login:login' %}">Logout</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+    <div id="hamburger" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="header-divider"></div>
+
+  <div class="header-container header-bottom">
+    <div class="first-info">
+      {% if user.is_authenticated %}
+        <span><a href="{% url 'cadastro_login:criar_end' %}">Informe seu cep</a></span>
+        <span>|</span>
+      {% else %}
+        <span><a href="{% url 'cadastro_login:login' %}">Informe seu cep</a></span>
+        <span>|</span>
+      {% endif %}
+    </div>
+    <nav class="categories-nav">
+      
+      <ul class="header-menu">
+        <li class="header-item"><a href="{% url 'produtos:produto' 'panelas' %}">Panelas</a></li>
+        <li class="header-item"><a href="{% url 'produtos:produto' 'conjunto-de-facas' %}">Facas</a></li>
+        <li class="header-item"><a href="{% url 'produtos:produto' 'eletroportateis' %}">Eletroportáteis</a></li>
+        <li class="header-item"><a href="{% url 'produtos:produto' 'conjunto-de-panelas' %}">Conjunto de Panelas</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      
+      const header = document.querySelector('.header');
+      const hamburger = document.getElementById('hamburger');
+      let lastScroll = 0;
+
+      // 1. HEADER AUTO-HIDE (Ocultar ao scrollar)
+      window.addEventListener('scroll', () => {
+          if (!header) return;
+          const current = window.pageYOffset;
+          
+          // Só esconde a barra se o menu mobile não estiver aberto
+          if (current > lastScroll && current > 80 && !header.classList.contains('menu-open')) {
+              header.classList.add('hide');
+          } else {
+              header.classList.remove('hide');
+          }
+          lastScroll = current;
+      });
+
+      // 2. LÓGICA DO MENU MOBILE
+      if (hamburger && header) {
+          hamburger.addEventListener('click', function (evento) {
+              evento.stopPropagation();
+              header.classList.toggle('menu-open');
+              
+              // Trava a tela de fundo para o usuário não scrollar o site enquanto o menu está aberto
+              if(header.classList.contains('menu-open')){
+                  document.body.style.overflow = 'hidden';
+              } else {
+                  document.body.style.overflow = '';
+              }
+          });
+
+          // Fecha o menu se o usuário clicar fora da área dele
+          document.addEventListener('click', function (evento) {
+              if (header.classList.contains('menu-open') && !header.contains(evento.target)) {
+                  header.classList.remove('menu-open');
+                  document.body.style.overflow = '';
+              }
+          });
+      }
+  });
+</script>
+{% endblock extra_scripts %}

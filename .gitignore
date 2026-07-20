@@ -1,0 +1,96 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+sdist/
+develop-eggs/
+.installed.cfg
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Coverage/Tests
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.pytest_cache/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Project specific
+node_modules/
+bower_components/
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Payment API keys and secrets
+*.pem
+*.key
+*.crt
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+static/
+test_db.sqlite3
+db.sqlite3-shm
+db.sqlite3-wal
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+
+#Cache e celery
+*.pid
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+celerybeat.pid
+*.rdb
+
+#Arquivos temp:
+*.tmp
+*.temp
+
+#Arquivos de backapp:
+*.bak
+*.backup
+
+#Arquivos de pagamentos
+.env.payments
+.env.production
+
+coisasimportantes.txt

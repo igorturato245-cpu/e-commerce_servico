@@ -1,0 +1,170 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+  <!-- ============================== -->
+  <!-- SEÇÃO PRODUTO (Refatorada e JS Corrigido) -->
+  <!-- ============================== -->
+  <section class="detalhe-section">
+    <div class="detalhe-container">
+      <!-- FOTO -->
+      <div class="detalhe-foto-box">
+        <button class="seta-img seta-img-esquerda" id="botaoesquerdoimg">‹</button>
+        {% for foto in produto.carrosel.all %}
+          <img src="{{foto.foto.url}}" alt="{{produto.name}}" class="carrossel-img {% if forloop.first %}ativo{% endif %}">
+        {% endfor %}
+        <button class="seta-img seta-img-direita" id="botaodireitoimg">›</button>
+      </div>
+
+      <!-- INFO PRINCIPAL (Grid) -->
+      <div class="detalhe-grid">
+        
+        <!-- NOME DO PRODUTO -->
+        <div class="detalhe-box">
+          <h1 class="detalhe-nome">
+            {% block title %} {{produto.name}} | Luvia Home{% endblock title %}
+          </h1>
+        </div>
+
+        <!-- DESCRIÇÃO -->
+        <div class="detalhe-box">
+          <div class="detalhe-descricao">
+          {% block meta_description %}{{ produto.descricao|truncatewords:160 }}{% endblock meta_description %}
+          </div>
+        </div>
+
+        <!-- PREÇO -->
+        {% if produto.preco_promocional %}
+        <div class="detalhe-box">
+          <span class="detalhe-preco">{{ produto.preco_promocional}}</span>
+        </div>
+        {% else %}
+        <div class="detalhe-box">
+          <span class="detalhe-preco">{{ produto.preco}}</span>
+        </div>
+        {% endif %}
+
+        <!-- QUANTIDADE -->
+        <div class="detalhe-box">
+          <span>Quantidade</span>
+
+          <div class="detalhe-qtd-controle">
+            <!-- 🔥 Recoloquei a classe "quantidade-btn" pro JS funcionar -->
+            <button type="button" class="detalhe-qtd-btn quantidade-btn" data-acao="menos">-</button>
+            
+            <!-- 🔥 Recoloquei a classe "quantidade-num" pro JS funcionar -->
+            <span class="detalhe-qtd-num quantidade-num">1</span>
+            
+            <!-- 🔥 Recoloquei a classe "quantidade-btn" pro JS funcionar -->
+            <button type="button" class="detalhe-qtd-btn quantidade-btn" data-acao="mais">+</button>
+          </div>
+
+          <!-- quantidade real enviada (Exatamente igual ao antigo) -->
+          <input type="hidden" id="quantidade-input" value="1" />
+        </div>
+
+        <!-- BOTÃO COMPRAR -->
+        <div class="detalhe-box">
+          <form method="post" action="" style="width: 100%;">
+            {% csrf_token %}
+            <!-- 🔥 Voltei para o id="quantidade-input" pro JS conseguir atualizar esse valor antes de enviar -->
+            <input type="hidden" name="quantidade" id="quantidade-input" value="1">
+            <input type="hidden" name="acao" value="comprar" />
+            <button type="submit" class="detalhe-btn-comprar">Comprar</button>
+          </form>
+        </div>
+
+        <!-- BOTÃO ADICIONAR AO CARRINHO -->
+        <div class="detalhe-box">
+          <form method="post" action="" style="width: 100%;">
+            {% csrf_token %}
+            <!-- 🔥 Voltei para o id="quantidade-input" -->
+            <input type="hidden" name="quantidade" id="quantidade-input" value="1">
+            <input type="hidden" name="acao" value="continuar" />
+            <button type="submit" class="detalhe-btn-comprar">Adicionar ao carrinho</button>
+          </form>
+        </div>
+        
+      </div> <!-- fim da grid -->
+
+      <!-- AVISO -->
+      <span class="detalhe-aviso">Produto não é entregue pela nossa loja.</span>
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ==========================================
+    // 1. CÓDIGO DA QUANTIDADE (Que você já tinha)
+    // ==========================================
+    const numEl = document.querySelector(".quantidade-num");
+    const inputQtds = document.querySelectorAll("#quantidade-input");
+    const btns = document.querySelectorAll(".quantidade-btn");
+    let quantidade = 1;
+
+    btns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const acao = btn.dataset.acao;
+            if (acao === "mais" && quantidade < 99) quantidade++;
+            if (acao === "menos" && quantidade > 1) quantidade--;
+
+            if (numEl) numEl.textContent = quantidade;
+
+            inputQtds.forEach(input => {
+                input.value = quantidade;
+            });
+        });
+    });
+
+    // ==========================================
+    // 2. CÓDIGO DO CARROSSEL (Novo)
+    // ==========================================
+    const imagens = document.querySelectorAll(".carrossel-img");
+    const btnEsquerda = document.getElementById("botaoesquerdoimg");
+    const btnDireita = document.getElementById("botaodireitoimg");
+    
+    let indexAtual = 0; // Começa na primeira foto (índice 0)
+
+    // Se o produto tiver 1 foto ou nenhuma, esconde as setas para não ficarem inúteis
+    if (imagens.length <= 1) {
+        if(btnEsquerda) btnEsquerda.style.display = 'none';
+        if(btnDireita) btnDireita.style.display = 'none';
+        return; 
+    }
+
+    // Função que mostra a imagem baseada no número (index)
+    function mostrarImagem(index) {
+        // Primeiro, tira a classe 'ativo' de TODAS as fotos
+        imagens.forEach(img => img.classList.remove("ativo"));
+        
+        // Depois, coloca a classe 'ativo' SÓ na foto do momento
+        imagens[index].classList.add("ativo");
+    }
+
+    // Clicar na seta Direita
+    btnDireita.addEventListener("click", function() {
+        indexAtual++; // Soma 1
+        
+        // Se passar da última foto, volta pra primeira (0)
+        if (indexAtual >= imagens.length) {
+            indexAtual = 0; 
+        }
+        mostrarImagem(indexAtual);
+    });
+
+    // Clicar na seta Esquerda
+    btnEsquerda.addEventListener("click", function() {
+        indexAtual--; // Subtrai 1
+        
+        // Se tentar voltar antes da primeira foto, vai lá pra última
+        if (indexAtual < 0) {
+            indexAtual = imagens.length - 1; 
+        }
+        mostrarImagem(indexAtual);
+    });
+
+});
+</script>
+{% endblock extra_scripts %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+        {% include "global/partials/_head.html" %}
+    </head>
+
+    <body>
+        {% include "global/partials/_header.html" %}
+
+        <main>
+            
+            {% block content %}{% endblock content %}
+
+        </main>
+
+        {% include "global/partials/_footer.html" %}
+
+        {% block extra_scripts %}{% endblock extra_scripts %}
+    </body>
+
+</html>

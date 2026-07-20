@@ -1,0 +1,64 @@
+{% extends "global/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="secao-produtos">
+    <div class="produtos-container">
+        <h2 class="produtos-titulo">Ofertas do dia</h2>
+
+        <div class="produtos-grid">
+            {% for produto in ofertas_do_dia %}
+            <div class="produto-card">
+                <div class="produto-img">
+                    <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug  %}">
+                        {% if produto.imagem %}
+                            <img src="{{ produto.imagem.url }}" alt="{{ produto.name }}">
+                        {% elif produto.imagem_url %}
+                            <img src="{{ produto.imagem_url }}" alt="{{ produto.name }}">
+                        {% else %}
+                            <img src="" alt="{{ produto.name }}">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="produto-info-index">
+                    <h3 class="produto-nome-index">
+                        <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug  %}">{{ produto.name }}</a>
+                    </h3>
+                    <div class="produto-preco-index">
+                        <a href="">{{ produto.get_preco }}</a>
+                    </div>
+                    {% if produto.preco_promocional %}
+                        <div class="produto-preco-antigo">
+                            <a href="">{{ produto.preco }}</a>
+                        </div>
+                    {% endif %}
+                    <div class="produto-desc"><a href="">{{ produto.descrixcao|truncatechars:160 }}</a></div>
+
+                    <div class="produto-rating">
+                        {% with avaliacao=produto.avaliation_product.first %}
+                            {% if avaliacao %}
+                                {% for i in avaliacao.estrelas_cheias %}
+                                    <i class="fa-solid fa-star star-icon"></i>
+                                {% endfor %}
+                                {% if avaliacao.tem_meia %}
+                                    <i class="fa-solid fa-star-half-stroke star-icon"></i>
+                                {% endif %}
+                                {% for i in avaliacao.estrelas_vazias %}
+                                    <i class="fa-regular fa-star star-icon"></i>
+                                {% endfor %}
+                                <div class="avaliacao">{{ avaliacao.media_avaliacoes|floatformat:1 }}</div>
+                            {% else %}
+                                <span>Sem avaliações</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p>Nenhum produto encontrado.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

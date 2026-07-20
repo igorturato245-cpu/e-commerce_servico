@@ -1,0 +1,110 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+{% load static %}
+
+<!-- CONTEÚDO PRINCIPAL (Landing Page Premium) -->
+<main class="premium-home">
+
+    <!-- 1. HERO: Ofertas do Dia -->
+    <section class="hero-section reveal-on-scroll">
+        <!-- Substitua a URL pela sua imagem ou tag static do Django -->
+        <div class="hero-bg" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1556910103-1c02745a872f?q=80&w=2000&auto=format&fit=crop');"></div>
+        <div class="hero-content">
+            <h1 class="reveal-up delay-1">Ofertas Exclusivas</h1>
+            <p class="reveal-up delay-2">Renove seu espaço com o que há de melhor em design e performance. Tempo limitado.</p>
+            <a href="{% url 'produtos:ofertas' %}" class="btn-premium reveal-up delay-3">Explorar Ofertas</a>
+        </div>
+    </section>
+
+    <!-- 2. SEÇÃO: Panelas Avulsas (Texto Esquerda, Foto Direita) -->
+    <section class="story-section bg-light reveal-on-scroll">
+        <div class="story-container">
+            <div class="story-text">
+                <span class="category-label reveal-up">O Dia a Dia</span>
+                <h2 class="reveal-up delay-1">Panelas Avulsas.</h2>
+                <p class="reveal-up delay-2">Monte seu arsenal de acordo com a sua necessidade. Panelas com alta condutividade térmica e design minimalista, perfeitas para preparos rápidos ou receitas demoradas.</p>
+                <a href="{% url 'produtos:produto' 'panelas' %}" class="link-arrow reveal-up delay-3">Descobrir Panelas <span>&rarr;</span></a>
+            </div>
+            <div class="story-image reveal-left delay-2">
+                <img src="https://images.unsplash.com/photo-1520981825232-ece5fae45120?q=80&w=800&auto=format&fit=crop" alt="Panelas Avulsas">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SEÇÃO: Conjunto de Panelas (Cinza, Foto Esquerda, Texto Direita) -->
+    <section class="story-section bg-gray reveal-on-scroll">
+        <div class="story-container reverse-layout">
+            <div class="story-image reveal-right delay-1">
+                <img src="https://images.unsplash.com/photo-1584990347449-a6e0ee2845a1?q=80&w=1000&auto=format&fit=crop" alt="Conjunto de Panelas Premium">
+            </div>
+            <div class="story-text">
+                <span class="category-label reveal-up">Coleção Signature</span>
+                <h2 class="reveal-up delay-1">A arte em conjunto.</h2>
+                <p class="reveal-up delay-2">Por que escolher uma se você pode ter a sinfonia completa? Nossos conjuntos foram pensados para entregar versatilidade máxima na sua cozinha com um visual padronizado e elegante.</p>
+                <a href="{% url 'produtos:produto' 'conjunto-de-panelas' %}" class="link-arrow reveal-up delay-3">Ver Conjuntos <span>&rarr;</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. SEÇÃO: Facas (Fundo Escuro, Texto Esquerda, Foto Direita) -->
+    <section class="story-section bg-dark reveal-on-scroll">
+        <div class="story-container">
+            <div class="story-text text-light">
+                <span class="category-label reveal-up">Precisão Absoluta</span>
+                <h2 class="reveal-up delay-1">O fio da perfeição.</h2>
+                <p class="reveal-up delay-2">Forjadas em aço de alta qualidade e desenhadas para o balanço ideal na sua mão. As facas da Luvia Home não apenas cortam, elas deslizam. Eleve seu padrão no preparo de qualquer receita.</p>
+                <a href="{% url 'produtos:produto' 'conjunto-de-facas' %}" class="link-arrow text-light reveal-up delay-3">Descobrir Facas <span>&rarr;</span></a>
+            </div>
+            <div class="story-image reveal-left delay-2">
+                <img src="https://images.unsplash.com/photo-1593618998160-e34014e67546?q=80&w=800&auto=format&fit=crop" alt="Facas de Precisão" class="img-tall">
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. SEÇÃO: Eletroportáteis (Layout Centralizado Amplo, Fundo Claro) -->
+    <section class="story-section bg-light reveal-on-scroll">
+        <div class="story-container center-layout">
+            <div class="story-text text-center">
+                <span class="category-label reveal-up">Tecnologia e Design</span>
+                <h2 class="reveal-up delay-1">Sua rotina, simplificada.</h2>
+                <p class="reveal-up delay-2">Eletroportáteis que não precisam ser escondidos no armário. Estética impecável que complementa sua bancada, com a potência necessária para acelerar suas manhãs.</p>
+                <a href="{% url 'produtos:produto' 'eletroportateis' %}" class="btn-premium dark reveal-up delay-3">Ver Linha Completa</a>
+            </div>
+            
+            <div class="story-image-wide reveal-up delay-2">
+                <img src="https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?q=80&w=1600&auto=format&fit=crop" alt="Eletroportáteis Modernos">
+            </div>
+        </div>
+    </section>
+
+</main>
+{% endblock content %}
+
+<!-- CORRIGIDO PARA PLURAL: extra_scripts -->
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const sectionsToReveal = document.querySelectorAll('.reveal-on-scroll');
+
+    const observerOptions = {
+        root: null,
+        threshold: 0.15, // Reduzi levemente para ativar a animação um pouco antes (melhor para celular)
+        rootMargin: "0px 0px -20px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    sectionsToReveal.forEach(section => {
+        revealObserver.observe(section);
+    });
+});
+</script>
+{% endblock extra_scripts %}

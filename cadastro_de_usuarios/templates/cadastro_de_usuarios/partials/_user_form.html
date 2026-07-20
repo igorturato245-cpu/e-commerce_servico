@@ -1,0 +1,82 @@
+{% if form_cadastro.errors %}
+    <div class="alert alert-danger">
+        <p>Corrija os erros abaixo:</p>
+    </div>
+{% endif %}
+
+{% for field in form_cadastro%}
+  <div>
+    <label>{{ field.label }}</label>
+    {{ field }}
+    {{ field.errors }}
+    {% if field.help_text %}
+      <p>{{ field.help_text }}</p>
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% for field in perfil_cadastro%}
+  <div>
+    <label>{{ field.label }}</label>
+    {{ field }}
+    {{ field.errors }}
+    {% if field.help_text %}
+      <p>{{ field.help_text }}</p>
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% if form.non_field_errors %}
+  <div>
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+{% block extra_scripts %}
+<script>
+    // Funções de Máscara
+    const mCPF = (value) => {
+        return value
+            .replace(/\D/g, '') // Remove tudo o que não é dígito
+            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto após os 3 primeiros dígitos
+            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto após os 6 primeiros dígitos
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+    }
+
+    const mTelefone = (value) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/^(\d{2})(\d)/g, '($1) $2') // Coloca parênteses no DDD
+            .replace(/(\d{5})(\d)/, '$1-$2') // Coloca hífen no número (formato 99999-9999)
+            .replace(/(-\d{4})\d+?$/, '$1'); // Limita a quantidade de números
+    }
+
+    const mData = (value) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(\d{2})(\d)/, '$1/$2') // Coloca barra após o dia
+            .replace(/(\d{2})(\d)/, '$1/$2') // Coloca barra após o mês
+            .replace(/(\/\d{4})\d+?$/, '$1'); // Limita a 4 dígitos no ano
+    }
+
+    // Função genérica para aplicar a máscara
+    function applyMask(inputName, maskFunction) {
+        // Seleciona o input pelo atributo 'name' (o Django gera name="cpf", name="telefone", etc)
+        const input = document.querySelector(`input[name="${inputName}"]`);
+        
+        if (input) {
+            input.addEventListener('input', (e) => {
+                e.target.value = maskFunction(e.target.value);
+            }, false);
+        }
+    }
+
+    // Executa as máscaras ao carregar o DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        // Ajuste os nomes abaixo conforme os nomes dos campos no seu models.py/forms.py
+        applyMask('cpf', mCPF);
+        applyMask('telefone', mTelefone);
+        applyMask('data_de_nascimento', mData); // ou 'nascimento', 'data', verifique no seu model Perfil
+    });
+</script>
+{% endblock extra_scripts %}
