@@ -1,6 +1,8 @@
 {% extends "global/base.html" %}
 {% load static %}
 
+{% load filters %}
+
 {% block content %}
 <section class="secao-produtos">
     <div class="produtos-container">
@@ -25,11 +27,11 @@
                         <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug  %}">{{ produto.name }}</a>
                     </h3>
                     <div class="produto-preco-index">
-                        <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug  %}">{{ produto.get_preco }}</a>
+                        <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug  %}">{{ produto.get_preco|formata_preco }}</a>
                     </div>
                     {% if produto.preco_promocional %}
                         <div class="produto-preco-antigo">
-                            <a href="">{{ produto.preco }}</a>
+                            <a href="">{{ produto.preco|formata_preco }}</a>
                         </div>
                     {% endif %}
                     <div class="produto-desc"><a href="">{{ produto.descrixcao|truncatechars:160 }}</a></div>

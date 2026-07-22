@@ -1615,6 +1615,468 @@ Endereços
 
 
 
+
+
+
+
+
+/* ==========================================
+   BASE DO CARRINHO (Com Variáveis)
+========================================== */
+.carrinho {
+    min-height: 100vh;
+    background: var(--bg-gray); /* Fundo cinza para os cards brancos saltarem aos olhos */
+    padding: var(--section-padding) 20px;
+    color: var(--text-color);
+}
+
+.carrinho-titulo {
+    font-size: var(--title-size);
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: var(--text-darkest);
+}
+
+/* ==========================================
+   LAYOUT
+========================================== */
+.carrinho-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: flex-start;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* ==========================================
+   CARD GENÉRICO (Para Lista e Resumo)
+========================================== */
+.carrinho-card {
+    background: var(--bg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: 30px;
+}
+
+/* ==========================================
+   HEADER (Títulos da Tabela)
+========================================== */
+.carrinho-header {
+    display: grid;
+    grid-template-columns: 80px 2fr 130px 120px 100px;
+    gap: 15px;
+    font-weight: 700;
+    padding-bottom: 15px;
+    border-bottom: var(--border-light);
+    color: var(--text-darkest);
+}
+
+/* ==========================================
+   ITEM DA LISTA
+========================================== */
+.carrinho-item {
+    display: grid;
+    grid-template-columns: 80px 2fr 130px 120px 100px;
+    gap: 15px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: var(--border-light);
+}
+
+.carrinho-item > div {
+    text-align: left;
+}
+
+/* ===== PRODUTO INFO ===== */
+.item-imagem img {
+    width: 70px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+}
+
+.item-nome {
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-darkest);
+}
+
+.item-info {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.item-vendedor {
+    font-size: 12px;
+    color: #777;
+}
+
+/* ===== QUANTIDADE ===== */
+.quantidade-box {
+    background: var(--bg-card-light);
+    padding: 6px 8px;
+    border-radius: var(--radius-md);
+    width: fit-content;
+    border: var(--border-light);
+}
+
+.qtd-label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.qtd-controle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.qtd-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.qtd-btn:hover,
+.qtd-btn:active {
+    background: #e0e0e0;
+    transform: scale(0.95);
+}
+
+.qtd-num {
+    font-weight: 700;
+    color: var(--text-darkest);
+}
+
+/* ===== PREÇO / REMOVER ===== */
+.item-preco {
+    font-weight: 700;
+    text-align: right;
+    color: var(--text-darkest);
+}
+
+.item-remover {
+    text-align: right;
+    margin-right: auto;
+}
+
+.item-remover button {
+    background: none;
+    border: none;
+    color: #c00;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: opacity var(--transition-fast);
+}
+
+.item-remover button:hover,
+.item-remover button:active {
+    opacity: 0.6;
+}
+
+/* ==========================================
+   ENTREGA / CEP
+========================================== */
+.entrega-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.entrega-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: var(--border-light);
+}
+
+.entrega-form button {
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--text-darkest);
+    color: var(--bg);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.entrega-form button:hover,
+.entrega-form button:active {
+    background: var(--text-color);
+    transform: scale(0.98);
+}
+
+/* ==========================================
+   RESUMO DO PEDIDO
+========================================== */
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    color: var(--text-color);
+}
+
+.resumo-final {
+    border-top: var(--border-light);
+    margin-top: 10px;
+}
+
+.resumo-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-darkest);
+}
+
+/* ==========================================
+   CARRINHO VAZIO
+========================================== */
+.carrinho-vazio {
+    min-height: 100vh;
+    background: var(--bg-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.carrinho-vazio-box {
+    background: var(--bg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: 40px 50px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+}
+
+.carrinho-vazio-box h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--text-darkest);
+}
+
+.carrinho-vazio-box p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.btn-voltar {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    background: var(--text-darkest);
+    color: var(--bg);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all var(--transition-fast);
+}
+
+.btn-voltar:hover,
+.btn-voltar:active {
+    background: var(--text-color);
+    transform: scale(0.98);
+}
+
+/* ==========================================
+   MEDIA QUERIES (A MÁGICA RESPONSIVA)
+========================================== */
+
+/* Laptop & Tablet Landscape */
+@media (max-width: 1024px) {
+    .carrinho-container {
+        grid-template-columns: 1fr; /* Coloca o resumo embaixo da lista */
+    }
+    .carrinho-vazio-box { padding: 35px 40px; }
+    .carrinho-vazio-box h2 { font-size: 22px; }
+}
+
+/* Tablet Portrait */
+@media (max-width: 768px) {
+    .carrinho-header { display: none; } /* Oculta a barra de títulos */
+    
+    .carrinho-item {
+        /* Muda a grade para empilhar de forma mais inteligente */
+        grid-template-columns: 80px 1fr 100px;
+        grid-template-areas:
+            "img info remover"
+            "img qtd preco";
+        gap: 15px;
+    }
+
+    /* Mapeando os 5 itens da div do HTML para as áreas do Grid acima */
+    .carrinho-item > div:nth-child(1) { grid-area: img; }
+    .carrinho-item > div:nth-child(2) { grid-area: info; }
+    .carrinho-item > div:nth-child(3) { grid-area: qtd; }
+    .carrinho-item > div:nth-child(4) { grid-area: preco; text-align: right; }
+    .carrinho-item > div:nth-child(5) { grid-area: remover; text-align: right; }
+}
+
+/* Mobile Padrão */
+@media (max-width: 600px) {
+    .carrinho { padding: 20px 10px; }
+    .carrinho-card { padding: 20px; }
+    .carrinho-vazio-box { padding: 30px 25px; }
+    .carrinho-vazio-box h2 { font-size: 20px; }
+    .btn-voltar { width: 100%; text-align: center; }
+}
+/* ==========================================
+   MOBILE PEQUENO (O Pedido dos 480px!)
+========================================== */
+@media (max-width: 480px) {
+    .carrinho-titulo {
+        font-size: 24px;
+        text-align: center;
+    }
+    
+    .carrinho-card {
+        padding: 15px;
+        border-radius: var(--radius-lg);
+    }
+
+    /* Transforma a linha do carrinho num Card Vertical bonito */
+    .carrinho-item {
+        display: grid;
+        grid-template-columns: 80px 1fr; 
+        grid-template-rows: auto auto auto; 
+        gap: 10px;
+        position: relative; 
+        padding: 20px 0;
+    }
+
+    /* 1. Imagem na esquerda */
+    .carrinho-item > div:nth-child(1) { 
+        grid-area: auto; 
+        grid-column: 1; 
+        grid-row: 1 / span 3; 
+        align-self: start; 
+    }
+
+    /* 2. Textos (Nome/Vendedor) na direita */
+    .carrinho-item > div:nth-child(2) { 
+        grid-area: auto; 
+        grid-column: 2; 
+        grid-row: 1; 
+        padding-right: 65px; 
+        text-align: left !important;
+    }
+
+    /* 3. e 4. Garantia contra Esticamento (Qtd e Preço) */
+    .carrinho-item > div:nth-child(3),
+    .carrinho-item > div:nth-child(4) { 
+        grid-area: auto; 
+        grid-column: 2; 
+        justify-self: start !important; 
+        
+        /* 🔥 A MÁGICA: Substitui o 100% por max-content 🔥 */
+        width: max-content !important; 
+        text-align: left !important; 
+    }
+
+    .carrinho-item > div:nth-child(3) {
+        grid-row: 2; 
+        margin-top: 8px; 
+    }
+
+    .carrinho-item > div:nth-child(4) {
+        grid-row: 3; 
+        margin-top: 10px; 
+        font-size: 18px; 
+    }
+
+    /* 🔥 TRAVA ABSOLUTA DE SEGURANÇA NA CAIXA 🔥 */
+    .quantidade-box {
+        width: max-content !important;
+        min-width: 0 !important;
+        display: inline-block !important;
+    }
+
+    /* 5. Elemento do Canto Superior Direito (Preço no seu caso) */
+    .carrinho-item > div:nth-child(5) { 
+        grid-area: auto; 
+        position: absolute;
+        top: 18px; 
+        right: 0px; 
+        text-align: right;
+    }
+
+    /* Formulario de Entrega em coluna */
+    .entrega-form {
+        flex-direction: column;
+    }
+    .entrega-form button {
+        width: 100%;
+        padding: 14px;
+    }
+
+    .item-imagem {
+        grid-column: 1;
+        grid-row: 1 / span 3; /* Imagem ocupa a lateral toda */
+    }
+
+    .item-info-group {
+        grid-column: 2;
+        padding-right: 0;
+    }
+
+    .quantidade-box {
+        grid-column: 2;
+        margin-top: 5px;
+    }
+
+    .item-preco {
+        grid-column: 2;
+        text-align: left !important;
+        font-size: 1.1rem;
+        margin-top: 5px;
+    }
+
+    .item-remover {
+        position: absolute;
+        bottom: 10px;
+        right: 0;
+    }
+    .qtd-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ==================================================
    INSTITUCIONAL
    ================================================== */

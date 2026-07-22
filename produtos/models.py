@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from django.db.models.expressions import Combinable
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from utils.formata_preco import oficial_formatar_preco
 
 
 class Category(models.Model):
@@ -50,10 +51,23 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    class_formata=oficial_formatar_preco()    
+    
+    def formata_preco(self):
+        return Decimal(self.class_formata.formata_preco(self.preco))
+    formata_preco.short_description='Preço'
+    
+    def formata_preco_promocional(self):
+        return Decimal(self.class_formata.formata_preco(self.preco_promocional))
+    formata_preco_promocional.short_description='Preço promo'
+    
+        
+    
     def get_preco(self):
         if self.preco_promocional and self.preco_promocional > Decimal('0.00'):
             return self.preco_promocional
-        return self.preco
+        return self.preco    
+    
     
     def save(self,*args, **kwargs):
         if not self.slug:

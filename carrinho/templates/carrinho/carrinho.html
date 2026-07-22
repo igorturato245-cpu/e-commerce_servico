@@ -1,0 +1,221 @@
+{% extends 'global/base.html' %}
+
+{% load filters %}
+
+{% block content %}
+  {% load static %}
+
+  {% if items %}
+    <section class="carrinho">
+      <h2 class="carrinho-titulo">Seu Carrinho</h2>
+
+      <div class="carrinho-container">
+        <!-- PRODUTOS -->
+        <div class="carrinho-card">
+          <div class="carrinho-header">
+            <span>Imagem</span>
+            <span>Produto/Descrição</span>
+            <span>Quantidade</span>
+            <span>Preço</span>
+            <span></span>
+          </div>
+
+        <!-- Procure o loop 'for item in Items' e substitua por este bloco -->
+        {% for item in items %}
+          <div class="carrinho-item">
+            <!-- 1. IMAGEM -->
+            <div class="item-imagem">
+              <img src="" alt="{{ item.produto.imagem }}" />
+            </div>
+
+            <!-- 2. INFO (Agrupamos Nome e Descrição aqui) -->
+            <div class="item-info-group">
+              <div class="item-nome">{{ item.produto.name }}</div>
+              <div class="item-info">{{ item.produto.descricao|truncatechars:80 }}</div>
+            </div>
+
+            <!-- 3. QUANTIDADE -->
+            <div class="quantidade-box">
+              <span class="qtd-label">Quantidade</span>
+              <div class="qtd-controle" data-item-id="{{ item.id }}">
+                <button class="qtd-btn">-</button>
+                <span class="qtd-num">{{ item.quantidade }}</span>
+                <button class="qtd-btn">+</button>
+              </div>
+            </div>
+
+            <!-- 4. PREÇO -->
+            <div class="item-preco">{{ item.preco_unitario | formata_preco}}</div>
+
+            <!-- 5. REMOVER -->
+            <div class="item-remover">
+              <button class="btn-remover" data-item-id="{{ item.id }}" data-url="{% url 'carrinho:remover_do_carrinho' %}">Remover</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- LATERAL -->
+        <div class="carrinho-lateral">
+          <div class="carrinho-entrega carrinho-card">
+            <h2>Calculo de frete</h2>
+            <span>O frete será calculado automaticamente no checkout, adicione um endereço na área "Endereço" que você verá o valor do frete.</span>
+          </div>
+
+          <div class="carrinho-resumo carrinho-card">
+            <h2>Resumo do pedido</h2>
+
+            <div class="resumo-linha">
+              <span>Subtotal</span>
+              <span class="resumo-total">{{ total | formata_preco}}</span>
+            </div>
+
+            <div class="resumo-linha resumo-final">
+              <span>Total</span>
+              <span class="resumo-total">{{ total | formata_preco}}</span>
+            </div>
+
+            {% if not user.is_authenticated %}
+              <div class="entrega-form">
+                <form method="get" action="{% url 'cadastro_login:login' %}">
+                  {% csrf_token %}
+                  <button type="submit">Comprar</button>
+                </form>
+              </div>
+            {% else %}
+              <div class="entrega-form">
+                <form method="post" action="">
+                  {% csrf_token %}
+                  <button type="submit">Comprar</button>
+                </form>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+  {% else %}
+    <!-- 🛒 CARRINHO VAZIO -->
+    <section class="carrinho-vazio">
+      <div class="carrinho-vazio-box">
+        <h2>Seu carrinho está vazio</h2>
+        <p>Adicione produtos para continuar sua compra</p>
+        <a href="/" class="btn-voltar">Voltar para a loja</a>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+  <script>
+    // 1. FUNÇÃO PARA PEGAR O TOKEN DE SEGURANÇA DO DJANGO
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Verifica se este cookie começa com o nome que queremos
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      
+      // ==========================================
+      // LÓGICA DE QUANTIDADE (+ E -)
+      // ==========================================
+      document.querySelectorAll('.qtd-controle').forEach((controle) => {
+        const btns = controle.querySelectorAll('.qtd-btn')
+        const numEl = controle.querySelector('.qtd-num')
+        const itemId = controle.dataset.itemId
+    
+        btns.forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            let quantidade = parseInt(numEl.textContent)
+            const tipo = btn.textContent.trim()
+    
+            if (tipo === '+' && quantidade < 99) quantidade++
+            if (tipo === '-' && quantidade > 1) quantidade--
+    
+            // 🔒 trava os botões durante a requisição para evitar duplo clique
+            btns.forEach((b) => (b.disabled = true))
+    
+            try {
+              const response = await fetch("{% url 'carrinho:qtd_no_carrinho' %}", {
+                method: 'POST',
+                cache: 'no-store',
+                headers: {
+                  'X-CSRFToken': getCookie('csrftoken'), // Agora o JS sabe o que é getCookie!
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `item_id=${itemId}&quantidade=${quantidade}`
+              })
+    
+              const data = await response.json()
+    
+              // atualiza quantidade exibida
+              numEl.textContent = data.quantidade
+    
+              // 🔥 atualiza os subtotais na lateral
+              document.querySelectorAll('.resumo-total').forEach((el) => {
+                 el.textContent = data.subtotal_format;
+              });
+            } catch (error) {
+              console.error('Erro ao atualizar quantidade:', error)
+            }
+    
+            // 🔓 libera os botões
+            btns.forEach((b) => (b.disabled = false))
+          })
+        })
+      })
+
+      // ==========================================
+      // LÓGICA DE REMOVER ITEM
+      // ==========================================
+      document.querySelectorAll('.btn-remover').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const itemId = btn.dataset.itemId
+          const url = btn.dataset.url
+          const linha = btn.closest('.carrinho-item')
+    
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken') // Agora o JS sabe o que é getCookie!
+            },
+            body: new URLSearchParams({
+               'item_id': itemId // É preciso enviar qual item será removido!
+            })
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                // Some com a linha do produto
+                linha.remove()
+    
+                // Atualiza subtotal e total
+                document.querySelectorAll('.resumo-total').forEach((el) => {
+                    el.textContent = `${data.subtotal_format}`;
+                })
+    
+                // Se não sobrar itens → recarrega para mostrar carrinho vazio
+                if (data.itens_restantes === 0) {
+                  location.reload()
+                }
+              }
+            }).catch((err) => {
+                console.error("Erro ao remover:", err);
+            })
+        })
+      })
+      
+    })
+  </script>
+{% endblock %}

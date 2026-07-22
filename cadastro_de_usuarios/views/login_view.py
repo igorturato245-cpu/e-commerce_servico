@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,logout
 from django.contrib import messages
 from django.shortcuts import render,redirect
+from carrinho.services import oficial_merg
 
 
 class login_class(View):
@@ -23,6 +24,9 @@ class login_class(View):
             old_session_key=request.session.session_key
                 
             login(request,user)
+            
+            merge=oficial_merg()
+            merge.marge_cards(old_session_key,user)
                 
             messages.success(request,'Secesso ao fazer login.')
             return redirect('index:index')

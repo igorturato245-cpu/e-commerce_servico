@@ -10,7 +10,7 @@
       <ul class="header-menu">
         {% if not user.is_authenticated %}
           <li class="header-item">
-            <a href="">Carrinho</a>
+            <a href="{% url 'carrinho:carrinho_url' %}">Carrinho</a>
           </li>
           <li class="header-item">
             <a href="{% url 'cadastro_login:login' %}">Faça seu login</a>
@@ -20,7 +20,7 @@
           </li>
         {% else %}
           <li class="header-item">
-            <a href="">Carrinho</a>
+            <a href="{% url 'carrinho:carrinho_url' %}">Carrinho</a>
           </li>
           <li class="header-item">
             <a href="">Meus pedidos</a>

@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from carrinho.services import oficial_merg
 
 
 
@@ -62,7 +63,7 @@ class BaseCadastro(View):
 
 
 
-class CriarUser(BaseCadastro):
+class CriarUser(BaseCadastro,oficial_merg):
     def post(self,*args, **kwargs):
         if not self.form_cadastro.is_valid() or not self.perfil_cadastro.is_valid():
             return self.renderizar
@@ -94,6 +95,9 @@ class CriarUser(BaseCadastro):
             
             if autentica:
                 login(self.request,user=usuario)
+                
+                merge=oficial_merg()
+                merge.marge_cards(old_session_key,usuario)
                 
         messages.success(self.request,'Sucesso ao criar sua conta, aproveite suas comprar.')
         
