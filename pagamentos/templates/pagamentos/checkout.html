@@ -1,0 +1,131 @@
+{% extends "global/base.html" %}
+{% load filters %}
+
+{% block content %}
+<div class="checkout-container">
+
+{% if cart %}
+
+    <!-- ENDEREÇO -->
+    <div class="checkout-section">
+        <h3 class="checkout-title">Endereço de entrega:</h3>
+
+
+        {% for end in endereco %}
+        <div class="checkout-card">
+
+            <div class="checkout-end-txt">
+                <span>Endereço</span>
+                <span>Número</span>
+                <span>Complemento</span>
+                <span>Bairro</span>
+                <span>Cep</span>
+                <span>Cidade</span>
+                <span>Estado</span>
+            </div>
+
+            <div class="checkout-end-info">
+                <span>{{end.endereco}}</span>
+                <span>{{end.numero}}</span>
+                <span>{{end.complemento}}</span>
+                <span>{{end.bairro}}</span>
+                <span>{{end.cep}}</span>
+                <span>{{end.cidade}}</span>
+                <span>{{end.estado}}</span>
+            </div>
+
+            <a class="checkout-edit" href="{% url "cadastro_login:atualizarend" end.pk %}">
+                Editar endereço
+            </a>
+
+            <a class="checkout-edit" href="{% url "cadastro_login:listarend" %}">
+                Alterar endereço
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- PRODUTOS -->
+    <div class="checkout-section">
+        <h3 class="checkout-title">Produtos:</h3>
+
+        {% for item in itens %}
+        <div class="checkout-item-card">
+            <span class="produto-nome">{{item.produto.name}}</span>
+            <span class="produto-qtd">x{{item.quantidade}}</span>
+
+            <span class="produto-preco">
+                {% if item.produto.preco_promocional %}
+                    {{ item.produto.preco_promocional|formata_preco }}
+                {% else %}
+                    {{ item.produto.preco|formata_preco }}
+                {% endif %}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="checkout-section">
+        <h3>Valor do frete:</h3>
+
+        <div class="checkout-item-card">
+            <span class="produto-nome">{{valor_frete}}</span>
+        </div>
+    </div>
+
+    <div class="checkout-section">
+        <h3>Prezo de entrega:</h3>
+
+        <div class="checkout-item-card">
+            <span class="produto-nome">{{prazo}}</span>
+        </div>
+    </div>
+
+    <!-- SUBTOTAL -->
+    <div class="checkout-total">
+        <strong>Subtotal:</strong>
+        <span>{{total_com_frete|formata_preco}}</span>
+    </div>
+
+    <!-- PAGAMENTO -->
+    <form method="post" action="{% url "pagamentos:start_payment" %}" class="checkout-form">
+        {% csrf_token %}
+
+        <h3 class="checkout-title">Método de pagamento</h3>
+
+        <label class="radio-label">
+            <input type="radio" name="metodo" value="pagseguro" checked>
+            PagSeguro
+        </label>
+
+        <button type="submit" class="btn-finalizar">
+            Finalizar compra
+        </button>
+    </form>
+
+{% else %}
+    <h2 class="carrinho-vazio">Carrinho está vazio.</h2>
+{% endif %}
+
+<!-- Google tag (gtag.js)
+<script async src="https://www.googletagmanager.com/gtag/js?id={{Tag_id}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{Tag_id}}');
+</script>-->
+<!-- Event snippet for Compra conversion page -->
+
+<!-- Event snippet for Iniciar pagamento (1) conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': '{{Tag_checkout}}',
+      'value': 1.0,
+      'currency': 'BRL'
+  });
+</script>
+
+{% endblock content %}

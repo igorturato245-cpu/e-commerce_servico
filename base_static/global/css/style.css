@@ -2064,7 +2064,1578 @@ Endereços
 
 
 
+/* ============================================================
+   ESTILOS DA PÁGINA DE STATUS DA ANÁLISE DE REEMBOLSO
+============================================================ */
 
+.analise-reembolso-page {
+    padding: var(--section-padding) 20px;
+    background-color: var(--bg-gray); /* Fundo neutro e frio */
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: var(--text-color);
+}
+
+.analise-reembolso-container {
+    max-width: 650px; /* Um pouco mais estreito que o form para dar foco */
+    width: 100%;
+    background-color: var(--bg);
+    padding: var(--container-padding);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-form);
+    border: var(--border-light-soft);
+}
+
+/* Título da Seção */
+.analise-reembolso-titulo {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-black);
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--bg-gray);
+    padding-bottom: 15px;
+    letter-spacing: -0.01em;
+}
+
+/* Estilização dos textos de dados */
+.analise-reembolso-txt {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 16px;
+    padding: 12px 15px;
+    background-color: #fafafa; /* Fundo leve para separar as linhas */
+    border-radius: var(--radius-sm);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between; /* Alinha label à esquerda e valor à direita */
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.analise-reembolso-txt:hover {
+    background-color: #f5f5f5;
+    border-color: #e5e5e5;
+}
+
+/* Destaque para as Labels (strong) */
+.analise-reembolso-txt strong {
+    font-weight: 600;
+    color: var(--text-darkest);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+/* Estilização específica para Status (para dar um feedback visual neutro) */
+.analise-reembolso-txt:nth-of-type(2), 
+.analise-reembolso-txt:last-of-type {
+    border-left: 4px solid #ccc; /* Detalhe lateral frio */
+}
+
+/* Caso não haja solicitação (Mensagem de Alerta) */
+.analise-reembolso-container > p:only-of-type {
+    background-color: #fff4f4;
+    color: var(--color-error);
+    border: 1px dashed var(--color-error);
+    text-align: center;
+    padding: 20px;
+    font-weight: 500;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+
+/* Tablet e Telas Médias */
+@media (max-width: 768px) {
+    .analise-reembolso-container {
+        padding: 30px 20px;
+    }
+}
+
+/* Celulares (Foco 480px) */
+@media (max-width: 480px) {
+    .analise-reembolso-page {
+        padding: 20px 10px;
+    }
+
+    .analise-reembolso-titulo {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .analise-reembolso-container {
+        padding: 20px 15px;
+        border-radius: var(--radius-lg);
+    }
+
+    /* Quebra o layout de linha para coluna no mobile */
+    .analise-reembolso-txt {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        font-size: 14px;
+        padding: 15px;
+    }
+
+    .analise-reembolso-txt strong {
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ================================
+   ESTILOS DA SEÇÃO DE FEEDBACK
+==================================*/
+
+.feedback-section {
+    padding: var(--section-padding) 0;
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-gray);
+}
+
+.feedback-container {
+    background-color: var(--bg);
+    padding: var(--container-padding);
+    border-radius: var(--radius-xl);
+    max-width: 600px;
+    width: 90%;
+}
+
+.feedback-title {
+    font-size: var(--title-size);
+    color: var(--text-black);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.rating-group {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: var(--border-light-soft);
+}
+
+.rating-label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+/* Sistema de Estrelas */
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 35px;
+    color: #ccc; /* Cor neutra para estrelas vazias */
+    cursor: pointer;
+}
+
+/* Efeito Hover e Check (Lógica de cascata reversa) */
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input:checked ~ label {
+    color: #ffca08; /* Cor Ouro/Dourado */
+}
+
+/* Formulário de Feedback */
+.feedback-form-wrapper h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.feedback-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    border: var(--border-input);
+    border-radius: var(--radius-input);
+    resize: vertical;
+    font-family: inherit;
+    margin-bottom: 20px;
+}
+
+.feedback-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-focus);
+}
+
+.btn-submit {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-2px);
+}
+
+/* ================================
+   MEDIA QUERIES (PADRÃO SOLICITADO)
+==================================*/
+
+/* 900px */
+@media (max-width: 900px) {
+    .feedback-container {
+        max-width: 500px;
+    }
+}
+
+/* 700px */
+@media (max-width: 700px) {
+    :root {
+        --section-padding: 40px;
+    }
+    .feedback-title {
+        font-size: 26px;
+    }
+}
+
+/* 600px */
+@media (max-width: 600px) {
+    .feedback-container {
+        padding: 25px;
+    }
+    .rating label {
+        font-size: 30px;
+    }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+    .feedback-title {
+        font-size: 22px;
+    }
+    .rating-label {
+        font-size: 14px;
+    }
+    .btn-submit {
+        padding: 12px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   ESTILOS DA PÁGINA DE DEVOLUÇÃO E REEMBOLSO
+============================================================ */
+
+.devolucao-reembolsar {
+    padding: var(--section-padding) 20px;
+    background-color: var(--bg-gray); /* Fundo neutro */
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: var(--text-color);
+}
+
+.devolucao-reembolsar-container {
+    max-width: 800px; /* Layout mais contido para leitura */
+    width: 100%;
+    background-color: var(--bg);
+    padding: var(--container-padding);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-form);
+    border: var(--border-light-soft);
+}
+
+/* Título */
+h2.devolucao-reembolsar-container {
+    all: unset; /* Reseta o estilo da div caso o HTML aplique a classe no h2 */
+    display: block;
+    font-size: var(--title-size);
+    font-weight: 600;
+    color: var(--text-black);
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+}
+
+/* Textos e Notas */
+.devolucao-reembolsar-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Bloco de Informações / Regras */
+.devolucao-reembolsar-info {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid #ccc; /* Detalhe frio em cinza */
+    margin-bottom: 30px;
+}
+
+.devolucao-reembolsar-info .devolucao-reembolsar-text {
+    font-weight: 600;
+    color: var(--text-darkest);
+    margin-bottom: 12px;
+}
+
+.devolucao-reembolsar-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.devolucao-reembolsar-lista-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* "Tabela" de Detalhes dos Produtos */
+.devolucao-reembolsar-info-detalhes,
+.devolucao-reembolsar-detalhes {
+    display: grid;
+    grid-template-columns: 40px 1fr 120px 40px; /* Estrutura de colunas */
+    align-items: center;
+    padding: 12px 0;
+    gap: 15px;
+}
+
+.devolucao-reembolsar-info-detalhes {
+    border-bottom: 2px solid var(--bg-gray);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+}
+
+.devolucao-reembolsar-detalhes {
+    border-bottom: 1px solid var(--bg-gray);
+    font-size: 15px;
+    transition: var(--transition-fast);
+}
+
+.devolucao-reembolsar-detalhes:hover {
+    background-color: #fcfcfc;
+}
+
+.devolucao-reembolsar-detalhes p {
+    margin: 0;
+}
+
+.devolucao-reembolsar-detalhes span:nth-child(3) {
+    font-weight: 600;
+    color: var(--text-black);
+}
+
+/* Área de Ação e Botão */
+.devolucao-reembolsar-confirmar {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+
+
+
+/* ============================================================
+   ESTILOS DOS CAMPOS DO FORMULÁRIO (Novos Elementos)
+============================================================ */
+
+.devolucao-reembolsar-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaço entre cada grupo de input */
+}
+
+.devolucao-reembolsar-grup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.devolucao-reembolsar-grup label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-darkest);
+}
+
+/* Estilização Geral para Select, Textarea e Input File */
+.devolucao-reembolsar-grup select,
+.devolucao-reembolsar-grup textarea,
+.devolucao-reembolsar-grup input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    border: var(--border-input);
+    border-radius: var(--radius-input);
+    background-color: var(--bg);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text-color);
+    transition: var(--transition-fast);
+}
+
+/* Foco nos campos (Efeito Frio) */
+.devolucao-reembolsar-grup select:focus,
+.devolucao-reembolsar-grup textarea:focus {
+    outline: none;
+    border-color: var(--text-black);
+    box-shadow: var(--shadow-focus);
+}
+
+/* Customização específica do Textarea */
+.devolucao-reembolsar-grup textarea {
+    resize: vertical; /* Permite aumentar altura, mas não largura */
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* Estilização do input de arquivo */
+.devolucao-reembolsar-grup input[type="file"] {
+    padding: 10px;
+    background-color: var(--bg-gray);
+    cursor: pointer;
+}
+
+/* Estilização do botão interno do input file (browser dependent) */
+.devolucao-reembolsar-grup input[type="file"]::file-selector-button {
+    background-color: var(--text-black);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    margin-right: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: var(--transition-fast);
+}
+
+.devolucao-reembolsar-grup input[type="file"]::file-selector-button:hover {
+    background-color: var(--primary-hover);
+}
+
+
+
+
+
+
+
+
+
+.devolucao-reembolsar-button {
+    background-color: var(--text-black); /* Botão preto para tom mais sério/frio */
+    color: var(--text-light);
+    border: none;
+    padding: 16px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-medium);
+    width: auto;
+}
+
+.devolucao-reembolsar-button:hover {
+    background-color: #333;
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+}
+
+.devolucao-reembolsar-button:active {
+    transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   RESPONSIVIDADE (Ajustada para os novos campos)
+============================================================ */
+
+@media (max-width: 768px) {
+    .devolucao-reembolsar-container {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .devolucao-reembolsar {
+        padding: 20px 10px;
+    }
+
+    h2.devolucao-reembolsar-container {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    /* Ajuste de espaçamento nos grupos para mobile */
+    .devolucao-reembolsar-grup {
+        gap: 6px;
+    }
+
+    .devolucao-reembolsar-grup label {
+        font-size: 13px;
+    }
+
+    /* Tabela de produtos empilhada */
+    .devolucao-reembolsar-info-detalhes {
+        display: none;
+    }
+
+    .devolucao-reembolsar-detalhes {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px 0;
+    }
+
+    .devolucao-reembolsar-detalhes span:nth-child(2)::before {
+        content: "Produtos:";
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 4px;
+    }
+
+    .devolucao-reembolsar-detalhes span:nth-child(3)::before {
+        content: "Total:";
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 4px;
+    }
+
+    /* Botão ocupando largura total no mobile */
+    .devolucao-reembolsar-confirmar {
+        margin-top: 30px;
+    }
+
+    .devolucao-reembolsar-button {
+        width: 100%;
+        padding: 18px;
+        font-size: 16px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+Checkout
+*/
+.checkout-container{
+    min-height: 100vh;
+    background: var(--bg); /* Original: #fff */
+    padding: var(--container-padding); /* Original: 40px */
+    color: var(--bg-dark); /* Original: #000 */
+}
+
+/* seções */
+.checkout-section{
+    margin-bottom: 30px;
+}
+
+.checkout-title{
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* cards */
+.checkout-card,
+.checkout-item-card{
+    background: var(--bg);
+    border: 1px solid #eee; /* Mantido original para não escurecer a borda */
+    border-radius: 14px; /* Mantido original */
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.checkout-end-txt{
+    display: grid;
+    grid-template-columns:
+        0.8fr
+        85px
+        120px
+        0.4fr
+        120px
+        0.4fr
+        70px;
+
+    gap: 15px;
+    align-items: center;
+
+    padding: 0 10px 10px 10px;
+    margin-bottom: 10px;
+
+    font-weight: 600;
+    font-size: 14px;
+    color: #666; /* Mantido original */
+
+    border-bottom: 1px solid #eee;
+}
+
+/* endereço info */
+.checkout-end-info{
+    display: grid;
+    grid-template-columns:
+        2fr 80px 120px 1fr 120px 1fr 80px;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* editar */
+.checkout-edit{
+    display: inline-block;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 8px 14px;
+    border-radius: var(--radius-md); /* Original: 8px */
+    text-decoration: none;
+    font-size: 14px;
+    transition: all var(--transition-fast);
+}
+
+.checkout-edit:hover,
+.checkout-edit:active{
+    transform: scale(0.95);
+    opacity: 0.9;
+}
+
+/* produtos */
+.checkout-item-card{
+    display: grid;
+    grid-template-columns: 1fr 60px auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.produto-qtd{
+    text-align: center;
+}
+
+/* total */
+.checkout-total{
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin: 30px 0;
+    font-weight: 700;
+}
+
+/* pagamento */
+.checkout-form{
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.radio-label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* botão */
+.btn-finalizar{
+    width: 100%;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 14px;
+    border: none;
+    border-radius: 10px; /* Mantido original */
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-finalizar:hover,
+.btn-finalizar:active{
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* ==========================================
+   MEDIA QUERY 600px (Sua lógica original)
+========================================== */
+@media (max-width:600px){
+
+    .checkout-end-txt{
+        display: none !important;
+    }
+
+    .checkout-container{
+        padding: 20px 15px;
+    }
+
+    .checkout-end-info{
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+    }
+
+    .checkout-end-info span{
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed #eee;
+        padding-bottom: 4px;
+    }
+
+    .checkout-end-info span::before{
+        font-weight: 600;
+        opacity: .6;
+    }
+
+    .checkout-end-info span:nth-child(1)::before{content:"Endereço";}
+    .checkout-end-info span:nth-child(2)::before{content:"Número";}
+    .checkout-end-info span:nth-child(3)::before{content:"Compl.";}
+    .checkout-end-info span:nth-child(4)::before{content:"Bairro";}
+    .checkout-end-info span:nth-child(5)::before{content:"CEP";}
+    .checkout-end-info span:nth-child(6)::before{content:"Cidade";}
+    .checkout-end-info span:nth-child(7)::before{content:"UF";}
+
+    .checkout-item-card{
+        grid-template-columns: 1fr auto;
+        gap: 6px;
+    }
+
+    .produto-qtd{
+        text-align: left;
+    }
+
+}
+
+/* ==========================================
+   NOVA MEDIA QUERY 480px (Seguindo a lógica)
+========================================== */
+@media (max-width:480px){
+
+    .checkout-container{
+        padding: 15px 10px; /* Reduz espaço lateral inútil no celular */
+    }
+
+    .checkout-card,
+    .checkout-item-card,
+    .checkout-form{
+        padding: 15px; /* Reduz o espaço em branco dentro dos cards */
+        border-radius: var(--radius-lg); 
+    }
+
+    .checkout-title{
+        font-size: 16px; /* Diminui título para não quebrar linha à toa */
+        margin-bottom: 12px;
+    }
+
+    .checkout-end-info{
+        font-size: 13px; /* Aperta o texto para caber Endereço longo */
+        gap: 5px;
+    }
+
+    .checkout-end-info span{
+        padding-bottom: 3px;
+    }
+
+    .checkout-item-card{
+        gap: 5px;
+        font-size: 13px; /* Informações do produto no resumo um pouco menores */
+    }
+
+    .checkout-total{
+        font-size: 16px;
+        margin: 20px 0; /* Aproxima os totais do botão */
+    }
+
+    .btn-finalizar{
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   ESTILOS DA PÁGINA DE STATUS DA ANÁLISE DE REEMBOLSO
+============================================================ */
+
+.analise-reembolso-page {
+    padding: var(--section-padding) 20px;
+    background-color: var(--bg-gray); /* Fundo neutro e frio */
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: var(--text-color);
+}
+
+.analise-reembolso-container {
+    max-width: 650px; /* Um pouco mais estreito que o form para dar foco */
+    width: 100%;
+    background-color: var(--bg);
+    padding: var(--container-padding);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-form);
+    border: var(--border-light-soft);
+}
+
+/* Título da Seção */
+.analise-reembolso-titulo {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-black);
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--bg-gray);
+    padding-bottom: 15px;
+    letter-spacing: -0.01em;
+}
+
+/* Estilização dos textos de dados */
+.analise-reembolso-txt {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 16px;
+    padding: 12px 15px;
+    background-color: #fafafa; /* Fundo leve para separar as linhas */
+    border-radius: var(--radius-sm);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between; /* Alinha label à esquerda e valor à direita */
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.analise-reembolso-txt:hover {
+    background-color: #f5f5f5;
+    border-color: #e5e5e5;
+}
+
+/* Destaque para as Labels (strong) */
+.analise-reembolso-txt strong {
+    font-weight: 600;
+    color: var(--text-darkest);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+/* Estilização específica para Status (para dar um feedback visual neutro) */
+.analise-reembolso-txt:nth-of-type(2), 
+.analise-reembolso-txt:last-of-type {
+    border-left: 4px solid #ccc; /* Detalhe lateral frio */
+}
+
+/* Caso não haja solicitação (Mensagem de Alerta) */
+.analise-reembolso-container > p:only-of-type {
+    background-color: #fff4f4;
+    color: var(--color-error);
+    border: 1px dashed var(--color-error);
+    text-align: center;
+    padding: 20px;
+    font-weight: 500;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+
+/* Tablet e Telas Médias */
+@media (max-width: 768px) {
+    .analise-reembolso-container {
+        padding: 30px 20px;
+    }
+}
+
+/* Celulares (Foco 480px) */
+@media (max-width: 480px) {
+    .analise-reembolso-page {
+        padding: 20px 10px;
+    }
+
+    .analise-reembolso-titulo {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .analise-reembolso-container {
+        padding: 20px 15px;
+        border-radius: var(--radius-lg);
+    }
+
+    /* Quebra o layout de linha para coluna no mobile */
+    .analise-reembolso-txt {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        font-size: 14px;
+        padding: 15px;
+    }
+
+    .analise-reembolso-txt strong {
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =======================================================
+   PÁGINA DE DETALHES DO PRODUTO (Nomes de classes únicos)
+========================================================== */
+
+.detalhe-section {
+    width: 100%;
+    min-height: 100vh; /* Recomendo 100dvh se for focado em mobile */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--section-padding) 15px;
+    background: var(--bg-gray); 
+}
+
+/* Container Principal (Antigo .produto-card) */
+.detalhe-container {
+    width: 100%;
+    max-width: var(--max-width);
+    background: var(--bg);
+    padding: 30px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* FOTO DO PRODUTO */
+.detalhe-foto-box {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    background: var(--bg-card-light);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detalhe-foto-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Contain não corta a imagem do produto */
+}
+
+/* GRID INTERNA (A mágica que divide em 2 no PC) */
+.detalhe-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* BOXES INTERNOS (Para o texto e para os botões) */
+.detalhe-box {
+    background: var(--bg-card-light);
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 15px; /* Espaço entre os itens dentro do box */
+}
+
+/* TEXTOS */
+.detalhe-nome {
+    font-size: var(--title-size);
+    font-weight: bold;
+    color: var(--text-darkest);
+}
+
+.detalhe-descricao {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+.detalhe-preco {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--text-darkest);
+}
+
+/* QUANTIDADE */
+.detalhe-qtd-controle {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.detalhe-qtd-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: #e0e0e0;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.detalhe-qtd-btn:hover {
+    background: #ccc;
+}
+
+.detalhe-qtd-num {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* BOTÃO COMPRAR */
+.detalhe-btn-comprar {
+    display: block;
+    width: 100%;
+    padding: 16px 0;
+    background: var(--bg); /* Usa o fundo branco para destacar */
+    color: var(--text-darkest);
+    border: 2px solid #000;
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.detalhe-btn-comprar:hover {
+    background: #dbd3d3;
+    border-color: #dbd3d3;
+}
+
+/* AVISO */
+.detalhe-aviso {
+    color: #555;
+    font-size: 14px;
+}
+
+/* ================================
+      RESPONSIVIDADE PRODUTO
+================================ */
+@media (max-width: 900px) {
+    .detalhe-grid {
+        grid-template-columns: 1fr; /* Transforma as 2 colunas em 1 no tablet */
+    }
+
+    .detalhe-btn-comprar:hover {
+    background: #dbd3d3;
+    border-color: #dbd3d3;
+}
+}
+
+@media (max-width: 600px) {
+    .detalhe-container {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .detalhe-foto-box {
+        height: 280px; /* Reduz a foto no celular para caber mais coisa na tela */
+    }
+
+    .detalhe-nome {
+        font-size: 24px;
+    }
+
+    .detalhe-preco {
+        font-size: 24px;
+    }
+    
+    .detalhe-box {
+        padding: 18px;
+    }
+
+    .detalhe-btn-comprar:hover {
+    background: #dbd3d3;
+    border-color: #dbd3d3;
+    }
+}
+
+@media (max-width: 480px) {
+    .detalhe-foto-box {
+        height: 220px;
+    }
+
+    .detalhe-nome {
+        font-size: 20px;
+    }
+
+    .detalhe-preco {
+        font-size: 20px;
+    }
+
+    .detalhe-btn-comprar {
+        font-size: 18px;
+        padding: 14px 0;
+    }
+
+    .detalhe-btn-comprar:hover {
+    background: #dbd3d3;
+    border-color: #dbd3d3;
+    }
+
+    .detalhe-qtd-btn:hover {
+    background: #ccc;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   LISTAGEM DE PEDIDOS (DESKTOP: 1220px)
+========================================== */
+.pedidos-container {
+    max-width: var(--max-width);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: var(--container-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Cabeçalho Desktop */
+.pedidos-header {
+    display: flex;
+    padding: 0 20px 15px 20px;
+    color: #888;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: var(--border-light-soft);
+    margin-bottom: 5px;
+}
+
+/* Escondendo os spans vazios (1 e 6) - O 1º era onde ficaria a bolinha de marcar */
+.pedidos-header span:nth-child(1),
+.pedido-info-txt span:nth-child(1),
+.pedido-info-txt span:nth-child(6) {
+    display: none; 
+}
+
+/* Colunas (Compartilhado entre Header e Linhas para alinhar perfeitamente) */
+.pedidos-header span,
+.pedido-info-txt span {
+    display: block;
+    flex: 1; /* Distribui o espaço por igual entre as 4 colunas de texto */
+    align-self: center;
+}
+
+/* Reserva o espaço do Botão Detalhes no Cabeçalho para não desalinhar */
+.pedidos-header span:nth-child(6) {
+    display: block; 
+    flex: 0 0 120px; 
+}
+
+/* Card da Linha (Desktop) */
+.pedido-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg);
+    border: var(--border-light-soft);
+    border-radius: var(--radius-lg);
+    padding: 12px 20px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-fast);
+}
+
+.pedido-info:hover {
+    border: var(--border-input);
+}
+
+.pedido-info-txt {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    color: var(--text-color);
+}
+
+/* Botão Detalhes */
+.pedido-reedirect-detalhe {
+    flex: 0 0 120px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pedido-reedirect-detalhe a {
+    background-color: var(--text-black);
+    color: var(--text-light);
+    padding: 8px 0;
+    width: 100%; 
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: var(--transition-fast);
+    text-align: center;
+}
+
+.pedido-reedirect-detalhe a:hover {
+    background-color: var(--text-hover-dark);
+    box-shadow: var(--shadow-button-hover);
+}
+
+
+/* ==========================================
+   MODO RESPONSIVO / MOBILE (Até 480px)
+========================================== */
+@media (max-width: 480px) {
+    .pedidos-container {
+        padding: 20px 15px; 
+    }
+
+    /* 1. Esconde o cabeçalho no mobile */
+    .pedidos-header {
+        display: none; 
+    }
+
+    /* 2. Transforma a linha em um Card Vertical */
+    .pedido-info {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+    }
+
+    .pedido-info-txt {
+        display: block; /* Força o comportamento de bloco para empilhar perfeitamente */
+        width: 100%;
+    }
+
+    /* 3. Transforma os Spans em linhas pontilhadas */
+    .pedido-info-txt span:nth-child(2),
+    .pedido-info-txt span:nth-child(3),
+    .pedido-info-txt span:nth-child(4),
+    .pedido-info-txt span:nth-child(5) {
+        display: block; /* Block no lugar de Flex */
+        text-align: right; /* Joga o texto da variável/valor para a direita */
+        padding: 12px 0;
+        border-bottom: 1px dashed var(--border-light);
+        font-size: 14px;
+        color: var(--text-color);
+        width: 100%;
+    }
+
+    .pedido-info-txt span:nth-child(5) {
+        border-bottom: none; /* Tira a borda do último item (Total) */
+        margin-bottom: 15px; /* Dá um respiro antes do botão */
+    }
+
+    /* 4. Injeta os Labels (Títulos) via CSS e joga para a esquerda */
+    .pedido-info-txt span:nth-child(2)::before { content: 'Status'; float: left; color: #777; font-weight: 600; }
+    .pedido-info-txt span:nth-child(3)::before { content: 'Payment Ref.'; float: left; color: #777; font-weight: 600; }
+    .pedido-info-txt span:nth-child(4)::before { content: 'Status Fornecedor'; float: left; color: #777; font-weight: 600; }
+    .pedido-info-txt span:nth-child(5)::before { content: 'Total'; float: left; color: #777; font-weight: 600; }
+
+    /* Evita que o float quebre a altura das linhas */
+    .pedido-info-txt span::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* 5. Ajusta o botão para ocupar a tela toda em baixo */
+    .pedido-reedirect-detalhe {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .pedido-reedirect-detalhe a {
+        display: block; /* Garante que ocupe a largura 100% no mobile */
+        width: 100%;
+        padding: 12px 0;
+        font-size: 15px;
+        text-align: center;
+        box-sizing: border-box; /* Impede que o padding quebre para fora do card */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   Return (DESKTOP: 1220px)
+========================================== */
+.return-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+.icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+    }
+
+.icon-success {
+        background-color: #d4edda;
+        color: #28a745;
+    }
+
+.icon-pending {
+        background-color: #fff3cd;
+        color: #ffc107;
+    }
+
+.return-title {
+        color: #333333;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+.return-message {
+        color: #666666;
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 30px;
+    }
+
+.order-reference {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 30px;
+        border: 1px dashed #ced4da;
+    }
+
+.btn-action {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #000000;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+.btn-action:hover {
+        background-color: #333333;
+        color: #ffffff;
+    }
+
+@media (max-width: 900px) {
+        .return-container {
+            margin: 50px 20px; /* Garante que o container não encoste nas bordas laterais */
+        }
+    }
+
+/* Telas Pequenas / Celulares Deitados (até 600px) */
+@media (max-width: 600px) {
+        .return-container {
+            margin: 40px 15px;
+            padding: 30px;
+        }
+        
+        .return-title {
+            font-size: 24px;
+        }
+
+        .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            font-size: 35px;
+        }
+    }
+
+    /* Smartphones Padrão (até 480px) - Foco Total em UX Mobile */
+@media (max-width: 480px) {
+   .return-container {
+            margin: 20px 15px;
+            padding: 25px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra mais suave no mobile */
+        }
+
+        .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .return-title {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .return-message {
+            font-size: 14px;
+            margin-bottom: 25px;
+            padding: 0 10px; /* Aperta um pouco o texto para não ficar grudado nas bordas */
+        }
+
+        .order-reference {
+            padding: 12px;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* O botão vira Full-Width (100%) para ser facilmente clicável com o polegar */
+        .btn-action {
+            display: block; 
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+    }
 
 
 

@@ -1,0 +1,52 @@
+{% extends 'global/base.html' %} 
+
+{% block content %}
+
+
+<div class="return-container">
+    
+    {% if success %}
+        <!-- TELA DE SUCESSO -->
+        <div class="icon-wrapper icon-success">
+            ✓
+        </div>
+        <h1 class="return-title">Pedido Confirmado!</h1>
+        <p class="return-message">Seu pagamento foi aprovado e seu pedido já está sendo processado. Em breve você receberá um e-mail com os detalhes.</p>
+    {% else %}
+        <!-- TELA DE PROCESSAMENTO / PENDENTE -->
+        <div class="icon-wrapper icon-pending">
+            ⏱
+        </div>
+        <h1 class="return-title">Pedido em Análise</h1>
+        <p class="return-message">Recebemos seu pedido com sucesso! O pagamento está em processamento pelo PagSeguro. Assim que for aprovado, o status será atualizado automaticamente.</p>
+    {% endif %}
+
+    {% if reference %}
+    <div class="order-reference">
+        Referência do Pedido:<br>
+        <span style="color: #000;">{{ reference }}</span>
+    </div>
+    {% endif %}
+
+    <p style="color: #888; font-size: 14px; margin-bottom: 20px;">
+        Você pode acompanhar o status em tempo real na aba <strong>Meus Pedidos</strong> da sua conta.
+    </p>
+
+    <a href="{% url 'pagamentos:meus_pedidos' %}" class="btn-action">Acompanhar meu pedido</a>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<!-- Event snippet for Compra (1) conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': '{{Tag_pagamento}}',
+      'value': 1.0,
+      'currency': 'BRL',
+      'transaction_id': ''
+      // 'new_customer': true /* calculate dynamically, populate with true/false */,
+  });
+</script>
+
+{% endblock extra_scripts %}
