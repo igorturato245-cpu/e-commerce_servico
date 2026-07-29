@@ -25,7 +25,7 @@ class Product(models.Model):
     category=models.ForeignKey(Category,related_name='categoria_produto',on_delete=models.CASCADE)
     name=models.CharField('Name',max_length=200)
     slug=models.SlugField('Slug',max_length=200,unique=True)
-    descrixcao=models.TextField('Descrição',blank=True)
+    descricao=models.TextField('Descrição',blank=True)
     preco=models.DecimalField('Preço', max_digits=10,decimal_places=2)
     preco_promocional=models.DecimalField('Preço promocional',max_digits=10,decimal_places=2)
     estoque=models.PositiveIntegerField('Estoque', default=0)

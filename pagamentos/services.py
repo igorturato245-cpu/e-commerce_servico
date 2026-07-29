@@ -6,6 +6,7 @@ from abc import ABC,abstractmethod
 from django.contrib import messages
 from django.urls import reverse
 from gateweys.gatewyes import PagseguroStrategy as pagseguro_integration
+from integrations.dropify.dropify_gateways import DropifyStrategy
       
 
 class CheckoutService:
@@ -92,7 +93,7 @@ class CheckoutService:
             pedido.status='cancelled'
             pedido.save()
                                 
-            send_order_cancelled_to_erp_task.dalay(pedido.id)
+            #send_order_cancelled_to_erp_task.dalay(pedido.id)
             
         return True
     
@@ -156,7 +157,9 @@ class CheckoutService:
                     
                     
                 if new_status == 'paid':
-                    transaction.on_commit(lambda:send_order_to_erp_task.delay(pedido.pk))
+                    endereco=Endereco_usuario.objects.filter(usuario=pedido.usuario,padrao=True).first()
+                    obj=DropifyStrategy()
+                    transaction.on_commit(lambda:obj.enviar_pedido(pedido,endereco))
             
             
             
@@ -234,7 +237,7 @@ class PagseguroGateway(PaymentGatewayStrategy):
         
         pg_data=pg.reembolso_transacao(transaction_code)
         
-        if not pg:
+        if not pg_data:
             raise ValueError('Falha ao processar reembolso no Pagseguro.')
         
         return True

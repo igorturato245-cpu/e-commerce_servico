@@ -19,7 +19,7 @@ class PagSeguroCreatePayload(PayloadAdapter):
             items.append({
                 'reference_id':item.produto_id_string or str(item.id),
                 'name':item.produto_name[:100],
-                'quanntity':item.quantidade,
+                'quantity':item.quantidade,
                 'unit_amount':int(round(item.price * 100))
             })
         

@@ -34,7 +34,7 @@
                             <a href="">{{ produto.preco|formata_preco }}</a>
                         </div>
                     {% endif %}
-                    <div class="produto-desc"><a href="">{{ produto.descrixcao|truncatechars:160 }}</a></div>
+                    <div class="produto-desc"><a href="">{{ produto.descricao|truncatechars:160 }}</a></div>
 
                     <div class="produto-rating">
                         {% with avaliacao=produto.avaliation_product.first %}
