@@ -4078,3 +4078,218 @@ font-size:18px;
         font-size: 12px;
     }
 }
+
+
+
+
+
+
+/* ==================================================
+   RESET PASSWORD CONTAINER
+   ================================================== */
+
+.reset{
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background-color:var(--bg);
+
+padding:20px;
+}
+
+
+/* ==================================================
+   CARD
+   ================================================== */
+
+.password-reset{
+
+width:100%;
+max-width:480px;
+
+background-color:var(--bg);
+
+border:var(--border-light-soft);
+
+border-radius:var(--radius-lg);
+
+padding:40px 30px;
+
+text-align:center;
+
+box-sizing:border-box;
+}
+
+
+/* ==================================================
+   TITLE
+   ================================================== */
+
+.password-reset-title{
+
+font-size:24px;
+
+margin-bottom:15px;
+
+color:var(--bg-dark);
+}
+
+
+/* ==================================================
+   INFO TEXT
+   ================================================== */
+
+.password-reset-info{
+
+font-size:14px;
+
+margin-bottom:25px;
+
+color:var(--bg-dark);
+}
+
+
+/* ==================================================
+   FORM
+   ================================================== */
+
+.password-reset-form{
+
+display:flex;
+flex-direction:column;
+
+gap:15px;
+}
+
+
+/* ==================================================
+   INPUT
+   ================================================== */
+
+.password-reset-form input{
+
+padding:10px;
+
+border:var(--border-input);
+
+border-radius:var(--radius-sm);
+
+font-size:14px;
+}
+
+
+/* ==================================================
+   BUTTON
+   ================================================== */
+
+.password-reset-make{
+
+display:inline-block;
+
+padding:10px;
+
+border-radius:var(--radius-sm);
+
+border:1px solid var(--bg-dark);
+
+background-color:var(--bg-dark);
+
+color:var(--text-light);
+
+font-size:14px;
+
+cursor:pointer;
+
+text-decoration:none;
+
+transition:var(--transition-fast);
+}
+
+
+.password-reset-make:hover{
+
+background-color:var(--text-hover-dark);
+}
+
+
+
+/* ==================================================
+   MEDIA QUERIES
+   ================================================== */
+
+@media (max-width:900px){
+
+.password-reset{
+
+max-width:420px;
+
+padding:35px 25px;
+
+}
+
+}
+
+
+@media (max-width:600px){
+
+.password-reset{
+
+max-width:360px;
+
+padding:30px 20px;
+
+}
+
+.password-reset-title{
+
+font-size:20px;
+
+}
+
+}
+
+
+@media (max-width:480px){
+
+.password-reset{
+
+max-width:100%;
+
+padding:25px 18px;
+
+}
+
+.password-reset-title{
+
+font-size:18px;
+
+}
+
+.password-reset-info{
+
+font-size:13px;
+
+}
+
+}
+
+
+
+
+
+
+.field-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: 4px;
+}
+
+.has-error input {
+  border-color: #dc2626;
+  outline-color: #dc2626;
+}
