@@ -5,6 +5,7 @@ from django.db.models.expressions import Combinable
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from utils.formata_preco import oficial_formatar_preco
+from django.db.models import F
 
 
 class Category(models.Model):
@@ -38,7 +39,7 @@ class Product(models.Model):
     sku=models.CharField('Sku',max_length=100, blank=True,null=True)
     erp_id=models.CharField('erp_id', max_length=128,blank=True,null=True)
     remote_price=models.DecimalField('Preço remoto', max_digits=10,decimal_places=2,null=True,blank=True)
-    remote_stock=models.IntegerField('Preço remoto', null=True,blank=True)
+    remote_stock=models.IntegerField('Estoque remoto', null=True,blank=True)
     last_synced=models.DateTimeField('Última sincronização',auto_now=True,blank=True,null=True)
     
     class Meta:
@@ -54,14 +55,38 @@ class Product(models.Model):
     class_formata=oficial_formatar_preco()    
     
     def formata_preco(self):
-        return Decimal(self.class_formata.formata_preco(self.preco))
+        return self.class_formata.formata_preco(self.preco)
     formata_preco.short_description='Preço'
     
     def formata_preco_promocional(self):
-        return Decimal(self.class_formata.formata_preco(self.preco_promocional))
+        return self.class_formata.formata_preco(self.preco_promocional)
     formata_preco_promocional.short_description='Preço promo'
     
         
+    def atualiza_estoque_paid(self,quantidade):
+        if self.estoque < quantidade:
+            raise ValueError(f'')
+        
+        self.estoque=F('estoque') - quantidade
+        self.remote_stock=F('remote_stock') - quantidade
+        self.save(update_fields=['estoque','remote_stoke'])
+        
+        self.refresh_from_db()
+        
+        if self.estoque <= 2:
+            Product.objects.filter(pk=self.pk).update(disponivel=False)
+        
+        
+    def atualiza_estoque_devolvido(self,quantidade):
+        
+        self.estoque=F('estoque') + quantidade
+        self.remote_stock=F('remote_stock') + quantidade
+        self.save(update_fields=['estoque','remote_stock'])
+        
+        self.refresh_from_db()
+        
+        if self.estoque > 2:
+            Product.objects.filter(pk=self.pk).update(disponivel=True)
     
     def get_preco(self):
         if self.preco_promocional and self.preco_promocional > Decimal('0.00'):

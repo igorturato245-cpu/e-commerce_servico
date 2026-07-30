@@ -16,8 +16,8 @@ class PerfilForm(forms.ModelForm):
         model=Perfil
         exclude=('usuario',)
         widgets={
-            'cpf':forms.TextInput(attrs={'max_length':'14','placeholder':'000.000.000-00'}),
-            'telefone':forms.TextInput(attrs={'max_length':'15','placeholder':'(00)00000-0000'}),
+            'cpf':forms.TextInput(attrs={'maxlength':'14','placeholder':'000.000.000-00'}),
+            'telefone':forms.TextInput(attrs={'maxlength':'15','placeholder':'(00)00000-0000'}),
             'data_de_nascimento':forms.TextInput(attrs={'max_length':'10','placeholder':'DD/MM/AAAA'})
         }
         
@@ -74,7 +74,7 @@ class Cadastroform(forms.ModelForm):
             try:
                 password_validation.validate_password(password_data,user_instance)
             except forms.ValidationError as e:
-                self.add_error('Senha', e)
+                self.add_error('password', e)
                                   
        
         return cleaned 

@@ -20,7 +20,7 @@ class EmailForUser:
         
         
     def enviar_email_status_pedido(self,pedido):
-        subject=f'Pedido recebido #{pedido.id}'
+        subject=f'Atualização no seu pedido #{pedido.id}'
         from_email=settings.DEFAULT_FROM_EMAIL
         to=[pedido.usuario.email]
             
@@ -32,7 +32,7 @@ class EmailForUser:
         email.send()
             
     def enviar_email_status_erp_pedido(self,pedido):
-        subject=f'Pedido recebido #{pedido.id}'
+        subject=f'Atualização no seu pedido #{pedido.id}'
         from_email=settings.DEFAULT_FROM_EMAIL
         to=[pedido.usuario.email]
                 
@@ -44,7 +44,7 @@ class EmailForUser:
         email.send()
         
     def enviar_email_status_reembolso(self,solicitacao,pedido):
-        subject=f'Pedido recebido #{pedido.id}'
+        subject=f'Atualização do seu reembolso - Pedido #{pedido.id}'
         from_email=settings.DEFAULT_FROM_EMAIL
         to=[pedido.usuario.email]
             
@@ -62,7 +62,7 @@ class EmailForUser:
         
         
     def enviar_email_cancelamento_direto(self,pedido):
-            subject=f'Pedido recebido #{pedido.id}'
+            subject=f'Confirmação de cancelamento - Pedido #{pedido.id}'
             from_email=settings.DEFAULT_FROM_EMAIL
             to=[pedido.usuario.email]
                     

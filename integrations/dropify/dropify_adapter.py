@@ -34,7 +34,7 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         for infos in lista_suja:
             retorno.append({
                 'erp_id':infos.get('id'),
-                'nome':infos.get('title'),
+                'name':infos.get('title'),
                 'preco':infos.get('suggestedRetailPrice',0)/100,
                 'estoque':infos.get('stockQuantity',0)
             })
@@ -52,17 +52,19 @@ class DropifyAdapter(IntegrationAdapterAbstract):
                 'quantity':item.quantidade,
                 'unit_amount':int(round(item.price * 100))
             })
+            
+        perfil=pedido.usuario.perfil_set.first()
         
         payload={
                 "externalOrderId": str(pedido.id),
                 "salesChannel": "Luvia Home",
                 "consumer": {
                     "consumerType": "naturalPerson",
-                    "name":pedido.usuario.get_full_name or pedido.usuario.name,
+                    "name":pedido.usuario.get_full_name() or pedido.usuario.first_name,
                     "email": pedido.usuario.email,
-                    "phoneNumber": pedido.usuario.telefone,
-                    "mobilePhoneNumber": pedido.usuario.telefone,
-                    "cpfCnpj": pedido.usuario.cpf,
+                    "phoneNumber": perfil.telefone if perfil else "",
+                    "mobilePhoneNumber": perfil.telefone if perfil else "",
+                    "cpfCnpj": perfil.cpf if perfil else "",
                     "address": {
                         "postalCode": endereco.cep,
                         "street": endereco.endereco,

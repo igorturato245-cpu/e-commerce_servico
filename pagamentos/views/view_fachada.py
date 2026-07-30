@@ -39,7 +39,7 @@ class StartPaymentView(View):
         
         except ValueError as e:
             messages.error(request,str(e))
-            redirect('carrinho:carrinho_url')
+            return redirect('carrinho:carrinho_url')
             
         except Exception as e:
             messages.error(request,'Erro ao processar pagamento. Tente novamente mais tarde.')
@@ -58,7 +58,7 @@ class RetryPaymentView(View):
         
         try:
             servico=CheckoutService()
-            envio_de_dados=servico.precessar_retry(request,pedido, request.user)
+            envio_de_dados=servico.processar_retry(request,pedido, request.user)
             url_link=str(envio_de_dados)
             
             return redirect(url_link)
@@ -87,7 +87,7 @@ class CancelledRefundedView(View):
             
             except Exception as e:
                 messages.error(request,'Erro de comunicação ao cancelar pedido. Tente novamente mais tarde.')
-                return redirect('pegamentos:meus_pedidos')
+                return redirect('pagamentos:meus_pedidos')
         
         else:
             messages.error(request,'Esse pedido não pode ser cancelado no momento.')
@@ -99,7 +99,7 @@ class CancelledRefundedView(View):
 class RefundedSolicitationAprovedView(View):
     def post(self,request,pedido_id):
         if not request.user.is_authenticated:
-            return redirect('Cadastro_login:login')
+            return redirect('cadastro_login:login')
         
         pedido=get_object_or_404(Pedido,id=pedido_id,usuario=request.user)
         

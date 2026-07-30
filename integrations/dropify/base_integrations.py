@@ -8,7 +8,7 @@ class IntegrationGatewayStrategy(ABC):
         pass
     
     @abstractmethod
-    def enviar_pedido(self,pedido):
+    def enviar_pedido(self,pedido,endereco):
         pass
     
     @abstractmethod

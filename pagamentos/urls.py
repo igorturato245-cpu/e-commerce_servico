@@ -3,7 +3,7 @@ from views.view_checkout import Checkout
 from views.view_avaliarpedidos import AvaliarPedido
 from views.view_retorno_pagamento import RetornoPagamento
 from views.view_meuspedidos import MeusPedidos,DetalhePedido
-from views.view_reembolso import Solicitacao_reembolso,AnaliseReembolso
+from views.view_reembolso import SolicitarReembolso,AnaliseReembolso
 from views.view_cancelamentopedido import CancelarPedido,ConclusaCancelamento
 from views.view_fachada import StartPaymentView,RetryPaymentView,CancelledRefundedView,PagseguroNotificationView,RefundedSolicitationAprovedView
 
@@ -21,8 +21,8 @@ urlpatterns = [
     path('pedido/<int:pedido_id>/',DetalhePedido.as_view(),name='detalhe_pedido'),
     path('avaliar-pedido/<int:pedido_id>/',AvaliarPedido.as_view(),name='avaliar_pedido'),
     path('cancelar-pedido/<int:pedido_id>/',CancelarPedido.as_view(), name='devolucao_reembolso_direto'),
-    path('solicitacao-reembolso-pedido/<int:pedido_id>/',Solicitacao_reembolso.as_view(),name='solicitacao_reembolso'),
+    path('solicitacao-reembolso-pedido/<int:pedido_id>/',SolicitarReembolso.as_view(),name='solicitacao_reembolso'),
     path('analise-reembolso-pedido/<int:pedido_id>',AnaliseReembolso.as_view(),name='analise_reembolso'),
-    path('solicitacao-reembolso-pedido/<int:pedido_id>/',RefundedSolicitationAprovedView.as_view(),name='solicitacao_reembolso_aprovada'),
+    path('solicitacao-reembolso-pedido-aprovada/<int:pedido_id>/',RefundedSolicitationAprovedView.as_view(),name='solicitacao_reembolso_aprovada'),
     path('conclucsao-cancelamento-automatico/<int:pedido_id>/',ConclusaCancelamento.as_view(),name='conclusao_cancelamento_automatico')
 ]

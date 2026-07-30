@@ -57,7 +57,7 @@ class Pedido(models.Model):
             self.carrinho_id=None
             
             
-            Pedido.objects.filter(pk=carr_id).update(carrinho=None)
+            Pedido.objects.filter(pk=self.pk).update(carrinho=None)
             
             Carrinho.objects.filter(pk=carr_id).delete()
             return True
@@ -71,7 +71,7 @@ class Pedido(models.Model):
     def pode_solicitar_reembolso(self):
         return self.status in ['erp_confirmed'] and self.erp_status in ['sent','received']
     
-    def ja_avalisado(self):
+    def ja_avaliado(self):
         return Avaliation_product.objects.filter(usuario=self.usuario,pedido=self).exists()
     
     @property

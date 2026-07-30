@@ -38,7 +38,7 @@ ALLOWED_HOSTS = getattr(local_settings,'ALLOWED_HOSTS',[])
 
 # PagSeguro
 PAGSEGURO_URL=getattr(local_settings,'PAGSEGURO_URL',None)
-PAGSEGURO_SANDBOX_URL=(local_settings,'PAGSEGURO_SANDBOX_URL',None)
+PAGSEGURO_SANDBOX_URL=getattr(local_settings,'PAGSEGURO_SANDBOX_URL',None)
 PAGSEGURO_EMAIL = getattr(local_settings, 'PAGSEGURO_EMAIL', None)
 PAGSEGURO_TOKEN = getattr(local_settings, 'PAGSEGURO_TOKEN', None)
 PAGSEGURO_SANDBOX = getattr(local_settings, 'PAGSEGURO_SANDBOX', True)
@@ -96,7 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'e_comerce.views.context_processors.google_ads_ids',
+                #'e_comerce.views.context_processors.google_ads_ids',
                 'django.template.context_processors.debug',
             ],
         },
@@ -179,7 +179,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS=[BASE_DIR / 'base_static']
 STATIC_ROOT=BASE_DIR/'static'
 MEDIA_URL='media/'
-MEDIA_DIR=BASE_DIR/'media'
+MEDIA_ROOT=BASE_DIR/'media'
 
 
 

@@ -13,7 +13,7 @@ class CancelarPedido(View):
         pedido=get_object_or_404(Pedido,pk=pedido_id,usuario=request.user)
         
         if not pedido.pode_cancelar_direto:
-            messages.error(request,'Pedido ja cancelado/enviado, cancelamento automatimo esta indisponivel. Tente solicitar seu reembolso mais tarde.')
+            messages.error(request,'Pedido ja cancelado/enviado, cancelamento automatico está indisponivel. Tente solicitar seu reembolso mais tarde.')
         itens_pedido=Pedidoitem.objects.filter(pedido=pedido)
         
         context={

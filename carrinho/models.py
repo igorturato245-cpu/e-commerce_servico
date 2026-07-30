@@ -32,7 +32,7 @@ class Carrinho(models.Model):
             return f'Carrinho de {self.usuario.username} - criado em {self.criado_em}'
         if self.session_key:
             return f'Carrinho session {self.session_key} - criado em {self.criado_em}'
-        return f'Carrinho criado em %d/%m/%Y às %H:%M:%S'
+        return f'Carrinho criado em {self.criado_em.strftime('%d/%m/%Y às %H:%M:%S')}'
     
     
 class Item_carrinho(models.Model):

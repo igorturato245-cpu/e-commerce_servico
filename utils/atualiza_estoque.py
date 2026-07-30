@@ -13,7 +13,7 @@ class AtualizaEstoque:
                 return
             
             
-            items=pedido.items.select_related('produto').all()#type:ignore
+            items=pedido.itens_pedido.select_related('produto').all()#type:ignore
             
             
             for item in items:
@@ -40,7 +40,7 @@ class AtualizaEstoque:
                 return
             
             
-            items=pedido.items.select_related('produto').all()#type:ignore
+            items=pedido.itens_pedido.select_related('produto').all()#type:ignore
             
             
             for item in items:

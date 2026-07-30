@@ -62,7 +62,7 @@ class CheckoutService:
                         price=it.produto.get_preco()
                     )
     
-        except ImportError:
+        except Exception:
             messages.error(request,'Pedido já está sendo processado, aguarde alguns instantes.')
             return redirect('carrinho:carrinho_url')
         
@@ -72,7 +72,7 @@ class CheckoutService:
         return url_redirect
         
     @classmethod 
-    def precessar_retry(cls, request, pedido, user):
+    def processar_retry(cls, request, pedido, user):
         endereco=Endereco_usuario.objects.filter(usuario=user,padrao=True)
         
         if not endereco:
@@ -228,7 +228,7 @@ class PagseguroGateway(PaymentGatewayStrategy):
         return True
     
     def solicitacao_reembolso(self, pedido) -> bool:
-        transaction_code=pedido.metadata.get('pagseguro_code')
+        transaction_code=pedido.metadata.get('pagseguro')
         
         if not transaction_code:
             raise Exception('Código de transação do Pagseguro não encontrado no pedido.')

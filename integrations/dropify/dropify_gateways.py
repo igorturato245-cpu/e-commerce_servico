@@ -8,7 +8,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def _get_config(self):
         client_id=getattr(settings,'DROPIFY_CLIENT_ID',None)
         client_secret=getattr(settings,'DROPIFY_CLIENT_SECRET',None)
-        base_url=(settings,'DESTRIBUIDOR_URL',None)
+        base_url=getattr(settings,'DESTRIBUIDOR_URL',None)
         
         if not client_id or not client_secret:
             raise RuntimeError('Credenciais (Client ID/Secret) da dropify não configuradas')
@@ -92,10 +92,10 @@ class DropifyStrategy(IntegrationGatewayStrategy):
         
         url=f'{base_url}/products/{produto_erp_id}'
         
-        respose=requests.get(url,headers=headers,timeout=30)
+        response=requests.get(url,headers=headers,timeout=30)
         
-        if respose.status_code == 200:
-            data=respose.json()
+        if response.status_code == 200:
+            data=response.json()
             
             adaptador=DropifyAdapter()
             return adaptador.extrair_preco(data)
@@ -115,4 +115,4 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             adaptador=DropifyAdapter()
             return adaptador.traduzir_status_pedido(data)
         
-        return ValueError(f'Erro ao buscar status do pedido {pedido_id}')
+        raise ValueError(f'Erro ao buscar status do pedido {pedido_id}')

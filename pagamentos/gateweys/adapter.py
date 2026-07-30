@@ -62,10 +62,10 @@ class PagSeguroCreatePayload(PayloadAdapter):
         
         charge={}
         
-        if notification_id.starstwith('CHAR_'):
+        if notification_id.startswith('CHAR_'):
             charge=data
             ref=data.get('reference_id')
-        elif notification_id.starstwith('CHCK_'):
+        elif notification_id.startswith('CHCK_'):
             ref=data.get('reference_id')
             orders=data.get('orders',[{}])
             order=orders[0] if orders else {}

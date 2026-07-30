@@ -13,7 +13,7 @@ class Produtos:
                 erp_id=prod['erp_id'],
                 defaults={
                     'name':prod['name'],
-                    'price':prod['preco'],
+                    'preco':prod['preco'],
                     'estoque':prod['estoque'],
                     'remote_stock':prod['estoque']
                 }

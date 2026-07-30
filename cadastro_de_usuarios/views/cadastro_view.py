@@ -147,7 +147,7 @@ class Atualizauser(BaseCadastro):
             if password:
                 autentica=authenticate(
                     self.request,
-                    usarneme=usuario,
+                    userneme=usuario.username,
                     password=password
                 )
                 

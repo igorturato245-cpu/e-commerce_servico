@@ -36,7 +36,7 @@ class adicionar_ao_carrinho(_get_card_for_request,View):
         if create:
             messages.success(request,f'Sucesso ao adicionar o produto {produto.name} ao carrinho.')
         else:          
-            messages.error(request, 'Erro ao adicionar produto ao carrinho, tente novamente.')
+            messages.success(request, f'Quantidade do produto {produto.name} atualizada no carrinho.')
             
         
         acao=request.POST.get('acao')

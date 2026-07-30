@@ -11,7 +11,7 @@ class contatoview(View):
         email=request.POST.get('Email')
         texto=request.POST.get('Área de contato')  
         
-        Contato.objects.update_or_create(
+        Contato.objects.create(
             nome=nome,
             email=email,
             texto=texto

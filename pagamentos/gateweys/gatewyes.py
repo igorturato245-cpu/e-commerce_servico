@@ -12,7 +12,7 @@ class PagseguroStrategy(PaymentGatewayStrategy):
     def _get_config(self):
         token=getattr(settings,'PAGSEGURO_TOKEN',None)
         sandbox=getattr(settings,'PAGSEGURO_SANDBOX',None)
-        base_url=(settings,'PAGSEGURO_SANDBOX_URL') if sandbox else (settings,'PAGSEGURO_URL',None)
+        base_url=getattr(settings,'PAGSEGURO_SANDBOX_URL') if sandbox else (settings,'PAGSEGURO_URL',None)
         
         headers = {
             'Content-Type':'application/json',
@@ -61,9 +61,9 @@ class PagseguroStrategy(PaymentGatewayStrategy):
         if not token:
             raise RuntimeError('Token Pagseguro não configurado.')
         
-        if notification_id.starstwith('CHCK_'):
+        if notification_id.startswith('CHCK_'):
             endpoint=f'{base_url}/checkouts/{notification_id}'
-        elif notification_id.starstwith('CHAR_'):
+        elif notification_id.startswith('CHAR_'):
             endpoint=f'{base_url}/charges/{notification_id}'
         else:
             endpoint=f'{base_url}/orders/{notification_id}'

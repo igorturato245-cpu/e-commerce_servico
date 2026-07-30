@@ -10,7 +10,7 @@ from django.contrib import messages
 class Lista_end(LoginRequiredMixin,View):
     template_name='cadastro_de_usuarios/lista_end.html'
     
-    def get(self,*args, **kwargs):
+    def get(self,request,*args, **kwargs):
         
         enderecos=Endereco_usuario.objects.filter(usuario=self.request.user).order_by('-padrao','-id')
         
@@ -18,7 +18,7 @@ class Lista_end(LoginRequiredMixin,View):
     
 
 class Delete_end(LoginRequiredMixin,View):
-    def post(self,pk,*args, **kwargs):
+    def post(self,request,pk,*args, **kwargs):
         
         
         endereco=get_object_or_404(Endereco_usuario,pk=pk,usuario=self.request.user)
@@ -31,7 +31,7 @@ class Delete_end(LoginRequiredMixin,View):
     
 
 class Default_end(LoginRequiredMixin,View):
-    def post(self,pk,*args, **kwargs):
+    def post(self,request,pk,*args, **kwargs):
                         
         enderecopadrao=get_object_or_404(Endereco_usuario,pk=pk,usuario=self.request.user)
         

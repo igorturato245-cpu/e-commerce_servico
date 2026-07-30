@@ -11,16 +11,16 @@ class quantidade_carrinho(_get_card_for_request,View):
         item_id=request.POST.get('item_id')
         
         try:
-            quantidade_add=int(request.POST.get('quantidade', 1))
+            nova_quantidade=int(request.POST.get('quantidade', 1))
         except ValueError:
-            quantidade_add=1
+            nova_quantidade=1
             
             
         carrinho=self.get_carrinho(request)
         
         item=get_object_or_404(Item_carrinho.objects.select_related('produto'), id=item_id,carrinho=carrinho)
         
-        item.atualiza_qtd(quantidade_add)
+        item.atualiza_qtd(nova_quantidade)
         item.save()
         
         subtotal=carrinho.total()

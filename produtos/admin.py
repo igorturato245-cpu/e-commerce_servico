@@ -7,7 +7,7 @@ class CarrosselImg(admin.TabularInline):
 
 @admin.register(Category)
 class Categoryadmin(admin.ModelAdmin):
-    list_display='name','slug',
+    list_display=('name','slug',)
     prepopulated_fields={'slug':('name',)}
     ordering=('-id',)
 
@@ -25,9 +25,9 @@ class Productadmin(admin.ModelAdmin):
     
 @admin.register(Avaliation_product)
 class Avaliationadmin(admin.ModelAdmin):
-    list_display='nota_site','nota_produto'
+    list_display=('nota_site','nota_produto')
     
 @admin.register(Token_Fonecedor)
 class TokenFornecedoradmin(admin.ModelAdmin):
-    list_display='access_token','refresh_token'
+    list_display=('access_token','refresh_token')
     

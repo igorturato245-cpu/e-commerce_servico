@@ -24,7 +24,7 @@ class oficial_merg(carts_merg):
             )
             
             if not create:
-                new_qtd=user_new_card.quantidade + itens.quantide
+                new_qtd=user_new_card.quantidade + itens.quantidade
                 user_new_card.atualiza_qtd(new_qtd)
                 user_new_card.save()
                 

@@ -4,7 +4,7 @@ from produtos.models import Product
 
 class Produto(View):
     def get(self,request,categoria_slug, produto_slug):
-        single_produtct=get_object_or_404(Product.objects.select_related('category').prefetch_related('category'),slug=produto_slug,category__slug=categoria_slug,disponivel=True)
+        single_produtct=get_object_or_404(Product.objects.select_related('category'),slug=produto_slug,category__slug=categoria_slug,disponivel=True)
         ofertas_do_dia=Product.objects.filter(ofertas_do_dia=True,disponivel=True ).select_related('category')
         
         context={

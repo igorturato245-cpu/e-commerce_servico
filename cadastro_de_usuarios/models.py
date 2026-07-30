@@ -8,7 +8,7 @@ import re
 
 
 class Perfil(models.Model):
-    usuario=models.ForeignKey(User,null=True, on_delete=models.CASCADE)
+    usuario=models.OneToOneField(User,null=True, on_delete=models.CASCADE)
     idade=models.IntegerField()
     data_de_nascimento=models.DateField()
     telefone=models.CharField(max_length=15)
@@ -100,10 +100,10 @@ class Endereco_usuario(models.Model):
         cep_limpo=re.sub(r'\D','',str(self.cep))
         
         
-        if not cep_limpo.isdigit and len(self.cep) != 8:
+        if not cep_limpo.isdigit() and len(self.cep) != 8:
             erro_message['cep']='CEP inválido. Digite apenas números.'
             
-        self.cep =  self.cep
+        self.cep =  cep_limpo
         
         if erro_message:
             raise ValidationError(erro_message)
