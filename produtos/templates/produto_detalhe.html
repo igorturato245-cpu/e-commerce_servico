@@ -94,6 +94,23 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org/",
+ "@type": "Product",
+ "name": "{{ produto.name }}",
+ "description": "{{ produto.descricao|truncatechars:200 }}",
+ "sku": "{{ produto.id }}",
+
+ "offers": {
+   "@type": "Offer",
+   "priceCurrency": "BRL",
+   "price": "{{ produto.preco }}",
+   "availability": "https://schema.org/{% if produto.disponivel %}InStock{% else %}OutOfStock{% endif %}"
+ }
+}
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 

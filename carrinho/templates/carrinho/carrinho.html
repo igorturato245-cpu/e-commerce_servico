@@ -84,7 +84,7 @@
               </div>
             {% else %}
               <div class="entrega-form">
-                <form method="post" action="">
+                <form method="post" action="{% url 'pagamentos:checkout' %}">
                   {% csrf_token %}
                   <button type="submit">Comprar</button>
                 </form>

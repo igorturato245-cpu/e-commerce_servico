@@ -1,9 +1,39 @@
 {% load static %}
-
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="{% static 'global/img/favicon.ico' %}">
+<link rel="apple-touch-icon"href="{% static 'global/img/favicon.png' %}">
+
+<title>{% block title %}Luvia Home{% endblock title %}</title>
+<meta name="description" content="{% block meta_description %}As melhores ofertas para produtos voltados ao domicílio.{% endblock %}">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+
+
 <meta property="og:type" content="website">
+<meta property="og:title" content="{% block og_title %}Luvia Home - E-commerce{% endblock %}">
+<meta property="og:description" content="{% block og_description %}Confira nossos produtos exclusivos com os melhores preços.{% endblock %}">
+<meta property="og:image" content="{% block og_image %}{% static 'global/img/logo.png' %}{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+
 
 <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+<!-- Se estiver em produção, carrega os scripts de rastreio -->
+<!-- Google tag (gtag.js) único para Analytics e Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{Analytics_id}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Configura o Analytics
+  gtag('config', '{{Analytics_id}}');
+      
+  // CONFIGURAÇÃO ESSENCIAL: Você precisa disparar o 'config' do Google Ads aqui também
+  // para que os eventos de conversão funcionem corretamente depois.
+  gtag('config', '{{Tag_id}}');
+</script>
