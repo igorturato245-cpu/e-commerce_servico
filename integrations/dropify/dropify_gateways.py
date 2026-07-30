@@ -8,7 +8,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def _get_config(self):
         client_id=getattr(settings,'DROPIFY_CLIENT_ID',None)
         client_secret=getattr(settings,'DROPIFY_CLIENT_SECRET',None)
-        base_url='https://app.dropify.com.br/api'
+        base_url=(settings,'DESTRIBUIDOR_URL',None)
         
         if not client_id or not client_secret:
             raise RuntimeError('Credenciais (Client ID/Secret) da dropify não configuradas')

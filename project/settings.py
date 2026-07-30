@@ -10,10 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import sentry_sdk
 from pathlib import Path
+from celery.schedules import crontab
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+try:
+    from . import local_settings
+except ImportError:
+    raise Exception('O arquivo local_settings.py é obrigatório para rodar a aplicação.')
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +34,28 @@ SECRET_KEY = 'django-insecure-zj@+)!xi%qfsvc9v(_q@k&di2=(ud@-&)f_9e2iwt6#k_wt#lb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = getattr(local_settings,'ALLOWED_HOSTS',[])
+
+# PagSeguro
+PAGSEGURO_URL=getattr(local_settings,'PAGSEGURO_URL',None)
+PAGSEGURO_SANDBOX_URL=(local_settings,'PAGSEGURO_SANDBOX_URL',None)
+PAGSEGURO_EMAIL = getattr(local_settings, 'PAGSEGURO_EMAIL', None)
+PAGSEGURO_TOKEN = getattr(local_settings, 'PAGSEGURO_TOKEN', None)
+PAGSEGURO_SANDBOX = getattr(local_settings, 'PAGSEGURO_SANDBOX', True)
+PAGSEGURO_NOTIFICATION_URL = getattr(local_settings, 'PAGSEGURO_NOTIFICATION_URL', None)
+PAGSEGURO_REDIRECT_URL = getattr(local_settings, 'PAGSEGURO_REDIRECT_URL', None)
+PAGSEGURO_LOG_IN_MODEL = getattr(local_settings, 'PAGSEGURO_LOG_IN_MODEL', False)
+
+
+
+#Distribuidor
+DESTRIBUIDOR_URL=getattr(local_settings,'DESTRIBUIDOR_URL',None)
+DESTRIBUIDOR_CLIENT_ID = getattr(local_settings, 'DESTRIBUIDOR_CLIENT_ID', None)
+DESTRIBUIDOR_CLIENT_SECRET = getattr(local_settings, 'DESTRIBUIDOR_CLIENT_SECRET', None)
+DESTRIBUIDOR_TOKEN=getattr(local_settings, 'DESTRIBUIDOR_TOKEN',None)
+
+
+URL_GOOGLE_SHEETS=getattr(local_settings,'URL_GOOGLE_SHEETS',None)
 
 
 # Application definition
@@ -66,6 +96,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'e_comerce.views.context_processors.google_ads_ids',
+                'django.template.context_processors.debug',
             ],
         },
     },
@@ -104,6 +136,25 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Celery
+CELERY_BROKER_URL = getattr(local_settings, 'CELERY_BROKER_URL', 'redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+
+CELERY_BEAT_SCHEDULE = {
+    'verificar-rastreio-a-cada-hora': {
+        'task': 'pagamentos.tasks.check_all_orders_tracking_task',
+        'schedule': crontab(minute=0)
+    },
+    'limpar-carrinhos-diariamente': {
+        'task': 'carrinho.tasks.limpar_carrinhos_abandonados_task',
+        'schedule': crontab(hour=3, minute=0)
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -111,6 +162,15 @@ LANGUAGE_CODE = 'pt-BR'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
+
+# E-mail (Configurações reais)
+EMAIL_BACKEND = getattr(local_settings, 'EMAIL_BACKEND', "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = getattr(local_settings, 'EMAIL_HOST', "smtp.zoho.com")
+EMAIL_PORT = getattr(local_settings, 'EMAIL_PORT', 587)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = getattr(local_settings, 'EMAIL_HOST_USER', "")
+EMAIL_HOST_PASSWORD = getattr(local_settings, 'EMAIL_HOST_PASSWORD', "")
+DEFAULT_FROM_EMAIL = "contato@luviahome.com.br"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -120,3 +180,43 @@ STATICFILES_DIRS=[BASE_DIR / 'base_static']
 STATIC_ROOT=BASE_DIR/'static'
 MEDIA_URL='media/'
 MEDIA_DIR=BASE_DIR/'media'
+
+
+
+# Sessões
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 # 1 semana
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+GOOGLE_ANALYTICS_ID=getattr(local_settings,'GOOGLE_ANALYTICS_ID',"")
+GOOGLE_TAG_ID=getattr(local_settings,'GOOGLE_TAG_ID',"")
+CODIGO_ENVIO_GOOGLE_TAG_CARRINHO=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_CARRINHO',"")
+CODIGO_ENVIO_GOOGLE_TAG_CHECKOUT=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_CHECKOUT',"")
+CODIGO_ENVIO_GOOGLE_TAG_PAGAMENTO=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_PAGAMENTO',"")
+CODIGO_ENVIO_GOOGLE_TAG_INDEX=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_INDEX',"")
+
+
+
+# --- SEGURANÇA DE PRODUÇÃO (HTTPS) ---
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = getattr(local_settings, 'CSRF_TRUSTED_ORIGINS', [])
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    # HSTS
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+# Sentry Init
+SENTRY_DSN = getattr(local_settings, 'SENTRY_DSN', None)
+if SENTRY_DSN and not DEBUG:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+       integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        send_default_pii=True
+    )
