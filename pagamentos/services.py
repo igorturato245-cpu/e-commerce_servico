@@ -1,3 +1,4 @@
+import logging
 from pagamentos.models import Pedido,Pedidoitem
 from cadastro_de_usuarios.models import Endereco_usuario
 from django.db import transaction
@@ -7,7 +8,9 @@ from django.contrib import messages
 from django.urls import reverse
 from gateweys.gatewyes import PagseguroStrategy as pagseguro_integration
 from integrations.dropify.dropify_gateways import DropifyStrategy
+from utils.google_sheets import GoogleSheets
       
+logger=logging.getLogger(__name__)
 
 class CheckoutService:
     
@@ -35,10 +38,6 @@ class CheckoutService:
         
         total_com_frete=Pedido.calcula_total(endereco.cep,itens_para_calculo,total)
         
-           
-        valor_frete_total=total_com_frete['valor_frete']
-        valor_total=total_com_frete['total_produtos']
-        total_tudo=total_com_frete
         
         
         try:
@@ -46,9 +45,9 @@ class CheckoutService:
                 pedido=Pedido.objects.create(
                     usuario=request.user,
                     carrinho=carrinho,
-                    valor_frete=valor_frete_total,
-                    total=valor_total,
-                    total_com_frete=total_tudo,
+                    valor_frete=total_com_frete['valor_frete'],
+                    total=total_com_frete['total_produtos'],
+                    total_com_frete=total_com_frete,
                     status='pending',
                     erp_status='pending'
                 )
@@ -154,6 +153,12 @@ class CheckoutService:
                     'pagseguro_charge_id':data.get('charge_id'),
                 })
                 pedido.save(update_fields=['status','erp_status','metadata'])
+                
+                try:
+                    transaction.on_commit(lambda: GoogleSheets().enviar_pedido_sheets(pedido))
+                    
+                except Exception as e:
+                    logger.error(f'Erro ao enviar pedido {pedido.pk} para o Google Sheets:{str(e)}')
                     
                     
                 if new_status == 'paid':
