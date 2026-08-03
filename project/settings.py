@@ -96,7 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #'e_comerce.views.context_processors.google_ads_ids',
+                'index.context_processors.google_ads_ids',
                 'django.template.context_processors.debug',
             ],
         },

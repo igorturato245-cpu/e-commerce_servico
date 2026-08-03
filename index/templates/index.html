@@ -107,4 +107,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
+<script>
+  gtag('event', 'conversion', {
+      'send_to': '{{Tag_index}}',
+      'value': 1.0,
+      'currency': 'BRL'
+  });
+</script>
 {% endblock extra_scripts %}
