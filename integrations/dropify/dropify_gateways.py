@@ -1,3 +1,4 @@
+import json
 import requests
 from django.conf import settings
 from integrations.dropify.dropify_adapter import DropifyAdapter
@@ -6,8 +7,8 @@ from integrations.dropify.base_integrations import IntegrationGatewayStrategy
 
 class DropifyStrategy(IntegrationGatewayStrategy):
     def _get_config(self):
-        client_id=getattr(settings,'DROPIFY_CLIENT_ID',None)
-        client_secret=getattr(settings,'DROPIFY_CLIENT_SECRET',None)
+        client_id=getattr(settings,'DESTRIBUIDOR_CLIENT_ID',None)
+        client_secret=getattr(settings,'DESTRIBUIDOR_CLIENT_SECRET',None)
         base_url=getattr(settings,'DESTRIBUIDOR_URL',None)
         
         if not client_id or not client_secret:
@@ -18,7 +19,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             'client_secret':client_secret
         }
         
-        auth_url=f'{base_url}/auth'
+        auth_url=f'{base_url}/oauth'
         
         response=requests.post(auth_url,json=auth_payload,timeout=10)
         
@@ -38,7 +39,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def buscar_produtos(self):
         base_url,headers=self._get_config()
         
-        url=f'{base_url}/products?page=1&page_size=5'
+        url=f'{base_url}/api/products?page=1&page_size=5'
         
         response=requests.get(url,headers=headers,timeout=30)
         
@@ -56,11 +57,22 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def enviar_pedido(self, pedido,endereco):
         base_url,headers=self._get_config()
         
-        url=f'{base_url}/orders/create'
+        url=f'{base_url}/api/orders/create'
         
         adaptador=DropifyAdapter()
         payload=adaptador.montar_payload_pedido(pedido,endereco)
         
+        if getattr(settings,'DEBUG',False):
+            print("\n"+"="*50)
+            print("🚀 [MOCK DROPIFY] SIMULANDO ENVIO DE PEDIDO")
+            print(f'URL alvo:{url}')
+            print('Payload gerado pelo adapter:')
+            print(json.dumps(payload,indent=4,ensure_ascii=False))
+            print("="*50+"\n")
+            
+            return True
+        
+        """
         response=requests.post(url,json=payload,headers=headers,timeout=30)
         
         if response.status_code in (200,201):
@@ -68,7 +80,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     
         else:
             raise Exception(f'Falha ao enviar pedido para o fornecedor:{response.text}')
-        
+        """
     
     
     def checar_estoque(self, produto_erp_id):

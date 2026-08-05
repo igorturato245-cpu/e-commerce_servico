@@ -4,7 +4,7 @@ from abc import ABC,abstractmethod
 class PaymentGatewayStrategy(ABC):
         
     @abstractmethod
-    def gerar_pagamento(self,pedido,endereco,return_url,notification_url):
+    def iniciar_pagamento(self,pedido,endereco,return_url,notification_url):
         pass
     
     @abstractmethod

@@ -164,7 +164,7 @@ USE_I18N = True
 USE_TZ = True
 
 # E-mail (Configurações reais)
-EMAIL_BACKEND = getattr(local_settings, 'EMAIL_BACKEND', "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_BACKEND = getattr(local_settings, 'EMAIL_BACKEND', "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = getattr(local_settings, 'EMAIL_HOST', "smtp.zoho.com")
 EMAIL_PORT = getattr(local_settings, 'EMAIL_PORT', 587)
 EMAIL_USE_TLS = True
@@ -200,7 +200,7 @@ CODIGO_ENVIO_GOOGLE_TAG_INDEX=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_IN
 
 
 # --- SEGURANÇA DE PRODUÇÃO (HTTPS) ---
-if not DEBUG:
+if DEBUG:
     CSRF_TRUSTED_ORIGINS = getattr(local_settings, 'CSRF_TRUSTED_ORIGINS', [])
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -213,7 +213,7 @@ if not DEBUG:
 
 # Sentry Init
 SENTRY_DSN = getattr(local_settings, 'SENTRY_DSN', None)
-if SENTRY_DSN and not DEBUG:
+if SENTRY_DSN and DEBUG:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
        integrations=[DjangoIntegration()],

@@ -15,9 +15,9 @@ class PagSeguroCreatePayload(PayloadAdapter):
         
         items=[]
         
-        for item in pedido.items.all():
+        for item in pedido.itens_pedido.all():
             items.append({
-                'reference_id':item.produto_id_string or str(item.id),
+                'reference_id':item.produto_id_str or str(item.id),
                 'name':item.produto_name[:100],
                 'quantity':item.quantidade,
                 'unit_amount':int(round(item.price * 100))

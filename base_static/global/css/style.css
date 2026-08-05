@@ -2703,6 +2703,7 @@ h2.devolucao-reembolsar-container {
 Checkout
 */
 .checkout-container{
+    margin-top: 50px;
     min-height: 100vh;
     background: var(--bg); /* Original: #fff */
     padding: var(--container-padding); /* Original: 40px */
@@ -3309,6 +3310,9 @@ Checkout
 /* ==========================================
    LISTAGEM DE PEDIDOS (DESKTOP: 1220px)
 ========================================== */
+.meus-pedidos-container{
+    margin-top: 50px;
+}
 .pedidos-container {
     max-width: var(--max-width);
     min-height: 100vh;
@@ -3480,6 +3484,386 @@ Checkout
 
 
 
+/* ==========================================
+   DETALHE DO PEDIDO (DESKTOP)
+   Aparência de Painel / Dashboard (Não Horizontal)
+========================================== */
+.detalhe-container {
+    max-width: var(--max-width);
+    margin: 40px auto;
+    padding: var(--container-padding);
+    background-color: var(--bg-card-light);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-medium);
+}
+
+/* Esconde o cabeçalho original em TODAS as telas. 
+   Não usaremos mais o estilo "tabela horizontal". */
+.detalhe-header {
+    display: none;
+}
+
+/* Esconde os spans vazios que vieram do HTML */
+.detalhe-info-txt span:first-child,
+.detalhe-info-txt span:last-child {
+    display: none;
+}
+
+/* Área principal (Fundo Branco) */
+.detalhe-info {
+    background-color: var(--bg);
+    border: var(--border-light-soft);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* 
+  Transforma o conteúdo em Grid.
+  Em vez de uma linha, teremos 3 colunas de blocos de informação.
+*/
+.detalhe-info-txt {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 blocos por linha */
+    gap: 30px; /* Espaço entre os blocos */
+}
+
+/* Design de cada "Bloco/Campo" de informação */
+.detalhe-info-txt span {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-gray); /* Fundo suave para parecer um campo isolado */
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--primary-color); /* Detalhe moderno na lateral */
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.detalhe-small-info {
+    display: block;       /* Força ele a ocupar a linha toda */
+    margin-bottom: 15px;  /* Empurra o botão para baixo */
+    color: #888;
+    font-size: 13px;
+    max-width: 500px;     /* Evita que o texto fique muito largo no desktop */
+}
+
+/* INJETANDO OS TÍTULOS VIA CSS PARA CADA BLOCO */
+.detalhe-info-txt span:nth-child(2)::before { content: 'Status'; }
+.detalhe-info-txt span:nth-child(3)::before { content: 'Payment Reference'; }
+.detalhe-info-txt span:nth-child(4)::before { content: 'Ordem do Fornecedor'; }
+.detalhe-info-txt span:nth-child(5)::before { content: 'Status do Fornecedor'; }
+.detalhe-info-txt span:nth-child(6)::before { content: 'Produtos'; }
+.detalhe-info-txt span:nth-child(7)::before { content: 'Total'; }
+
+/* Estilo do Título (Label) de cada Bloco */
+.detalhe-info-txt span::before {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.detalhe-info-txt span:nth-child(6){
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* Destaque Exclusivo para o Total (Último Campo) */
+.detalhe-info-txt span:nth-child(7) {
+    background-color: rgba(0, 119, 255, 0.05); /* Fundo sutil com a cor primária */
+    border-left-color: var(--primary-hover);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 20px;
+}
+.detalhe-info-txt span:nth-child(7)::before {
+    color: var(--primary-color);
+}
+
+/* ==========================================
+   ÁREA DE REDIRECIONAMENTO DE PAGAMENTO
+========================================== */
+.detalhe-redirect {
+    margin-top: 40px; 
+    padding-top: 30px;
+    border-top: var(--border-light-soft); /* Linha divisória para separar do resumo do pedido */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.detalhe-help {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.detalhe-paymente-redirect {
+    background-color: var(--text-black);
+    color: var(--text-light);
+    padding: 12px 40px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-soft);
+}
+
+.detalhe-paymente-redirect:hover {
+    background-color: var(--text-hover-dark);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-2px); /* Efeito suave de elevação ao passar o mouse */
+}
+
+/* ==========================================
+   SEÇÃO DE CONFIRMAÇÃO/AVALIAÇÃO (Dentro do Card)
+========================================== */
+.detalhe-avaliacao-box {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-light);
+    text-align: left; /* Mantém à esquerda conforme pedido */
+    max-width: fit-content; /* Deixa o bloco pequeno */
+}
+
+.detalhe-confimacao {
+    font-size: 13px; /* "Meio pequena" */
+    color: #777;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.detalhe-avalizcao {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 8px 18px; /* Botão mais compacto */
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+}
+
+.detalhe-avalizcao:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-button-hover);
+}
+
+.badge-sucesso{
+    margin-top: 20px;
+}
+
+/* ==========================================
+   MEDIA QUERY: 700px (Tablets)
+   O Grid passa de 3 para 2 colunas
+========================================== */
+@media (max-width: 700px) {
+    .detalhe-info-txt {
+        grid-template-columns: repeat(2, 1fr); /* 2 blocos por linha */
+        gap: 20px;
+    }
+    .detalhe-avaliacao-box {
+        margin-top: 25px;
+    }
+}
+
+
+/* ==========================================
+   MEDIA QUERY: 600px (Ajustes de Espaço)
+========================================== */
+@media (max-width: 600px) {
+    .detalhe-container {
+        padding: 20px 15px;
+        margin: 20px auto;
+    }
+
+    .detalhe-info {
+        padding: 20px;
+    }
+    
+    .detalhe-info-txt {
+        gap: 15px;
+    }
+    
+    .detalhe-info-txt span {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    /* Aproxima mais o botão e o texto em telas médias */
+    .detalhe-redirect {
+        margin-top: 30px;
+        padding-top: 25px;
+    }
+
+    .detalhe-avaliacao-box {
+        padding-top: 15px;
+    }
+    .detalhe-confimacao {
+        font-size: 12px;
+    }
+    .detalhe-avalizcao {
+        padding: 7px 15px;
+        font-size: 13px;
+    }
+}
+
+
+/* ==========================================
+   MEDIA QUERY: 480px (Mobile/Celular)
+   Lista Pontilhada e Botão 100%
+========================================== */
+@media (max-width: 480px) {
+    .detalhe-info-txt {
+        display: block; /* Desliga os blocos lado a lado e empilha tudo */
+    }
+
+    /* Remove o estilo de "Card" do desktop e aplica o visual de linha tracejada */
+    .detalhe-info-txt span {
+        display: block; 
+        background-color: transparent;
+        border-left: none;
+        border-radius: 0;
+        text-align: right; /* Joga a variável para a direita */
+        padding: 15px 0;
+        border-bottom: 1px dashed var(--border-light);
+        font-size: 14px;
+        width: 100%;
+    }
+
+    /* Tira a borda pontilhada apenas do Último (Total) */
+    .detalhe-info-txt span:nth-child(7) {
+        border-bottom: none;
+        padding-bottom: 5px;
+        background-color: transparent;
+    }
+
+    /* Joga o Título para a Esquerda e remove formatação de bloco (Maiúscula) */
+    .detalhe-info-txt span::before {
+        float: left;
+        margin-bottom: 0;
+        font-size: 14px;
+        text-transform: none; 
+        letter-spacing: normal;
+        color: #777;
+    }
+
+    /* Evita que o float quebre as pontilhadas */
+    .detalhe-info-txt span::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .detalhe-small-info {
+        margin-bottom: 20px; /* Aumenta o espaço entre o texto e o botão no celular */
+        text-align: center;
+    }
+
+    /* ===================================
+       Ajustes da Área de Pagamento (Mobile) 
+       =================================== */
+    .detalhe-redirect {
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    .detalhe-help {
+        font-size: 14px;
+    }
+
+    .detalhe-paymente-redirect {
+        display: block;
+        width: 100%; /* Botão ocupa a tela toda */
+        box-sizing: border-box;
+        padding: 14px 0;
+    }
+
+    .detalhe-avaliacao-box {
+        max-width: 100%; /* No mobile, permite ocupar a largura se necessário */
+        text-align: center; /* Centraliza para melhor toque no celular */
+        border-top: none; /* Remove a linha para não poluir o visual tracejado do mobile */
+        margin: 20px auto 0;
+        background-color: var(--bg-gray);
+        padding: 15px;
+        border-radius: var(--radius-md);
+    }
+    
+    .detalhe-avalizcao {
+        display: block; /* Botão vira bloco no mobile para facilitar o clique */
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+
+/* Container das estrelas e do número */
+.product-rating {
+    display: flex;
+    align-items: center; /* Alinha verticalmente no centro */
+    gap: 4px;            /* Espaçamento entre as estrelas */
+    margin: 8px 0;       /* Espaçamento superior e inferior do bloco */
+}
+
+/* Estilização das Estrelas */
+.star-icon {
+    color: #FFC107;      /* Cor dourada/amarela padrão */
+    font-size: 16px;     /* Tamanho das estrelas no Desktop */
+    cursor: default;
+    transition: transform 0.2s ease;
+}
+
+/* Estilização do Texto 0.0 */
+.avaliação {
+    font-size: 14px;
+    color: #777;         /* Cinza para não brigar com o preço */
+    font-weight: 600;
+    margin-left: 6px;    /* Afasta um pouco das estrelas */
+    font-family: sans-serif;
+}
+
+/* ==================================================
+   MEDIA QUERIES (Responsividade)
+   ================================================== */
+
+/* Tablets e Celulares Médios (Até 768px) */
+@media (max-width: 768px) {
+    .star-icon {
+        font-size: 14px; /* Diminui levemente as estrelas */
+    }
+    
+    .avaliação {
+        font-size: 13px;
+    }
+}
+
+/* Celulares Pequenos (Até 480px) - Onde o card fica bem estreito */
+@media (max-width: 480px) {
+    .product-rating {
+        gap: 2px;        /* Estreita o espaço para caber tudo */
+        justify-content: flex-start; /* Garante alinhamento à esquerda */
+    }
+
+    .star-icon {
+        font-size: 12px; /* Estrelas menores para não quebrar linha no card */
+    }
+
+    .avaliação {
+        font-size: 12px;
+        margin-left: 4px;
+    }
+}
 
 
 
@@ -3497,6 +3881,7 @@ Checkout
    Return (DESKTOP: 1220px)
 ========================================== */
 .return-container {
+        margin-top: 50px;
         max-width: 600px;
         margin: 60px auto;
         padding: 40px;

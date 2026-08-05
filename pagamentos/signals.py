@@ -6,7 +6,7 @@ from utils.email_para_o_usuario import EmailForUser
 
     
 @receiver(pre_save,sender=Pedido)
-def capturar_status_anterior(self,sender,instance,**kwargs):
+def capturar_status_anterior(sender,instance,**kwargs):
     if instance.pk:
         try:
             old_instance=Pedido.objects.get(id=instance.pk)
@@ -21,25 +21,25 @@ def capturar_status_anterior(self,sender,instance,**kwargs):
         instance._old_erp_status=None
             
 @receiver(post_save,sender=Pedido)
-def disparar_email_cancelamento_direto(self,sender,instance,created, **kwargs):
+def disparar_email_cancelamento_direto(sender,instance,created, **kwargs):
     if instance.status=='cancelled' and getattr(instance,'_old_status',None) != 'cancelled':
         obj=EmailForUser()
         obj.enviar_email_cancelamento_direto(instance)
             
 @receiver(post_save,sender=Solicitacao_reembolso)
-def disparar_email_apos_mudanca_reembolso(self,sender,instance,created,**kwargs):
+def disparar_email_apos_mudanca_reembolso(sender,instance,created,**kwargs):
     obj=EmailForUser()
     obj.enviar_email_status_reembolso(instance,instance.pedido)
         
     
 @receiver(post_save,sender=Pedido)
-def apagar_carrinho_pago(self,sender,instance,created,**kwargs):
+def apagar_carrinho_pago(sender,instance,created,**kwargs):
     if instance.status=='paid':
         if getattr(instance,'carrinho_id',None):
             instance.delete_cart_paid()
                 
 @receiver(post_save,sender=Solicitacao_reembolso)
-def alterar_status_pedido_apos_solicitacao(self,sender,instance,created,**kwargs):
+def alterar_status_pedido_apos_solicitacao(sender,instance,created,**kwargs):
     if created:
         pedido=instance.pedido
         pedido.status='cancelled'

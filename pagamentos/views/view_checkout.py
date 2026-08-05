@@ -7,7 +7,7 @@ from django.views import View
 
 
 class Checkout(View):
-    def get(self,request):
+    def post(self,request):
         if not request.user.is_authenticated:
             messages.error(request,'Usuario não está logado. Conclua seu login ou crie seu cadastro e conclua sua compra.')
             return redirect('cadastro_login:login')

@@ -76,7 +76,7 @@
 
     {% elif pedido.pode_cancelar_direto %}
       <div class="detalhe-redirect">
-        <form id='formCancelar' method="post" action="{% url 'pagamentos:cancel_payment' pedido.id %}">
+        <form id='formCancelar' method="post" action="{% url 'pagamentos:cancel_refunded_payment' pedido.id %}">
           {% csrf_token %}
           <p class="detalhe-help">Caso queria cancelar o pedido, clique no botão abaixo.</p>
           <small class="detalhe-small-info">Caso o produto não esteja na condição original, o reembolso poderá ser negado.</small>
@@ -95,7 +95,7 @@
         {% endif %}
           <small class="detalhe-small-info" >Caso o produto não esteja na condição original, o reembolso poderá ser negado.</small>
           {% if not pedido.ja_avaliado and not pedido.prazo_arrependimento %}
-            <a class="detalhe-paymente-redirect" href="{% url 'pagamentos:devoluacao_reembolso' pedido.id %}">Reembolso e devolução</a>
+            <a class="detalhe-paymente-redirect" href="{% url 'pagamentos:solicitacao_reembolso' pedido.id %}">Reembolso e devolução</a>
           {% endif %}
       </div>
 

@@ -2,8 +2,8 @@ import logging
 import requests
 from utils.apenas_numeros import apenas_numeros_concreto
 from django.conf import settings
-from base import PaymentGatewayStrategy
-from adapter import PagSeguroCreatePayload
+from pagamentos.gateweys.base import PaymentGatewayStrategy
+from pagamentos.gateweys.adapter import PagSeguroCreatePayload
 
 
 
@@ -21,7 +21,7 @@ class PagseguroStrategy(PaymentGatewayStrategy):
         
         return token,base_url,headers
     
-    def gerar_pagamento(self, pedido, endereco, return_url, notification_url):
+    def iniciar_pagamento(self, pedido, endereco, return_url, notification_url):
         token,base_url,headers=self._get_config()
         
         if not token:
@@ -29,7 +29,7 @@ class PagseguroStrategy(PaymentGatewayStrategy):
             
         ap=apenas_numeros_concreto()
             
-        perfil=pedido.usuario.perfil_set.first()
+        perfil=pedido.usuario.perfil if hasattr(pedido.usuario,'perfil') else None
         cpf_cliente=ap.apenas_numeros(perfil.cpf) if perfil else ""
         cep_cliente=ap.apenas_numeros(endereco.cep) 
         

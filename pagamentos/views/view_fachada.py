@@ -10,6 +10,7 @@ import json
 import logging
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from utils.email_para_o_usuario import EmailForUser
 
 logger=logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class StartPaymentView(View):
         carrinho=cart.get_carrinho(request)
         
         
-        if not cart or not cart.itens.exists():#type:ignore
+        if not carrinho or not carrinho.itens.exists():#type:ignore
             messages.error(request,'Carrinho vazio.')
             return redirect('carrinho:carrinho_url')
         
@@ -33,17 +34,24 @@ class StartPaymentView(View):
         try:
             servico= CheckoutService()
             envio_de_dados=servico.processar_novo_pedido(request,carrinho,request.user)
-            url_link=str(envio_de_dados)
+            url_link=envio_de_dados
+            
+            pedido=get_object_or_404(Pedido,usuario=request.user,carrinho=carrinho)
+            
+            obj=EmailForUser()
+            obj.enviar_email_pedido_recebido(pedido)
             
             return redirect(url_link)
         
         except ValueError as e:
             messages.error(request,str(e))
-            return redirect('carrinho:carrinho_url')
+            messages.error(request,'Seu pedido já foi salvo, caso tenha tido problemas com o pagamento, cliquei em "detalhe" e tente o pagamento novamente.')
+            return redirect('pagamentos:meus_pedidos')
             
         except Exception as e:
-            messages.error(request,'Erro ao processar pagamento. Tente novamente mais tarde.')
-            return redirect('pagamentos:meus_pedidos')        
+            messages.error(request,'Seu pedido já foi salvo, caso tenha tido problemas com o pagamento, cliquei em "detalhe" e tente o pagamento novamente.')
+            return redirect('pagamentos:meus_pedidos')   
+        
         
 class RetryPaymentView(View):
     def post(self,request,pedido_id):
@@ -56,10 +64,11 @@ class RetryPaymentView(View):
         if pedido.status != 'pending':
             messages.error(request,'Erro ao processar pagamento.Status atual não permite retry.')
         
+
         try:
             servico=CheckoutService()
             envio_de_dados=servico.processar_retry(request,pedido, request.user)
-            url_link=str(envio_de_dados)
+            url_link=envio_de_dados
             
             return redirect(url_link)
         except ValueError as e:
@@ -79,6 +88,10 @@ class CancelledRefundedView(View):
             try:
                 servico=CheckoutService()
                 servico.cancelar_pedido(pedido)
+                
+                obj=EmailForUser()
+                obj.enviar_email_cancelamento_direto(pedido.pk)
+                
                 return redirect('pagamentos:meus_pedidos')
                 
             except ValueError as e:
@@ -110,6 +123,9 @@ class RefundedSolicitationAprovedView(View):
                 servico=CheckoutService()
                 servico.solicitacao_reembolso(pedido,status_solicitacao)
                 messages.success(request,'Reembolso solicitado e processado com sucesso.')
+                
+                obj=EmailForUser()
+                obj.enviar_email_status_reembolso(status_solicitacao,pedido.pk)
                 return redirect('pagamentos:meus_pedidos')
             except ValueError as e:
                 messages.error(request,str(e))
@@ -153,7 +169,7 @@ class PagseguroNotificationView(View):
         try:
             servico=CheckoutService()
             servico.atualiza_status_notificacao(order_id)
-            return 
+            return HttpResponse('OK', status=200)
         except ValueError as e:
             logger.error(f'Aviso ao processar notificação {order_id}:{e}')
         except Exception as e:

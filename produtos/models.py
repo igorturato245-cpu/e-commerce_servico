@@ -69,7 +69,7 @@ class Product(models.Model):
         
         self.estoque=F('estoque') - quantidade
         self.remote_stock=F('remote_stock') - quantidade
-        self.save(update_fields=['estoque','remote_stoke'])
+        self.save(update_fields=['estoque','remote_stock'])
         
         self.refresh_from_db()
         

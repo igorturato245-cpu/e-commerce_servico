@@ -1,11 +1,11 @@
 from django.urls import path
-from views.view_checkout import Checkout
-from views.view_avaliarpedidos import AvaliarPedido
-from views.view_retorno_pagamento import RetornoPagamento
-from views.view_meuspedidos import MeusPedidos,DetalhePedido
-from views.view_reembolso import SolicitarReembolso,AnaliseReembolso
-from views.view_cancelamentopedido import CancelarPedido,ConclusaCancelamento
-from views.view_fachada import StartPaymentView,RetryPaymentView,CancelledRefundedView,PagseguroNotificationView,RefundedSolicitationAprovedView
+from pagamentos.views.view_checkout import Checkout
+from pagamentos.views.view_avaliarpedidos import AvaliarPedido
+from pagamentos.views.view_retorno_pagamento import RetornoPagamento
+from pagamentos.views.view_meuspedidos import MeusPedidos,DetalhePedido
+from pagamentos.views.view_reembolso import SolicitarReembolso,AnaliseReembolso
+from pagamentos.views.view_cancelamentopedido import CancelarPedido,ConclusaCancelamento
+from pagamentos.views.view_fachada import StartPaymentView,RetryPaymentView,CancelledRefundedView,PagseguroNotificationView,RefundedSolicitationAprovedView
 
 
 app_name='pagamentos'

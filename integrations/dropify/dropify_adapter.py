@@ -43,36 +43,42 @@ class DropifyAdapter(IntegrationAdapterAbstract):
     
     def montar_payload_pedido(self, pedido,endereco):
         
+        perfil=pedido.usuario.perfil if hasattr(pedido.usuario,'perfil') else None
+        
+        cpf_cliente=perfil.cpf if perfil else ''
+        telefone_cliente=perfil.telefone if perfil else ''
+        
         items=[]
         
-        for item in pedido.items.all():
+        for item in pedido.itens_pedido.all():
             items.append({
-                'reference_id':item.produto_id_string or str(item.id),
-                'name':item.produto_name,
+                'product':item.produto_name,
+                'sku':item.produto.sku if item.produto and item.produto.sku else str(item.produto_id_str),
                 'quantity':item.quantidade,
-                'unit_amount':int(round(item.price * 100))
+                'price':{
+                    'unit_amount':str(int(round(item.price * 100))),
+                    'currency':'BRL'
+                }
             })
-            
-        perfil=pedido.usuario.perfil_set.first()
         
         payload={
                 "externalOrderId": str(pedido.id),
                 "salesChannel": "Luvia Home",
                 "consumer": {
-                    "consumerType": "naturalPerson",
+                    "cpf": cpf_cliente,
                     "name":pedido.usuario.get_full_name() or pedido.usuario.first_name,
                     "email": pedido.usuario.email,
-                    "phoneNumber": perfil.telefone if perfil else "",
-                    "mobilePhoneNumber": perfil.telefone if perfil else "",
-                    "cpfCnpj": perfil.cpf if perfil else "",
+                    "phone":telefone_cliente,
+                    "mobilePhone": telefone_cliente,
                     "address": {
+                        "country": "Brasil",
+                        "state": endereco.estado,
                         "postalCode": endereco.cep,
+                        "city": endereco.cidade,
+                        "district": endereco.bairro,
                         "street": endereco.endereco,
                         "number": str(endereco.numero),
-                        "district": endereco.bairro,
-                        "city": endereco.cidade,
-                        "state": endereco.estado,
-                        "country": "Brasil"
+                        "complement":endereco.complemento or ""
                         }
                     },
                 "items": items,

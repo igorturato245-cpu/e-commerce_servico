@@ -6,9 +6,10 @@ from django.shortcuts import render,redirect,get_object_or_404
 from abc import ABC,abstractmethod
 from django.contrib import messages
 from django.urls import reverse
-from gateweys.gatewyes import PagseguroStrategy as pagseguro_integration
+from pagamentos.gateweys.gatewyes import PagseguroStrategy as pagseguro_integration
 from integrations.dropify.dropify_gateways import DropifyStrategy
 from utils.google_sheets import GoogleSheets
+from utils.email_para_o_usuario import EmailForUser
       
 logger=logging.getLogger(__name__)
 
@@ -45,9 +46,9 @@ class CheckoutService:
                 pedido=Pedido.objects.create(
                     usuario=request.user,
                     carrinho=carrinho,
-                    valor_frete=total_com_frete['valor_frete'],
                     total=total_com_frete['total_produtos'],
-                    total_com_frete=total_com_frete,
+                    valor_frete=total_com_frete['valor_frete'],
+                    total_com_frete=total_com_frete['total_com_frete'],
                     status='pending',
                     erp_status='pending'
                 )
@@ -62,8 +63,7 @@ class CheckoutService:
                     )
     
         except Exception:
-            messages.error(request,'Pedido já está sendo processado, aguarde alguns instantes.')
-            return redirect('carrinho:carrinho_url')
+            raise ValueError('Pedido já está sendo processado, aguarde alguns instantes.')
         
         gateway=PagseguroGateway()
         url_redirect=gateway.gerar_pagamento(request,endereco,pedido)
@@ -72,7 +72,7 @@ class CheckoutService:
         
     @classmethod 
     def processar_retry(cls, request, pedido, user):
-        endereco=Endereco_usuario.objects.filter(usuario=user,padrao=True)
+        endereco=Endereco_usuario.objects.filter(usuario=user,padrao=True).first()
         
         if not endereco:
             raise ValueError('Nenhum endereço padrão encontrado para o retry.')
@@ -160,6 +160,10 @@ class CheckoutService:
                 except Exception as e:
                     logger.error(f'Erro ao enviar pedido {pedido.pk} para o Google Sheets:{str(e)}')
                     
+                obj=EmailForUser()    
+                obj.enviar_email_status_pedido(pedido)
+                obj.enviar_email_status_erp_pedido(pedido)
+                    
                     
                 if new_status == 'paid':
                     endereco=Endereco_usuario.objects.filter(usuario=pedido.usuario,padrao=True).first()
@@ -195,23 +199,22 @@ class PaymentGatewayStrategy(ABC):
 
 class PagseguroGateway(PaymentGatewayStrategy):    
     def gerar_pagamento(self, request, endereco, pedido):
-        try:
-            return_url=request.build_absolute_uri(reverse('pagamentos:payment_return'))
-            notification_url=request.build_absolute_uri(reverse('pagamentos:pagseguro_notify'))
+        #try:
+        return_url=request.build_absolute_uri(reverse('pagamentos:payment_return'))
+        notification_url=request.build_absolute_uri(reverse('pagamentos:pagseguro_notify'))
             
             
-            pg=pagseguro_integration()
+        pg=pagseguro_integration()
             
-            pg_data=pg.gerar_pagamento(pedido,endereco,return_url,notification_url)
+        pg_data=pg.iniciar_pagamento(pedido,endereco,return_url,notification_url)
             
             
-            pedido.payment_reference=pg_data['reference']
-            pedido.metadata={'pagseguro':pg_data['code']}
-            pedido.save(update_fields=['payment_reference','metadata'])
+        pedido.payment_reference=pg_data['reference']
+        pedido.metadata={'pagseguro':pg_data['code']}
+        pedido.save(update_fields=['payment_reference','metadata'])
             
-        except Exception as e:
-            messages.error(request,'Erro ao processar pagamento. Tente novamente.')
-            return redirect('pagamentos:meus_pedidos')
+        #except Exception as e:
+        #    raise ValueError('Erro ao processar pagamento. Tente novamente.')
         return pg_data['redirect_url']
     
     def cancelar_pedido(self, pedido) -> bool:
