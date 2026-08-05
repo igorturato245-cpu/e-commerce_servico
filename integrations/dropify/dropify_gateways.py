@@ -62,17 +62,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
         adaptador=DropifyAdapter()
         payload=adaptador.montar_payload_pedido(pedido,endereco)
         
-        if getattr(settings,'DEBUG',False):
-            print("\n"+"="*50)
-            print("🚀 [MOCK DROPIFY] SIMULANDO ENVIO DE PEDIDO")
-            print(f'URL alvo:{url}')
-            print('Payload gerado pelo adapter:')
-            print(json.dumps(payload,indent=4,ensure_ascii=False))
-            print("="*50+"\n")
-            
-            return True
         
-        """
         response=requests.post(url,json=payload,headers=headers,timeout=30)
         
         if response.status_code in (200,201):
@@ -80,7 +70,6 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     
         else:
             raise Exception(f'Falha ao enviar pedido para o fornecedor:{response.text}')
-        """
     
     
     def checar_estoque(self, produto_erp_id):
