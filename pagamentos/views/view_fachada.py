@@ -30,18 +30,7 @@ class StartPaymentView(View):
             messages.error(request,'Carrinho vazio.')
             return redirect('carrinho:carrinho_url')
     
-        servico= CheckoutService()
-        envio_de_dados=servico.processar_novo_pedido(request,carrinho,request.user)
-        url_link=envio_de_dados
-                    
-        pedido=get_object_or_404(Pedido,usuario=request.user,carrinho=carrinho)
-                    
-        obj=EmailForUser()
-        obj.enviar_email_pedido_recebido(pedido)
-                    
-        return redirect(url_link)
         
-        """
         try:
             servico= CheckoutService()
             envio_de_dados=servico.processar_novo_pedido(request,carrinho,request.user)
@@ -62,7 +51,7 @@ class StartPaymentView(View):
         except Exception as e:
             messages.error(request,'Seu pedido já foi salvo, caso tenha tido problemas com o pagamento, cliquei em "detalhe" e tente o pagamento novamente.')
             return redirect('pagamentos:meus_pedidos')   
-        """
+
         
 class RetryPaymentView(View):
     def post(self,request,pedido_id):
