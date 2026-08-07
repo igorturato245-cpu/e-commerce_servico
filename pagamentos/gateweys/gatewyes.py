@@ -12,7 +12,7 @@ class PagseguroStrategy(PaymentGatewayStrategy):
     def _get_config(self):
         token=getattr(settings,'PAGSEGURO_TOKEN',None)
         sandbox=getattr(settings,'PAGSEGURO_SANDBOX',None)
-        base_url=getattr(settings,'PAGSEGURO_SANDBOX_URL') if sandbox else (settings,'PAGSEGURO_URL',None)
+        base_url=getattr(settings,'PAGSEGURO_SANDBOX_URL') if sandbox else getattr(settings,'PAGSEGURO_URL',None)
         
         headers = {
             'Content-Type':'application/json',
