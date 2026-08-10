@@ -16,11 +16,6 @@ class DropifyWebhooks(View):
         
         data=json.loads(request.body)
         
-        logger.warning(f"============== WEBHOOK DROPIFY RECEBIDO:{data}=======================")
-        
-        with open('codigo_dropify.txt','w') as f:
-            f.write(str(data))
-        
         evento=data.get('event')
         
         gateway=DropifyStrategy()
