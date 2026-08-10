@@ -39,7 +39,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def buscar_produtos(self):
         base_url,headers=self._get_config()
         
-        url=f'{base_url}/api/products?page=1&page_size=20'
+        url=f'{base_url}/api/products?page=1&page_size=5'
         
         response=requests.get(url,headers=headers,timeout=30)
         
