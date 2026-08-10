@@ -29,7 +29,7 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         
         retorno=[]
         
-        lista_suja=data.get('data',[])
+        lista_suja=data if isinstance(data,list) else data.get('data',[])
         
         for infos in lista_suja:
             retorno.append({
