@@ -14,7 +14,7 @@ logger=logging.getLogger(__name__)
 class DropifyWebhooks(View):
     def post(self,request):
         
-        data=json.load(request.body)
+        data=json.loads(request.body)
         
         logger.warning(f"============== WEBHOOK DROPIFY RECEBIDO:{data}=======================")
         
