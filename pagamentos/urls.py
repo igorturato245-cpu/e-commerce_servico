@@ -1,6 +1,7 @@
 from django.urls import path
 from pagamentos.views.view_checkout import Checkout
 from pagamentos.views.view_avaliarpedidos import AvaliarPedido
+from pagamentos.views.view_dropify_webhook import DropifyWebhooks
 from pagamentos.views.view_retorno_pagamento import RetornoPagamento
 from pagamentos.views.view_meuspedidos import MeusPedidos,DetalhePedido
 from pagamentos.views.view_reembolso import SolicitarReembolso,AnaliseReembolso
@@ -24,5 +25,6 @@ urlpatterns = [
     path('solicitacao-reembolso-pedido/<int:pedido_id>/',SolicitarReembolso.as_view(),name='solicitacao_reembolso'),
     path('analise-reembolso-pedido/<int:pedido_id>',AnaliseReembolso.as_view(),name='analise_reembolso'),
     path('solicitacao-reembolso-pedido-aprovada/<int:pedido_id>/',RefundedSolicitationAprovedView.as_view(),name='solicitacao_reembolso_aprovada'),
-    path('conclucsao-cancelamento-automatico/<int:pedido_id>/',ConclusaCancelamento.as_view(),name='conclusao_cancelamento_automatico')
+    path('conclucsao-cancelamento-automatico/<int:pedido_id>/',ConclusaCancelamento.as_view(),name='conclusao_cancelamento_automatico'),
+    path('dropify/webhook/', DropifyWebhooks.as_view(),name='dropify_webhooks')
 ]
