@@ -36,7 +36,8 @@ class DropifyAdapter(IntegrationAdapterAbstract):
                 'erp_id':infos.get('id'),
                 'name':infos.get('title'),
                 'preco':infos.get('suggestedRetailPrice',0)/100,
-                'estoque':infos.get('stockQuantity',0)
+                'estoque':infos.get('stockQuantity',0),
+                'sku':infos.get('sku','')
             })
             
         return retorno

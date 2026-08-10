@@ -16,38 +16,40 @@ class DropifyWebhooks(View):
         
         data=json.load(request.body)
         
+        logger.warning(f"============== WEBHOOK DROPIFY RECEBIDO:{data}=======================")
+        
+        with open('codigo_dropify.txt','w') as f:
+            f.write(str(data))
+        
         evento=data.get('event')
         
         gateway=DropifyStrategy()
         
         try:
-            if evento == 'stock':
-                novo_estoque=gateway.checar_estoque(data)
-            
+            if evento == 'stock':            
                 erp_id=data.get('product')
             
                 if erp_id:
+                    novo_estoque=gateway.checar_estoque(erp_id)
                     Product.objects.filter(erp_id=erp_id).update(
                         estoque=novo_estoque,
                         remote_stock=novo_estoque
                     )
                 
-            elif evento == 'price':
-                novo_preco=gateway.preco_atual_produto(data)
-            
+            elif evento == 'price':          
                 erp_id=data.get('product')
             
                 if erp_id:
+                    novo_preco=gateway.preco_atual_produto(erp_id)
                     Product.objects.filter(erp_id=erp_id).update(
                         preco=novo_preco,
                     )
                 
-            elif evento == 'order-status':
-                novo_status=gateway.status_pedido(data)
-            
+            elif evento == 'order-status':           
                 erp_id=data.get('product')
             
                 if erp_id:
+                    novo_status=gateway.status_pedido(erp_id)
                     Pedido.objects.filter(erp_id=erp_id).update(
                         status=novo_status,
                         erp_status=novo_status

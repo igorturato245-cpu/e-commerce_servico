@@ -15,7 +15,8 @@ class Produtos:
                     'name':prod['name'],
                     'preco':prod['preco'],
                     'estoque':prod['estoque'],
-                    'remote_stock':prod['estoque']
+                    'remote_stock':prod['estoque'],
+                    'sku':prod['sku'],
                 }
                 )
             
