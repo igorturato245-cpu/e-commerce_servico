@@ -39,19 +39,38 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def buscar_produtos(self):
         base_url,headers=self._get_config()
         
-        url=f'{base_url}/api/products?page=1&page_size=5'
+        skus_para_importar=[
+            'DY14151',
+            'DY14103-1',
+            'DY14281',
+            'DY14280-1',
+            'DY14097',
+            'DY23296',
+            'DY23347',
+            'DY14077',
+            'DY14256',
+            'DY14253',
+            'DY5208',
+            'DY10936'
+        ]
         
-        response=requests.get(url,headers=headers,timeout=30)
+        produtos_brutos=[]
         
-        if response.status_code == 200:
-            data=response.json()
-            adaptador=DropifyAdapter()
-            resposta_adapatador=adaptador.extrair_lista_produtos(data)
+        for sku in skus_para_importar:
+            url=f'{base_url}/api/products/{sku}'
+        
+            response=requests.get(url,headers=headers,timeout=30)
+        
+            if response.status_code == 200:
+                produtos_brutos.append(response.json())
+                
+        if not produtos_brutos:
+            raise Exception('Nenhum produtos foi encontrado na Dropify')
+           
+        adaptador=DropifyAdapter()
+        resposta_adapatador=adaptador.extrair_lista_produtos(produtos_brutos)
             
-            return resposta_adapatador
-        
-        else:
-            raise Exception(f'Erro ao buscar produtos:{response.text}')    
+        return resposta_adapatador
         
     
     def enviar_pedido(self, pedido,endereco):

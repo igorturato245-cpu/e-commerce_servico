@@ -34,7 +34,7 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         for infos in lista_suja:
             retorno.append({
                 'erp_id':infos.get('id'),
-                'name':infos.get('title'),
+                'name':infos.get('name',''),
                 'preco':infos.get('suggestedRetailPrice',0)/100,
                 'estoque':infos.get('stockQuantity',0),
                 'sku':infos.get('sku','')
