@@ -14,6 +14,7 @@ class Produtos:
                 defaults={
                     'name':prod['name'],
                     'preco':prod['preco'],
+                    'preco_promocional':0,
                     'estoque':prod['estoque'],
                     'remote_stock':prod['estoque'],
                     'sku':prod['sku'],
