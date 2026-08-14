@@ -29,15 +29,21 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         
         retorno=[]
         
-        lista_suja=data if isinstance(data,list) else data.get('data',[])
+        if isinstance(data,list):
+            lista_suja=[]
+        elif "_embedded" in data and "products" in data["_embedded"]:
+            lista_suja=data["_embedded"]["products"]
+        else:
+            lista_suja=data.get('data',[])
         
         for infos in lista_suja:
+            sku_produto=infos.get('sku','')
             retorno.append({
-                'erp_id':infos.get('id'),
+                'erp_id':sku_produto,
                 'name':infos.get('name',''),
                 'preco':infos.get('suggestedRetailPrice',0)/100,
                 'estoque':infos.get('stockQuantity',0),
-                'sku':infos.get('sku','')
+                'sku':sku_produto
             })
             
         return retorno
