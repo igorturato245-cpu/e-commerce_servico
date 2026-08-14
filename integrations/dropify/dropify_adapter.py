@@ -30,7 +30,7 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         retorno=[]
         
         if isinstance(data,list):
-            lista_suja=[]
+            lista_suja=data
         elif "_embedded" in data and "products" in data["_embedded"]:
             lista_suja=data["_embedded"]["products"]
         else:
