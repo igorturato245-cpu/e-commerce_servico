@@ -108,6 +108,11 @@
     <h2 class="carrinho-vazio">Carrinho está vazio.</h2>
 {% endif %}
 
+{% endblock content %}
+
+
+
+{% block extra_scripts %}
 <!-- Google tag (gtag.js)
 <script async src="https://www.googletagmanager.com/gtag/js?id={{Tag_id}}"></script>
 <script>
@@ -128,4 +133,7 @@
   });
 </script>
 
-{% endblock content %}
+<script>
+  fbq('track', 'InitiateCheckout');
+</script>
+{% endblock extra_scripts %}

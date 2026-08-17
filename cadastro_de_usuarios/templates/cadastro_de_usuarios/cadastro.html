@@ -23,4 +23,13 @@
       <button style="margin-top: 20px; text-align: center; border: none; background-color: white;" type="button" onclick="window.location.href='{{ request.GET.next|default:request.META.HTTP_REFERER|default:url_home }}'">Voltar</button>
     </div>
   </div>
+
+
 {% endblock %}
+
+
+{% block extra_scripts %}
+  <script>
+    fbq('track', 'CompleteRegistration');
+  </script>
+{% endblock extra_scripts %}
