@@ -9,5 +9,6 @@ def google_ads_ids(request):
         'Tag_pagamento':settings.CODIGO_ENVIO_GOOGLE_TAG_PAGAMENTO,
         'Tag_index':settings.CODIGO_ENVIO_GOOGLE_TAG_INDEX,
         'Url_pixel':settings.URL_PIXEL_JS,
-        'Id_pixel':settings.PIXEL_ID
+        'Id_pixel':settings.PIXEL_ID,
+        'Id_meta':settings.CODE_META_DOMAIN,
     }

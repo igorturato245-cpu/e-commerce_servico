@@ -51,6 +51,9 @@ URL_PIXEL_JS=getattr(local_settings,'URL_PIXEL_URL',None)
 PIXEL_ID=getattr(local_settings,'PIXEL_ID',None)
 
 
+CODE_META_DOMAIN=getattr(local_settings,'CODE_META_DOMAIN',None)
+
+
 #Distribuidor
 DESTRIBUIDOR_URL=getattr(local_settings,'DESTRIBUIDOR_URL',None)
 DESTRIBUIDOR_CLIENT_ID = getattr(local_settings, 'DESTRIBUIDOR_CLIENT_ID', None)
