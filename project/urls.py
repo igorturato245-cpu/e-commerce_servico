@@ -28,7 +28,7 @@ urlpatterns = [
     path('senha/reset/',auth_view.PasswordResetView.as_view(
         template_name='registration/password_reset_form.html',
         email_template_name='registration/password_reset_email.html',
-        subject_template_name='registration/password_reset_subject.html',
+        subject_template_name='registration/password_reset_subject.txt',
     ),name='password_reset'),
     path('senha/reset/enviado',auth_view.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('senha/reset/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
