@@ -47,6 +47,9 @@ PAGSEGURO_REDIRECT_URL = getattr(local_settings, 'PAGSEGURO_REDIRECT_URL', None)
 PAGSEGURO_LOG_IN_MODEL = getattr(local_settings, 'PAGSEGURO_LOG_IN_MODEL', False)
 
 
+URL_PIXEL_JS=getattr(local_settings,'URL_PIXEL_URL',None)
+PIXEL_ID=getattr(local_settings,'PIXEL_ID',None)
+
 
 #Distribuidor
 DESTRIBUIDOR_URL=getattr(local_settings,'DESTRIBUIDOR_URL',None)
