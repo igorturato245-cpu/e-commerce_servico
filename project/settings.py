@@ -47,9 +47,6 @@ PAGSEGURO_REDIRECT_URL = getattr(local_settings, 'PAGSEGURO_REDIRECT_URL', None)
 PAGSEGURO_LOG_IN_MODEL = getattr(local_settings, 'PAGSEGURO_LOG_IN_MODEL', False)
 
 
-PIXEL_ID=getattr(local_settings,'PIXEL_ID',None)
-
-
 CODE_META_DOMAIN=getattr(local_settings,'CODE_META_DOMAIN',None)
 
 
