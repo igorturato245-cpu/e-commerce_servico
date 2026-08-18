@@ -955,6 +955,7 @@ main.premium-home {
     gap: 30px;
 }
 
+/* FOTO DO PRODUTO */
 .detalhe-foto-box {
     position: relative;
     width: 100%;
@@ -967,14 +968,19 @@ main.premium-home {
     align-items: center;
 }
 
-/* 1. Esconde TODAS as imagens por padrão */
+/* 1. Esconde todas as imagens do carrossel por padrão */
 .detalhe-foto-box .carrossel-img {
-    display: none !important;
+    display: none;
     width: 100%;
     height: 100%;
     max-height: 100%;
-    object-fit: contain; /* Não corta a foto */
+    object-fit: contain;
     margin: 0 auto;
+}
+
+/* 2. Mostra APENAS a que estiver ativa */
+.detalhe-foto-box .carrossel-img.ativo {
+    display: block;
 }
 
 /* GRID INTERNA (A mágica que divide em 2 no PC) */
