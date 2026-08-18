@@ -11,7 +11,7 @@
       <div class="detalhe-foto-box">
         <button class="seta-img seta-img-esquerda" id="botaoesquerdoimg">‹</button>
         {% for foto in produto.carrosel.all %}
-          <img src="{{foto.foto.url}}" alt="{{produto.name}}" class="carrossel-img {% if forloop.first %}ativo{% endif %}">
+          <img src="{{foto.imagem.url}}" alt="{{produto.name}}" class="carrossel-img {% if forloop.first %}ativo{% endif %}">
         {% endfor %}
         <button class="seta-img seta-img-direita" id="botaodireitoimg">›</button>
       </div>
@@ -63,6 +63,7 @@
           <input type="hidden" id="quantidade-input" value="1" />
         </div>
 
+        {% if produto.disponivel %}
         <!-- BOTÃO COMPRAR -->
         <div class="detalhe-box">
           <form method="post" action="{% url 'carrinho:add_ao_carrinho' produto.pk %}" style="width: 100%;">
@@ -84,6 +85,28 @@
             <button type="submit" class="detalhe-btn-comprar">Adicionar ao carrinho</button>
           </form>
         </div>
+        {% else %}
+        <div class="detalhe-box">
+          <form method="post" action="{% url 'index:index'%}" style="width: 100%;">
+            {% csrf_token %}
+            <!-- 🔥 Voltei para o id="quantidade-input" pro JS conseguir atualizar esse valor antes de enviar -->
+            <input type="hidden" name="quantidade" id="quantidade-input" value="1">
+            <input type="hidden" name="acao" value="comprar" />
+            <button type="submit" class="detalhe-btn-comprar">Produto indisponível no momento.</button>
+          </form>
+        </div>
+
+        <!-- BOTÃO ADICIONAR AO CARRINHO -->
+        <div class="detalhe-box">
+          <form method="post" action="{% url 'index:index'%}" style="width: 100%;">
+            {% csrf_token %}
+            <!-- 🔥 Voltei para o id="quantidade-input" -->
+            <input type="hidden" name="quantidade" id="quantidade-input" value="1">
+            <input type="hidden" name="acao" value="continuar" />
+            <button type="submit" class="detalhe-btn-comprar">Produto indisponível no momento.</button>
+          </form>
+        </div>
+        {% endif %}
         
       </div> <!-- fim da grid -->
 
