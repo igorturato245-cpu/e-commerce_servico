@@ -4678,3 +4678,23 @@ font-size:13px;
   border-color: #dc2626;
   outline-color: #dc2626;
 }
+
+
+
+
+.carrossel-img {
+      display: none; 
+      max-width: 100%;
+      height: auto;
+  }
+  
+  /* Mostra a imagem que tem a classe 'ativo' */
+.carrossel-img.ativo {
+      display: block; 
+  }
+
+@media(max-width:480px){
+    .carrossel-img.ativo {
+      display: block; 
+  }
+}
