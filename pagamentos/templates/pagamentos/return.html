@@ -51,8 +51,8 @@
 
 <script>
   fbq('track', 'Purchase', {
-    value: {{ pedido.total }}, // Pega o valor total da compra do seu banco de dados
-    currency: 'BRL'            // Moeda (Reais)
+    value: {{ pedido.total|stringformat:".2f" }},
+    currency: 'BRL'
   });
 </script>
 

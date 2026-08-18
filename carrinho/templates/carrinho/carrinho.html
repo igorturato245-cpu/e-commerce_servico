@@ -225,8 +225,10 @@
 
   <script>
     fbq('track', 'AddToCart', {
-    content_ids: ['{{ produto.id }}'],
-    content_type: 'product'
+    content_ids: [{% for item in items %}'{{ item.produto.id }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+    content_type: 'product',
+    value: {{ total|default:0 }},
+    currency: 'BRL'
   });
   </script>
 {% endblock %}
