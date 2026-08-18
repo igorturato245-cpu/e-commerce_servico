@@ -11,7 +11,7 @@
       <div class="detalhe-foto-box">
         <button class="seta-img seta-img-esquerda" id="botaoesquerdoimg">‹</button>
         {% for foto in produto.carrosel.all %}
-          <img src="{{foto.imagem.url}}" alt="{{produto.name}}" class="carrossel-img {% if forloop.first %}ativo{% endif %}">
+          <img src="{{foto.foto.url}}" alt="{{produto.name}}" class="carrossel-img {% if forloop.first %}ativo{% endif %}">
         {% endfor %}
         <button class="seta-img seta-img-direita" id="botaodireitoimg">›</button>
       </div>
@@ -63,7 +63,7 @@
           <input type="hidden" id="quantidade-input" value="1" />
         </div>
 
-        {% if produto.disponivel %}
+        {% if produto.disponivel == True %}
         <!-- BOTÃO COMPRAR -->
         <div class="detalhe-box">
           <form method="post" action="{% url 'carrinho:add_ao_carrinho' produto.pk %}" style="width: 100%;">
