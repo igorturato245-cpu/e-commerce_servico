@@ -39,7 +39,10 @@ class Produtos:
                 produto.remote_stock=novo_estoque
                 produto.save(update_fields=['estoque','remote_stock'])
                 
-            except:
+                print(f'SKU:{produto.sku} | Estoque:{novo_estoque} | Nome:{produto.name}')
+                
+            except Exception as e:
+                print(f'❌ SKU:{produto.erp_id} | Falha ao atualizar:{str(e)}')
                 continue
             
         return True
