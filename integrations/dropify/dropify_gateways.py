@@ -94,7 +94,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def checar_estoque(self, produto_erp_id):
         base_url,headers=self._get_config()
         
-        url=f'{base_url}/products/{produto_erp_id}'
+        url=f'{base_url}/api/products/{produto_erp_id}'
         
         response=requests.get(url,headers=headers,timeout=30)
         
@@ -103,7 +103,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             adaptador=DropifyAdapter()
             estoque_atual=adaptador.extrair_estoque(data)
             return estoque_atual
-        
+        print(f"Erro ao buscar {produto_erp_id}: Status {response.status_code} - {response.text}")
         return 0
     
     
