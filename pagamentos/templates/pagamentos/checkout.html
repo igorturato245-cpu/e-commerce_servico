@@ -126,6 +126,18 @@
 
 <!-- Event snippet for Iniciar pagamento (1) conversion page -->
 <script>
+  gtag('set', 'user_data', {
+    "email": "{{ request.user.email }}",
+    "phone_number": "{{ request.user.perfil.telefone }}", // Se tiver telefone no perfil
+    "address": {
+      "first_name": "{{ request.user.first_name }}",
+      "last_name": "{{ request.user.last_name }}",
+      "postal_code": "{{ endereco.cep }}",  // Variável de CEP do seu checkout
+      "city": "{{ endereco.cidade }}",
+      "region": "{{ endereco.estado }}",
+      "country": "BR"
+    }
+  });
   gtag('event', 'conversion', {
       'send_to': '{{Tag_checkout}}',
       'value': 1.0,
