@@ -54,7 +54,7 @@
   });
   gtag('event', 'conversion', {
       'send_to': '{{Tag_pagamento}}',
-      'value': 1.0,
+      'value': '{{pedido.total_com_frete}}',
       'currency': 'BRL',
       'transaction_id': '{{pedido.id}}'
       // 'new_customer': true /* calculate dynamically, populate with true/false */,
