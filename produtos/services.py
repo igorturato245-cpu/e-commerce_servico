@@ -26,3 +26,20 @@ class Produtos:
                 )
             
         return True
+    
+    def sincroniza_estoque(self):
+        
+        strategy=DropifyStrategy()
+        produtos=Product.objects.exclude(erp_id__isnull=True).exclude(erp_id='')
+        
+        for produto in produtos:
+            try:
+                novo_estoque=strategy.checar_estoque(produto.erp_id)
+                produto.estoque=novo_estoque
+                produto.remote_stock=novo_estoque
+                produto.save(update_fields=['estoque','remote_stock'])
+                
+            except:
+                continue
+            
+        return True
