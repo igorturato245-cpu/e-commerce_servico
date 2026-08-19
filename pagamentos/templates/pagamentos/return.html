@@ -40,11 +40,23 @@
 {% block extra_scripts %}
 <!-- Event snippet for Compra (1) conversion page -->
 <script>
+  gtag('set', 'user_data', {
+    "email": "{{ pedido.usuario.email }}",
+    "phone_number": "{{ pedido.usuario.perfil.telefone }}", // Ex: +5511999999999
+    "address": {
+      "first_name": "{{ pedido.usuario.first_name }}",
+      "last_name": "{{ pedido.usuario.last_name }}",
+      "postal_code": "{{ pedido.endereco.cep }}",
+      "city": "{{ pedido.endereco.cidade }}",
+      "region": "{{ pedido.endereco.estado }}",
+      "country": "BR"
+    }
+  });
   gtag('event', 'conversion', {
       'send_to': '{{Tag_pagamento}}',
       'value': 1.0,
       'currency': 'BRL',
-      'transaction_id': ''
+      'transaction_id': '{{pedido.id}}'
       // 'new_customer': true /* calculate dynamically, populate with true/false */,
   });
 </script>
