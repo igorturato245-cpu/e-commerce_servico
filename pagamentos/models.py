@@ -47,6 +47,7 @@ class Pedido(models.Model):
     erp_status=models.CharField(max_length=32,choices=ERP_STATUS_CHOICES,null=True,blank=True)
     tracking_url=models.URLField('URL de rastreio',null=True,blank=True)
     data_de_envio=models.DateTimeField('Data de envio',null=True,blank=True)
+    enviado_dropify=models.BooleanField(default=False)
     metadata=models.JSONField(null=True,blank=True)
     
     

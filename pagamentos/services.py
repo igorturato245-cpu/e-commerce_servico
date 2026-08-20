@@ -160,15 +160,28 @@ class CheckoutService:
                 except Exception as e:
                     logger.error(f'Erro ao enviar pedido {pedido.pk} para o Google Sheets:{str(e)}')
                     
-                obj=EmailForUser()    
-                obj.enviar_email_status_pedido(pedido)
-                obj.enviar_email_status_erp_pedido(pedido)
+                try:
+                    obj=EmailForUser()    
+                    obj.enviar_email_status_pedido(pedido)
+                    obj.enviar_email_status_erp_pedido(pedido)
+                except Exception as e:
+                    logger.error(f'Erro ao enviar e-mails do pedido {pedido.pk}:{str(e)} ')    
                     
+        if new_status == 'paid' and not pedido.enviado_dropify:
+            endereco=Endereco_usuario.objects.filter(usuario=pedido.usuario,padrao=True).first()
                     
-                if new_status == 'paid':
-                    endereco=Endereco_usuario.objects.filter(usuario=pedido.usuario,padrao=True).first()
-                    obj=DropifyStrategy()
-                    transaction.on_commit(lambda:obj.enviar_pedido(pedido,endereco))
+            if not endereco:
+                logger.critical(f'❌ Pedido #{pedido.pk} PAGO mas SEM ENDEREÇO para envio Dropify!')
+                return
+                    
+            try:
+                obj=DropifyStrategy()
+                if obj.enviar_pedido(pedido,endereco):
+                    pedido.enviado_dropify=True
+                    pedido.save(update_fields=['enviado_dropify'])
+                    logger.info(f'✔ Pedido #{pedido.pk} enviado com sucesso para a Dropify!')                    
+            except Exception as e:
+                logger.error(f'❌ FALHA CRÍTICA ao enviar Pedido #{pedido.pk} para Dropify: {str(e)}')
             
             
             
