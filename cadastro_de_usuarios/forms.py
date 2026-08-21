@@ -30,7 +30,7 @@ class Cadastroform(forms.ModelForm):
         strip=False,
         widget=forms.PasswordInput(),
         help_text=password_validation.password_validators_help_text_html,
-        required=False       
+        required=True     
     )
     
     password2=forms.CharField(
@@ -38,7 +38,7 @@ class Cadastroform(forms.ModelForm):
         strip=False,
         widget=forms.PasswordInput(),
         help_text='Use a mesma senha de antes.',
-        required=False    
+        required=True   
     )
     
     def __init__(self,usuario=None,*args, **kwargs):
@@ -69,6 +69,9 @@ class Cadastroform(forms.ModelForm):
             
         if password_data != password2_data:
             self.add_error('password2','As senhas não conferem')
+            
+        if not password_data or not password2_data:
+            self.add_error('password','Usuário sem senha!')
             
         if password_data:
             try:
