@@ -22,6 +22,22 @@
 <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<!-- Se estiver em produção, carrega os scripts de rastreio -->
+<!-- Google tag (gtag.js) único para Analytics e Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{Analytics_id}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Configura o Analytics
+  gtag('config', '{{Analytics_id}}');
+      
+  // CONFIGURAÇÃO ESSENCIAL: Você precisa disparar o 'config' do Google Ads aqui também
+  // para que os eventos de conversão funcionem corretamente depois.
+  gtag('config', '{{Tag_id}}');
+</script>
+
 
 <!-- Meta Pixel Code -->
 <script>
@@ -40,19 +56,3 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1002848776132171&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
-
-<!-- Se estiver em produção, carrega os scripts de rastreio -->
-<!-- Google tag (gtag.js) único para Analytics e Ads -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{Analytics_id}}"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  // Configura o Analytics
-  gtag('config', '{{Analytics_id}}');
-      
-  // CONFIGURAÇÃO ESSENCIAL: Você precisa disparar o 'config' do Google Ads aqui também
-  // para que os eventos de conversão funcionem corretamente depois.
-  gtag('config', '{{Tag_id}}');
-</script>
