@@ -21,7 +21,8 @@ class RetornoPagamento(View):
         context={
             'reference':reference,
             'status':status,
-            'success':sucesso
+            'success':sucesso,
+            'pedido':pedido
         }
         
         if sucesso and pedido:
