@@ -49,6 +49,10 @@ PAGSEGURO_LOG_IN_MODEL = getattr(local_settings, 'PAGSEGURO_LOG_IN_MODEL', False
 
 CODE_META_DOMAIN=getattr(local_settings,'CODE_META_DOMAIN',None)
 
+META_PIXEL_ID=getattr(local_settings,'META_PIXEL_ID',None)
+META_ACCESS_TOKEN=getattr(local_settings,'META_ACCESS_TOKEN',None)
+META_API_VERSION=getattr(local_settings,'META_API_VERSION',None)
+
 
 #Distribuidor
 DESTRIBUIDOR_URL=getattr(local_settings,'DESTRIBUIDOR_URL',None)

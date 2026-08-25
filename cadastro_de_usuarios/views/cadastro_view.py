@@ -10,6 +10,7 @@ from django.contrib.auth import login,authenticate
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from carrinho.services import oficial_merg
+from index.meta_capi import EnviaEvento
 
 
 
@@ -98,6 +99,12 @@ class CriarUser(BaseCadastro,oficial_merg):
                 
                 merge=oficial_merg()
                 merge.marge_cards(old_session_key,usuario)
+                
+        obj=EnviaEvento()
+        obj.enviar_evento_data(
+            request=self.request,
+            event_name='Lead',
+            )
                 
         messages.success(self.request,'Sucesso ao criar sua conta, aproveite suas comprar.')
         

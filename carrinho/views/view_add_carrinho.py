@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404,redirect
 from carrinho.models import Item_carrinho
 from django.contrib import messages
 from django.views import View
+from index.meta_capi import EnviaEvento
 
 
 class adicionar_ao_carrinho(_get_card_for_request,View):
@@ -17,6 +18,16 @@ class adicionar_ao_carrinho(_get_card_for_request,View):
         except:
             quantidade_add=1
             
+        obj=EnviaEvento()
+        obj.enviar_evento_data(
+            request=request,
+            event_name='AddToCart',
+            custom_data={
+                'currency':'BRL',
+                'value':float(carrinho.total()),
+                'num_items':carrinho.itens.count()#type:ignore
+            }
+        )
         
         item,create=Item_carrinho.objects.get_or_create(
             carrinho=carrinho,

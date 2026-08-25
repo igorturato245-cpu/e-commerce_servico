@@ -4,6 +4,7 @@ from carrinho.views.view_carrinho import _get_card_for_request
 from django.contrib import messages
 from pagamentos.models import Pedido
 from django.views import View
+from index.meta_capi import EnviaEvento
 
 
 class Checkout(View):
@@ -50,6 +51,20 @@ class Checkout(View):
             'endereco':[endereco],
             'cart':carrinho,
         }
+        
+        valor_subtotal=float(calcular_frete['total_com_frete'])
+        
+        obj=EnviaEvento()
+        obj.enviar_evento_data(
+            request=request,
+            event_name='InitiateCheckout',
+            user_email=request.user.email,
+            custom_data={
+                'currency':'BRL',
+                'value':valor_subtotal,
+                'num_items':carrinho.itens.count()#type:ignore
+            }
+        )
         
         
         return render(request,'pagamentos/checkout.html',context)

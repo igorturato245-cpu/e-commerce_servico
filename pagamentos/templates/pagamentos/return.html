@@ -63,9 +63,10 @@
 
 <script>
   fbq('track', 'Purchase', {
-    value: {{ pedido.total|stringformat:".2f" }},
-    currency: 'BRL'
-  });
+    value: {{ pedido.total_com_frete|default:pedido.total|stringformat:".2f" }},
+    currency: 'BRL',
+    content_type: 'product'
+  }, { eventID: '{{ pedido.pk }}' });
 </script>
 
 {% endblock extra_scripts %}
