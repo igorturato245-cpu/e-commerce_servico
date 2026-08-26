@@ -96,8 +96,7 @@ class Building(AbstractBuilding):
     def cria_payload_response(self,event_payload):
         payload={
             'data':[event_payload],
-            'access_token':settings.META_ACCESS_TOKEN,
-            'test_event_code':'TEST31298'
+            'access_token':settings.META_ACCESS_TOKEN
         }
         
         return payload
