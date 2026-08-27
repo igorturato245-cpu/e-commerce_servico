@@ -12,7 +12,9 @@ class Produtos:
         id_categoria_padrao=produto_base.category_id if produto_base else 1
         
         for prod in lista_prod:
-            Product.objects.update_or_create(
+            if Product.objects.filter(erp_id=prod['sku']).exists():
+                continue
+            Product.objects.get_or_create(
                 erp_id=prod['erp_id'],
                 defaults={
                     'name':prod['name'],
