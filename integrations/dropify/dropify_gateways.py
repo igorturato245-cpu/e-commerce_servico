@@ -63,7 +63,8 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             'DY14146',
             'DY14106',
             'DY14101',
-            'DY14070-1'
+            'DY14070-1',
+            'DY23354'
         ]
         
         produtos_brutos=[]
