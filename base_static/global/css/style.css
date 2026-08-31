@@ -773,6 +773,7 @@ main.premium-home {
 
 /* TÍTULO NO TOPO */
 .produtos-titulo {
+    margin-top: 50px;
     position: absolute;
     top: 25px;
     left: var(--container-padding, 40px);
