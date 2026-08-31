@@ -928,7 +928,7 @@ main.premium-home {
 ========================================================= */
 @media (max-width: 480px) {
     .produtos-container { padding: 0 8px; }
-    .produtos-grid { gap: 0 8px; }
+    .produtos-grid { gap: 0 8px; margin-top: 20px; }
 
     .produtos-titulo {
         top: 16px;
