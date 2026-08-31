@@ -757,26 +757,31 @@ main.premium-home {
 
 
 /* ==========================================
-   SEÇÕES DE PRODUTOS (Múltiplas Viewports 100vh / 100dvh)
+   SEÇÕES DE PRODUTOS (Múltiplas Viewports Calibradas)
    ========================================== */
 
-/* Fundo alternando Branco/Preto a cada 100dvh (altura real da tela mobile) */
+:root {
+    --header-h: 65px; /* Altura do Header do site + barra do navegador */
+}
+
+/* Fundo calculado perfeitamente: 1ª tela compensada, próximas em 100dvh */
 .secao-produtos {
     width: 100%;
     position: relative;
-    background-image: repeating-linear-gradient(
+    background-image: linear-gradient(
         to bottom,
-        var(--bg, #ffffff) 0vh,
-        var(--bg, #ffffff) 100vh,
-        var(--bg-dark, #000000) 100vh,
-        var(--bg-dark, #000000) 200vh
-    );
-    background-image: repeating-linear-gradient(
-        to bottom,
-        var(--bg, #ffffff) 0dvh,
-        var(--bg, #ffffff) 100dvh,
-        var(--bg-dark, #000000) 100dvh,
-        var(--bg-dark, #000000) 200dvh
+        #ffffff 0,
+        #ffffff calc(100dvh - var(--header-h, 65px)),
+        #000000 calc(100dvh - var(--header-h, 65px)),
+        #000000 calc(200dvh - var(--header-h, 65px)),
+        #ffffff calc(200dvh - var(--header-h, 65px)),
+        #ffffff calc(300dvh - var(--header-h, 65px)),
+        #000000 calc(300dvh - var(--header-h, 65px)),
+        #000000 calc(400dvh - var(--header-h, 65px)),
+        #ffffff calc(400dvh - var(--header-h, 65px)),
+        #ffffff calc(500dvh - var(--header-h, 65px)),
+        #000000 calc(500dvh - var(--header-h, 65px)),
+        #000000 calc(600dvh - var(--header-h, 65px))
     );
 }
 
@@ -792,9 +797,9 @@ main.premium-home {
 /* TÍTULO */
 .produtos-titulo {
     position: absolute;
-    top: 25px;
+    top: 22px;
     left: var(--container-padding, 40px);
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
     color: #111111;
     z-index: 10;
@@ -802,12 +807,12 @@ main.premium-home {
     line-height: 1.2;
 }
 
-/* GRID PRINCIPAL: 100dvh para não estourar a tela no mobile */
+/* GRID: 1ª linha desconta o header; linhas seguintes ocupam 100dvh cheios */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 100vh;
-    grid-auto-rows: 100dvh;
+    grid-template-rows: calc(100dvh - var(--header-h, 65px)); /* Linha 1 ajustada */
+    grid-auto-rows: 100dvh;                                   /* Linhas 2 em diante */
     align-items: center;
     gap: 0 20px;
     width: 100%;
@@ -830,7 +835,7 @@ main.premium-home {
     transition: transform 0.3s;
 }
 
-/* DESKTOP (3 Colunas): Distância suave abaixo do título */
+/* DESKTOP (3 Colunas): Inicia logo abaixo do título com respiro */
 .produtos-grid > .produto-card:nth-child(1),
 .produtos-grid > .produto-card:nth-child(2),
 .produtos-grid > .produto-card:nth-child(3) {
@@ -879,7 +884,7 @@ main.premium-home {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* 3º card vai para a 2ª linha (preta) e centraliza */
+    /* 3º card vai para a 2ª linha (fundo preto) e centraliza */
     .produtos-grid > .produto-card:nth-child(3) {
         align-self: center !important;
         margin-top: 0 !important;
@@ -902,19 +907,19 @@ main.premium-home {
     }
 
     .produto-card {
-        height: 385px;
+        height: 380px;
         padding: 10px;
     }
-    .produto-img { height: 138px; margin-bottom: 8px; }
+    .produto-img { height: 135px; margin-bottom: 8px; }
     .produto-nome-index { font-size: 13px; margin-bottom: 4px; }
     .produto-preco-index { font-size: 15px; }
     .produto-desc { font-size: 11px; }
 
-    /* Afastamento sutil: respiro de ~22px abaixo do título */
+    /* Distância de ~30px do título para os cards */
     .produtos-grid > .produto-card:nth-child(1),
     .produtos-grid > .produto-card:nth-child(2) {
         align-self: start !important;
-        margin-top: 72px !important;
+        margin-top: 78px !important;
     }
 }
 
@@ -931,16 +936,16 @@ main.premium-home {
     }
 
     .produto-card {
-        height: 380px;
+        height: 370px;
         padding: 8px;
     }
-    .produto-img { height: 130px; margin-bottom: 6px; }
+    .produto-img { height: 125px; margin-bottom: 6px; }
 
-    /* Afastamento calibrado no mobile pequeno (respiro de ~20px) */
+    /* Distância ideal no mobile pequeno */
     .produtos-grid > .produto-card:nth-child(1),
     .produtos-grid > .produto-card:nth-child(2) {
         align-self: start !important;
-        margin-top: 68px !important;
+        margin-top: 72px !important;
     }
 }
 
