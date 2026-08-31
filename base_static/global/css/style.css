@@ -743,6 +743,7 @@ main.premium-home {
 
 /* Fundo calculado: 1ª tela ajustada com o header, próximas em 100dvh */
 .secao-produtos {
+    margin-top: 40px;
     width: 100%;
     position: relative;
     background-image: linear-gradient(
@@ -773,7 +774,6 @@ main.premium-home {
 
 /* TÍTULO NO TOPO */
 .produtos-titulo {
-    margin-top: 50px;
     position: absolute;
     top: 25px;
     left: var(--container-padding, 40px);
@@ -800,6 +800,7 @@ main.premium-home {
    CARDS (Todos centralizados naturalmente)
 ========================== */
 .produto-card {
+    margin-top: 20px;
     width: 100%;
     height: 440px;
     background: #ffffff !important;
