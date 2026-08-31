@@ -782,30 +782,31 @@ main.premium-home {
     box-sizing: border-box;
 }
 
-/* TÍTULO - Posicionado no topo com espaçamento compacto */
+/* TÍTULO - Fixo no topo do primeiro 100vh */
 .produtos-titulo {
     position: absolute;
-    top: 25px; /* Reduzido para ficar elegante e próximo dos cards */
+    top: 25px;
     left: var(--container-padding, 40px);
     font-size: var(--title-size, 30px);
     font-weight: 700;
     color: var(--text-darkest, #111111);
     z-index: 10;
     margin: 0;
+    line-height: 1.2;
 }
 
-/* O GRID: Cada linha ocupa exatamente 100vh */
+/* GRID: Linhas de exatamente 100vh com centralização por padrão */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 100vh; /* Cada linha = exatamente 100vh */
-    align-items: center;   /* Centraliza perfeitamente os cards no vh */
+    grid-auto-rows: 100vh;
+    align-items: center; /* Centraliza a 2ª linha em diante */
     gap: 0 20px;
     width: 100%;
 }
 
 /* ==========================
-   CARDS - SEMPRE BRANCOS EM QUALQUER TELA
+   CARDS
 ========================== */
 .produto-card {
     width: 100%;
@@ -821,11 +822,12 @@ main.premium-home {
     box-sizing: border-box;
 }
 
-/* DESKTOP: Leve ajuste nos primeiros cards apenas para respeitar o título sem vazar os 100vh */
+/* DESKTOP (3 Colunas): Força a 1ª linha a começar no topo logo abaixo do título */
 .produto-card:nth-child(1),
 .produto-card:nth-child(2),
 .produto-card:nth-child(3) {
-    margin-top: 35px; /* Reduzido de 130px para 35px */
+    align-self: start;   /* Não deixa o grid jogar no meio da tela */
+    margin-top: 80px;    /* Distância controlada do topo */
 }
 
 .produto-card:hover {
@@ -854,7 +856,6 @@ main.premium-home {
 .produto-preco-antigo { text-decoration: line-through; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
 .produto-desc { font-size: 12px; line-height: 1.35; }
 
-/* CORES DOS TEXTOS */
 .produto-nome-index a { color: #111111 !important; }
 .produto-preco-index a { color: #111111 !important; }
 .produto-preco-antigo a { color: #777777 !important; }
@@ -863,15 +864,16 @@ main.premium-home {
 .seta { display: none !important; }
 
 /* =========================================================
-   TABLETS (900px) - 2 colunas
+   TABLETS (900px) - Reduz para 2 colunas
 ========================================================= */
 @media (max-width: 900px) {
     .produtos-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* O 3º card vai para a 2ª linha (fundo preto), remove a margem */
+    /* O 3º card foi para a 2ª linha (fundo preto), volta a centralizar normal */
     .produto-card:nth-child(3) {
+        align-self: auto;
         margin-top: 0;
     }
 }
@@ -885,14 +887,15 @@ main.premium-home {
         left: 0;
         width: 100%;
         text-align: center;
-        font-size: 22px;
+        font-size: 24px;
     }
     .produtos-container { padding: 0 16px; }
     
-    /* Cards da primeira tela no mobile */
+    /* Puxa os 2 primeiros cards para o topo coladinhos no título */
     .produto-card:nth-child(1),
     .produto-card:nth-child(2) {
-        margin-top: 30px; /* Reduzido de 80px para 30px: fica coladinho no título */
+        align-self: start;
+        margin-top: 65px; /* Inicia logo após o título (que termina em ~45px) */
     }
 }
 
@@ -901,13 +904,19 @@ main.premium-home {
 ========================================================= */
 @media (max-width: 600px) {
     .produtos-grid { gap: 0 12px; }
-    .produto-card { height: 390px; padding: 10px; }
+    .produto-card { height: 385px; padding: 10px; }
     
-    .produto-img { height: 145px; margin-bottom: 8px; }
+    .produto-img { height: 140px; margin-bottom: 8px; }
     .produto-nome-index { font-size: 13px; margin-bottom: 4px; }
     .produto-preco-index { font-size: 15px; }
     .produto-preco-antigo { font-size: 12px; }
     .produto-desc { font-size: 11px; }
+
+    .produto-card:nth-child(1),
+    .produto-card:nth-child(2) {
+        align-self: start;
+        margin-top: 58px;
+    }
 }
 
 /* =========================================================
@@ -921,16 +930,16 @@ main.premium-home {
 
     .produtos-titulo {
         top: 15px;
-        font-size: 20px;
+        font-size: 22px;
     }
 
-    /* Puxa levemente para cima para não estourar os 100vh da tela */
+    /* Cola os cards logo abaixo do título no mobile pequeno */
     .produto-card:nth-child(1),
     .produto-card:nth-child(2) {
-        margin-top: 25px; /* Reduzido de 70px para 25px */
+        align-self: start;
+        margin-top: 50px;
     }
 }
-
 
 
 
