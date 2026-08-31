@@ -36,7 +36,7 @@
                     {% endif %}
                     <div class="produto-desc"><a href="">{{ produto.descricao|truncatechars:160 }}</a></div>
 
-                    <div class="produto-rating">
+                    <div class="product-rating">
                         {% with avaliacao=Product.Avaliation_product.first %}
                             {% if avaliacao %}
                                 {% for i in avaliacao.estrelas_cheias %}
