@@ -103,6 +103,29 @@ class Product(models.Model):
             
         super().save(*args, **kwargs)
         
+    @property
+    def media_avaliacoes(self):
+        media = Avaliation_product.objects.filter(produto=self).aggregate(avg=Avg('nota_produto'))['avg']
+    
+        return round(media, 1) if media is not None else 0.0 
+        
+    @property
+    def estrelas_cheias(self):
+        return range(int(self.media_avaliacoes))
+        
+    @property
+    def tem_meia(self):
+        return (self.media_avaliacoes - int(self.media_avaliacoes)) >= 0.5
+        
+    @property
+    def estrelas_vazias(self): 
+        vazia=5-int(self.media_avaliacoes)
+            
+        if self.tem_meia:
+            vazia -= 1
+            
+        return range(vazia)
+        
 
 class ProdutoImagem(models.Model):
     produto=models.ForeignKey(Product,on_delete=models.CASCADE,related_name='Carrossel')
@@ -123,30 +146,6 @@ class Avaliation_product(models.Model):
     
     def __str__(self) -> str:
         return f'Avaliação de {self.usuario.username} para o produto:{self.produto.name}'
-    
-    
-    @property
-    def media_avaliacoes(self):
-        media = Avaliation_product.objects.filter(produto=self.produto).aggregate(avg=Avg('nota_produto'))['avg']
-
-        return round(media, 1) if media is not None else 0.0 
-    
-    @property
-    def estrelas_cheias(self):
-        return range(int(self.media_avaliacoes))
-    
-    @property
-    def tem_meia(self):
-        return (self.media_avaliacoes - int(self.media_avaliacoes)) >= 0.5
-    
-    @property
-    def estrelas_vazias(self): 
-        vazia=5-int(self.media_avaliacoes)
-        
-        if self.tem_meia:
-            vazia -= 1
-        
-        return range(vazia)
     
     
 class Token_Fonecedor(models.Model):

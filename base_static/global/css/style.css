@@ -3581,7 +3581,7 @@ Checkout
 }
 
 /* Estilização do Texto 0.0 */
-.avaliação {
+.avaliacao {
     font-size: 14px;
     color: #777;         /* Cinza para não brigar com o preço */
     font-weight: 600;
@@ -3599,7 +3599,7 @@ Checkout
         font-size: 14px; /* Diminui levemente as estrelas */
     }
     
-    .avaliação {
+    .avaliacao {
         font-size: 13px;
     }
 }
@@ -3615,7 +3615,7 @@ Checkout
         font-size: 12px; /* Estrelas menores para não quebrar linha no card */
     }
 
-    .avaliação {
+    .avaliacao {
         font-size: 12px;
         margin-left: 4px;
     }
