@@ -98,6 +98,13 @@ main {
     margin-top: var(--header-height); /* compensar header fixo */
 }
 
+/* Na Home, remove a margem para colar no topo */
+main.premium-home,
+main:has(.premium-home) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
 /* ==================================================
    CSS FUNCTIONS / REUTILIZAÇÃO
    ================================================== */

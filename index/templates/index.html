@@ -1,14 +1,15 @@
 {% extends "global/base.html" %}
 
+{% block main_class %}premium-home{% endblock main_class %}
+
 {% block content %}
 {% load static %}
 
 <!-- CONTEÚDO PRINCIPAL (Landing Page Premium) -->
-<main class="premium-home">
+<div class="premium-home">
 
     <!-- 1. HERO: Ofertas do Dia -->
     <section class="hero-section reveal-on-scroll">
-        <!-- Substitua a URL pela sua imagem ou tag static do Django -->
         <div class="hero-bg" style="background-image: linear-gradient(to bottom, #151515 0%, rgba(21,21,21,0.85) 15%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0.85) 100%), url('https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=2000&auto=format&fit=crop');"></div>
         <div class="hero-content">
             <h1 class="reveal-up delay-1">Ofertas Exclusivas</h1>
@@ -78,10 +79,9 @@
         </div>
     </section>
 
-</main>
+</div>
 {% endblock content %}
 
-<!-- CORRIGIDO PARA PLURAL: extra_scripts -->
 {% block extra_scripts %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const observerOptions = {
         root: null,
-        threshold: 0.15, // Reduzi levemente para ativar a animação um pouco antes (melhor para celular)
+        threshold: 0.15,
         rootMargin: "0px 0px -20px 0px"
     };
 
