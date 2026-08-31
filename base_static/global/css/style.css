@@ -444,7 +444,7 @@ main {
    PREMIUM HOME (Storytelling Layout)
    ================================================== */
 
-/* 1. ZERA QUALQUER ESPAÇAMENTO DO BASE.HTML (Body, Header e Containers) */
+/* Zera margens do layout base para a home */
 body {
     padding-top: 0 !important;
     margin-top: 0 !important;
@@ -456,7 +456,6 @@ header, .header, nav, .navbar, .site-header, .top-bar {
     border-bottom: none !important;
 }
 
-/* Zera qualquer div intermediária que o base.html possa ter */
 .content, .main-content, .container, .wrapper, .site-content {
     padding-top: 0 !important;
     margin-top: 0 !important;
@@ -467,7 +466,7 @@ main.premium-home {
     padding-top: 0 !important;
     width: 100%;
     overflow: hidden;
-    background-color: #000000; /* Fundo preto para nunca vazar branco */
+    background-color: #151515; /* Cor exata da Header */
 }
 
 /* --- HERO SECTION --- */
@@ -475,15 +474,16 @@ main.premium-home {
     position: relative;
     top: 0;
     margin-top: 0 !important;
-    height: calc(100dvh - 60px);
     height: 100vh;
+    height: 100dvh;
     min-height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 24px;
+    padding-top: 60px; /* Compensa o espaço da header fixa */
     box-sizing: border-box;
-    background-color: #000000;
+    background-color: #151515;
 }
 
 .hero-bg {
@@ -499,26 +499,12 @@ main.premium-home {
     z-index: 1;
 }
 
-/* Sombra preta no topo para fundir a foto perfeitamente com a navbar preta */
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
-    z-index: 2;
-    pointer-events: none;
-}
-
 .hero-content {
     position: relative;
     z-index: 3;
     text-align: center;
     color: #fff;
     max-width: 800px;
-    margin-top: 10px;
 }
 
 .hero-content h1 {
@@ -671,9 +657,9 @@ main.premium-home {
     }
 
     .hero-section {
-        height: calc(100dvh - 60px);
+        height: 100dvh;
         min-height: 480px;
-        padding-top: 0 !important;
+        padding-top: 60px !important;
     }
 
     .story-container, .reverse-layout {
@@ -707,9 +693,9 @@ main.premium-home {
 
 @media (max-width: 480px) {
     .hero-section {
-        height: calc(100dvh - 60px);
+        height: 100dvh;
         min-height: 440px;
-        padding: 0 16px !important;
+        padding: 60px 16px 0 16px !important;
     }
 
     .story-section { padding: 40px 0; }
@@ -730,6 +716,10 @@ main.premium-home {
         box-sizing: border-box;
     }
 }
+
+
+
+
 
 
 
