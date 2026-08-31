@@ -757,10 +757,10 @@ main.premium-home {
 
 
 /* ==========================================
-   SEÇÕES DE PRODUTOS (Múltiplas Viewports 100vh)
+   SEÇÕES DE PRODUTOS (Múltiplas Viewports 100vh / 100dvh)
    ========================================== */
 
-/* Fundo infinito alternando Branco/Preto a cada 100vh */
+/* Fundo alternando Branco/Preto a cada 100dvh (altura real da tela mobile) */
 .secao-produtos {
     width: 100%;
     position: relative;
@@ -770,6 +770,13 @@ main.premium-home {
         var(--bg, #ffffff) 100vh,
         var(--bg-dark, #000000) 100vh,
         var(--bg-dark, #000000) 200vh
+    );
+    background-image: repeating-linear-gradient(
+        to bottom,
+        var(--bg, #ffffff) 0dvh,
+        var(--bg, #ffffff) 100dvh,
+        var(--bg-dark, #000000) 100dvh,
+        var(--bg-dark, #000000) 200dvh
     );
 }
 
@@ -782,25 +789,26 @@ main.premium-home {
     box-sizing: border-box;
 }
 
-/* TÍTULO - Fixo no topo do primeiro 100vh */
+/* TÍTULO */
 .produtos-titulo {
     position: absolute;
     top: 25px;
     left: var(--container-padding, 40px);
-    font-size: var(--title-size, 30px);
+    font-size: 30px;
     font-weight: 700;
-    color: var(--text-darkest, #111111);
+    color: #111111;
     z-index: 10;
     margin: 0;
     line-height: 1.2;
 }
 
-/* GRID: Linhas de exatamente 100vh com centralização por padrão */
+/* GRID PRINCIPAL: 100dvh para não estourar a tela no mobile */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 100vh;
-    align-items: center; /* Centraliza a 2ª linha em diante */
+    grid-auto-rows: 100dvh;
+    align-items: center;
     gap: 0 20px;
     width: 100%;
 }
@@ -810,24 +818,24 @@ main.premium-home {
 ========================== */
 .produto-card {
     width: 100%;
-    height: 450px;
+    height: 440px;
     background: #ffffff !important;
     padding: 14px;
-    border-radius: var(--radius-lg, 12px);
+    border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    transition: transform var(--transition-medium, 0.3s);
     box-sizing: border-box;
+    transition: transform 0.3s;
 }
 
-/* DESKTOP (3 Colunas): Força a 1ª linha a começar no topo logo abaixo do título */
-.produto-card:nth-child(1),
-.produto-card:nth-child(2),
-.produto-card:nth-child(3) {
-    align-self: start;   /* Não deixa o grid jogar no meio da tela */
-    margin-top: 80px;    /* Distância controlada do topo */
+/* DESKTOP (3 Colunas): Distância suave abaixo do título */
+.produtos-grid > .produto-card:nth-child(1),
+.produtos-grid > .produto-card:nth-child(2),
+.produtos-grid > .produto-card:nth-child(3) {
+    align-self: start !important;
+    margin-top: 85px !important;
 }
 
 .produto-card:hover {
@@ -837,23 +845,23 @@ main.premium-home {
 /* IMAGEM */
 .produto-img {
     width: 100%;
-    height: 190px;
+    height: 180px;
     background: #e8e8e8;
-    border-radius: var(--radius-md, 8px);
+    border-radius: 8px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 .produto-img img { width: 100%; height: 100%; object-fit: cover; }
 
 /* TEXTOS DENTRO DO CARD */
 .produto-info-index { display: flex; flex-direction: column; }
 .produto-info-index a { text-decoration: none; }
-.produto-nome-index { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.produto-nome-index { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
 .produto-preco-index { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-.produto-preco-antigo { text-decoration: line-through; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.produto-preco-antigo { text-decoration: line-through; font-size: 13px; font-weight: 700; margin-bottom: 5px; }
 .produto-desc { font-size: 12px; line-height: 1.35; }
 
 .produto-nome-index a { color: #111111 !important; }
@@ -864,83 +872,77 @@ main.premium-home {
 .seta { display: none !important; }
 
 /* =========================================================
-   TABLETS (900px) - Reduz para 2 colunas
+   TABLETS (900px) - 2 colunas
 ========================================================= */
 @media (max-width: 900px) {
     .produtos-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* O 3º card foi para a 2ª linha (fundo preto), volta a centralizar normal */
-    .produto-card:nth-child(3) {
-        align-self: auto;
-        margin-top: 0;
+    /* 3º card vai para a 2ª linha (preta) e centraliza */
+    .produtos-grid > .produto-card:nth-child(3) {
+        align-self: center !important;
+        margin-top: 0 !important;
     }
 }
 
 /* =========================================================
-   CELULARES MAIORES (768px)
+   CELULARES (768px até 481px)
 ========================================================= */
 @media (max-width: 768px) {
+    .produtos-container { padding: 0 14px; }
+    .produtos-grid { gap: 0 10px; }
+
     .produtos-titulo {
-        top: 20px; 
+        top: 18px; 
         left: 0;
         width: 100%;
         text-align: center;
         font-size: 24px;
     }
-    .produtos-container { padding: 0 16px; }
-    
-    /* Puxa os 2 primeiros cards para o topo coladinhos no título */
-    .produto-card:nth-child(1),
-    .produto-card:nth-child(2) {
-        align-self: start;
-        margin-top: 65px; /* Inicia logo após o título (que termina em ~45px) */
-    }
-}
 
-/* =========================================================
-   CELULAR (600px)
-========================================================= */
-@media (max-width: 600px) {
-    .produtos-grid { gap: 0 12px; }
-    .produto-card { height: 385px; padding: 10px; }
-    
-    .produto-img { height: 140px; margin-bottom: 8px; }
+    .produto-card {
+        height: 385px;
+        padding: 10px;
+    }
+    .produto-img { height: 138px; margin-bottom: 8px; }
     .produto-nome-index { font-size: 13px; margin-bottom: 4px; }
     .produto-preco-index { font-size: 15px; }
-    .produto-preco-antigo { font-size: 12px; }
     .produto-desc { font-size: 11px; }
 
-    .produto-card:nth-child(1),
-    .produto-card:nth-child(2) {
-        align-self: start;
-        margin-top: 58px;
+    /* Afastamento sutil: respiro de ~22px abaixo do título */
+    .produtos-grid > .produto-card:nth-child(1),
+    .produtos-grid > .produto-card:nth-child(2) {
+        align-self: start !important;
+        margin-top: 72px !important;
     }
 }
 
 /* =========================================================
-   CELULAR PEQUENO (480px)
+   CELULARES PEQUENOS (480px para baixo)
 ========================================================= */
 @media (max-width: 480px) {
-    .produtos-container { padding: 0 10px; }
+    .produtos-container { padding: 0 8px; }
     .produtos-grid { gap: 0 8px; }
-    .produto-card { height: 375px; padding: 8px; }
-    .produto-img { height: 130px; }
 
     .produtos-titulo {
-        top: 15px;
+        top: 16px;
         font-size: 22px;
     }
 
-    /* Cola os cards logo abaixo do título no mobile pequeno */
-    .produto-card:nth-child(1),
-    .produto-card:nth-child(2) {
-        align-self: start;
-        margin-top: 50px;
+    .produto-card {
+        height: 380px;
+        padding: 8px;
+    }
+    .produto-img { height: 130px; margin-bottom: 6px; }
+
+    /* Afastamento calibrado no mobile pequeno (respiro de ~20px) */
+    .produtos-grid > .produto-card:nth-child(1),
+    .produtos-grid > .produto-card:nth-child(2) {
+        align-self: start !important;
+        margin-top: 68px !important;
     }
 }
-
 
 
 
