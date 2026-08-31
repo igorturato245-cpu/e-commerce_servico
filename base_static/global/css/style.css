@@ -444,54 +444,66 @@ main {
    PREMIUM HOME (Storytelling Layout)
    ================================================== */
 
+/* Zera qualquer margem ou padding herdado do base.html */
+header, .header, nav, .navbar {
+    margin-bottom: 0 !important;
+}
+
 main.premium-home {
     margin-top: 0 !important;
-}
-.premium-home {
+    padding-top: 0 !important;
     width: 100%;
-    overflow: hidden; /* Evita barra de rolagem horizontal por causa das animações */
+    overflow: hidden;
 }
 
 /* --- HERO SECTION --- */
 .hero-section {
     position: relative;
     top: 0;
-    height: 100vh; /* Ocupa a tela inteira ao entrar no site */
-    min-height: 600px;
+    margin-top: 0 !important;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 550px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 24px;
-    padding-top: 120px;
+    box-sizing: border-box;
 }
 
 .hero-bg {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
     background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* Efeito Parallax suave no fundo */
-    z-index: -1;
+    background-position: center top; /* Garante que a foto cole no topo sem folga */
+    background-repeat: no-repeat;
+    background-attachment: fixed;    /* Parallax no Desktop */
+    z-index: 1;
 }
 
 .hero-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
     color: #fff;
     max-width: 800px;
-    margin-top: 60px; /* Compensa a altura da header */
+    margin-top: 20px;
 }
 
 .hero-content h1 {
     font-size: 64px;
     font-weight: 800;
     letter-spacing: -1px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .hero-content p {
     font-size: 20px;
     color: #e5e7eb;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
     line-height: 1.6;
 }
 
@@ -506,12 +518,13 @@ main.premium-home {
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 4px;
+    text-decoration: none;
     transition: transform 0.3s ease, background 0.3s ease;
 }
 .btn-premium:hover { transform: translateY(-4px); background-color: #f3f4f6; }
 
 .btn-premium.dark { background-color: #151515; color: #fff; }
-.btn-premium.dark:hover { background-color: var(--primary-color); }
+.btn-premium.dark:hover { background-color: var(--primary-color, #333); }
 
 .link-arrow {
     display: inline-flex;
@@ -521,21 +534,22 @@ main.premium-home {
     color: #000;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-decoration: none;
     transition: color 0.3s ease;
 }
 .link-arrow span {
     margin-left: 8px;
     transition: transform 0.3s ease;
 }
-.link-arrow:hover { color: var(--primary-color); }
+.link-arrow:hover { color: var(--primary-color, #555); }
 .link-arrow:hover span { transform: translateX(8px); }
 
 .link-arrow.text-light { color: #fff; }
-.link-arrow.text-light:hover { color: var(--primary-color); }
+.link-arrow.text-light:hover { color: var(--primary-color, #ccc); }
 
 /* --- SEÇÕES DE CONTEÚDO (STORY) --- */
 .story-section {
-    padding: 140px 0; /* Respiro GIGANTE, cara de site de grife */
+    padding: 140px 0;
     width: 100%;
 }
 
@@ -551,14 +565,13 @@ main.premium-home {
     align-items: center;
     justify-content: space-between;
     gap: 80px;
+    box-sizing: border-box;
 }
 
-/* Inverte a ordem no PC: Foto na esquerda, texto na direita */
 .reverse-layout {
     flex-direction: row-reverse; 
 }
 
-/* Layout Centralizado (Eletroportáteis) */
 .center-layout {
     flex-direction: column;
     text-align: center;
@@ -604,7 +617,6 @@ main.premium-home {
     position: relative;
 }
 
-/* Fotos arredondadas com sombras finas */
 .story-image img, .story-image-wide img {
     width: 100%;
     height: auto;
@@ -613,23 +625,20 @@ main.premium-home {
     object-fit: cover;
 }
 .story-image img.img-tall {
-    height: 700px; /* Força a foto das facas a ser bem alta e imponente */
+    height: 700px;
 }
 
 /* ==================================================
-   ANIMAÇÕES DE SCROLL (CLASSES JS)
+   ANIMAÇÕES DE SCROLL
    ================================================== */
-/* Estado inicial (invisível e fora do lugar) */
 .reveal-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 .reveal-left { opacity: 0; transform: translateX(40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 .reveal-right { opacity: 0; transform: translateX(-40px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
-/* Delays para os elementos aparecerem um de cada vez em cascata */
 .delay-1 { transition-delay: 0.1s; }
 .delay-2 { transition-delay: 0.25s; }
 .delay-3 { transition-delay: 0.4s; }
 
-/* Estado final (Ativado pelo JS) */
 .active .reveal-up, 
 .active .reveal-left, 
 .active .reveal-right {
@@ -637,120 +646,88 @@ main.premium-home {
     transform: translate(0);
 }
 
-
 /* ==================================================
-   MEDIA QUERIES (Responsivo - Landing Page)
+   RESPONSIVO (CORREÇÃO MOBILE DEFINITIVA)
    ================================================== */
 
-/* --- TABLETS E TELAS MÉDIAS (até 900px) --- */
+/* --- TABLETS E MOBILE (até 900px) --- */
 @media (max-width: 900px) {
-    /* Empilha texto e foto */
-    main.premium-home {
-    margin-top: 0 !important;
+    /* CORREÇÃO DO BUG MOBILE: Desativa fixed para a imagem colar no topo */
+    .hero-bg {
+        background-attachment: scroll !important;
+        background-position: center top !important;
     }
-    
-    
 
-    .hero-section{
-        padding-top: 80px;
-        top: 0;
+    .hero-section {
+        height: calc(100dvh - 60px); /* Altura exata da tela descontando a header */
+        min-height: 480px;
+        padding-top: 0 !important;
     }
+
+    .hero-content {
+        margin-top: 0 !important;
+    }
+
     .story-container, .reverse-layout {
         flex-direction: column; 
         gap: 48px;
-        text-align: center; /* Centraliza tudo no tablet/mobile para ficar mais limpo */
+        text-align: center;
     }
     
     .story-section { 
-        padding: 80px 0; /* Reduz o espaço gigante entre as seções */
+        padding: 70px 0;
     }
     
-    /* Centraliza os botões e textos alinhados à esquerda/direita que sobraram */
     .story-text {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .hero-content h1 { font-size: 52px; }
-    .story-text h2 { font-size: 40px; }
+    .hero-content h1 { font-size: 46px; }
+    .story-text h2 { font-size: 36px; }
     
-    /* Limita a altura das fotos verticalizadas para não ocuparem a tela toda */
-    .story-image img.img-tall { height: auto; max-height: 500px; }
-    
-    /* Zera os atrasos das animações no mobile para não parecer que o site tá lento */
+    .story-image img.img-tall { height: auto; max-height: 450px; }
     .delay-1, .delay-2, .delay-3 { transition-delay: 0s; }
 }
 
-/* --- SMARTPHONES NORMAIS (até 600px) --- */
+/* --- SMARTPHONES (até 600px) --- */
 @media (max-width: 600px) {
-    main.premium-home {
-    margin-top: 0 !important;
-    }
+    .story-section { padding: 50px 0; }
+
+    .hero-content h1 { font-size: 38px; margin-bottom: 14px; }
+    .hero-content p { font-size: 16px; margin-bottom: 28px; }
     
-    .hero-section{
-        padding-top: 80px;
-        top: 0;
-    }
+    .story-text h2 { font-size: 30px; margin-bottom: 14px; }
+    .story-text p { font-size: 15px; margin-bottom: 28px; }
 
-    .story-section { 
-        padding: 64px 0; /* Espaço ainda menor para mobile */
-    }
-
-    .hero-section {
-        min-height: 500px; /* Reduz altura do banner principal */
-    }
-
-    .hero-content h1 { font-size: 40px; margin-bottom: 16px; }
-    .hero-content p { font-size: 16px; margin-bottom: 32px; }
-    
-    .story-text h2 { font-size: 32px; margin-bottom: 16px; }
-    .story-text p { font-size: 16px; margin-bottom: 32px; }
-
-    /* Reduz as fotos sutilmente */
-    .story-image img, .story-image-wide img {
-        border-radius: 8px;
-    }
+    .story-image img, .story-image-wide img { border-radius: 8px; }
 }
 
 /* --- SMARTPHONES PEQUENOS (até 480px) --- */
 @media (max-width: 480px) {
-    main.premium-home {
-    margin-top: 0 !important;
-    }
-    
-    .hero-section{
-        padding-top: 80px;
-        margin-top: 0;
-        top: 0;
+    .hero-section {
+        height: calc(100dvh - 60px);
+        min-height: 440px;
+        padding: 0 16px !important;
     }
 
-    .story-section { 
-        padding: 48px 0; 
-    }
+    .story-section { padding: 40px 0; }
 
     .story-container, .reverse-layout, .center-layout {
-        gap: 32px; /* Fotos ficam mais pertinhas do texto */
-        padding: 0 16px; /* Reduz margem de segurança da tela para ganhar espaço útil */
+        gap: 28px;
+        padding: 0 16px;
     }
 
-    .hero-content h1 { 
-        font-size: 32px; 
-    }
-    .story-text h2 { 
-        font-size: 28px; 
-        letter-spacing: 0;
-    }
-    .story-text p { 
-        font-size: 15px; /* Fonte levemente menor para caber melhor na tela estreita */
-        line-height: 1.6;
-    }
+    .hero-content h1 { font-size: 32px; }
+    .story-text h2 { font-size: 26px; }
+    .story-text p { font-size: 14px; line-height: 1.5; }
 
-    /* Botão ocupando quase toda a tela horizontalmente para facilitar o clique com dedão */
     .btn-premium {
         width: 100%;
         text-align: center;
-        padding: 16px 20px;
+        padding: 15px 16px;
+        box-sizing: border-box;
     }
 }
 
