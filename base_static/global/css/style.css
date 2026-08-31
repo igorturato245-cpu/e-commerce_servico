@@ -779,25 +779,27 @@ main.premium-home {
     margin: 0 auto;
     padding: 0 var(--container-padding, 40px);
     position: relative;
+    box-sizing: border-box;
 }
 
-/* TÍTULO - Fixo no topo absoluto do container */
+/* TÍTULO - Posicionado no topo com espaçamento compacto */
 .produtos-titulo {
     position: absolute;
-    top: 60px; /* Espaço para o header */
+    top: 25px; /* Reduzido para ficar elegante e próximo dos cards */
     left: var(--container-padding, 40px);
-    font-size: var(--title-size, 32px);
+    font-size: var(--title-size, 30px);
     font-weight: 700;
     color: var(--text-darkest, #111111);
     z-index: 10;
+    margin: 0;
 }
 
-/* O GRID MÁGICO */
+/* O GRID: Cada linha ocupa exatamente 100vh */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 100vh; /* Cada linha = 100vh */
-    align-items: center; /* Centraliza verticalmente na viewport */
+    grid-auto-rows: 100vh; /* Cada linha = exatamente 100vh */
+    align-items: center;   /* Centraliza perfeitamente os cards no vh */
     gap: 0 20px;
     width: 100%;
 }
@@ -808,22 +810,22 @@ main.premium-home {
 .produto-card {
     width: 100%;
     height: 450px;
-    background: #ffffff !important; /* Força o fundo sempre branco */
+    background: #ffffff !important;
     padding: 14px;
     border-radius: var(--radius-lg, 12px);
-    /* Sombra um pouco mais forte para destacar bem quando o fundo for preto */
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     transition: transform var(--transition-medium, 0.3s);
+    box-sizing: border-box;
 }
 
-/* TÍTULO OVERLAP FIX: Empurra a 1ª linha de cards para baixo para não bater no título (Desktop) */
+/* DESKTOP: Leve ajuste nos primeiros cards apenas para respeitar o título sem vazar os 100vh */
 .produto-card:nth-child(1),
 .produto-card:nth-child(2),
 .produto-card:nth-child(3) {
-    margin-top: 130px; 
+    margin-top: 35px; /* Reduzido de 130px para 35px */
 }
 
 .produto-card:hover {
@@ -833,26 +835,26 @@ main.premium-home {
 /* IMAGEM */
 .produto-img {
     width: 100%;
-    height: 200px;
+    height: 190px;
     background: #e8e8e8;
     border-radius: var(--radius-md, 8px);
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 .produto-img img { width: 100%; height: 100%; object-fit: cover; }
 
-/* TEXTOS DENTRO DO CARD - SEMPRE ESCUROS */
+/* TEXTOS DENTRO DO CARD */
 .produto-info-index { display: flex; flex-direction: column; }
 .produto-info-index a { text-decoration: none; }
-.produto-nome-index { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.produto-preco-index { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-.produto-preco-antigo { text-decoration: line-through; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.produto-desc { font-size: 13px; line-height: 1.4; }
+.produto-nome-index { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.produto-preco-index { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+.produto-preco-antigo { text-decoration: line-through; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.produto-desc { font-size: 12px; line-height: 1.35; }
 
-/* FORÇANDO AS CORES DOS TEXTOS PARA NÃO SUMIREM NO CARD BRANCO */
+/* CORES DOS TEXTOS */
 .produto-nome-index a { color: #111111 !important; }
 .produto-preco-index a { color: #111111 !important; }
 .produto-preco-antigo a { color: #777777 !important; }
@@ -861,14 +863,14 @@ main.premium-home {
 .seta { display: none !important; }
 
 /* =========================================================
-   TABLETS (900px) - Reduz para 2 colunas
+   TABLETS (900px) - 2 colunas
 ========================================================= */
 @media (max-width: 900px) {
     .produtos-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* Como agora são 2 colunas, o 3º card cai para a segunda linha. */
+    /* O 3º card vai para a 2ª linha (fundo preto), remove a margem */
     .produto-card:nth-child(3) {
         margin-top: 0;
     }
@@ -879,18 +881,18 @@ main.premium-home {
 ========================================================= */
 @media (max-width: 768px) {
     .produtos-titulo {
-        top: 40px; 
+        top: 20px; 
         left: 0;
         width: 100%;
         text-align: center;
-        font-size: 24px;
+        font-size: 22px;
     }
-    .produtos-container { padding: 0 20px; }
+    .produtos-container { padding: 0 16px; }
     
-    /* CORREÇÃO DO PULO DO CARD: Puxa os 2 primeiros cards para cima no celular */
+    /* Cards da primeira tela no mobile */
     .produto-card:nth-child(1),
     .produto-card:nth-child(2) {
-        margin-top: 80px; 
+        margin-top: 30px; /* Reduzido de 80px para 30px: fica coladinho no título */
     }
 }
 
@@ -899,12 +901,12 @@ main.premium-home {
 ========================================================= */
 @media (max-width: 600px) {
     .produtos-grid { gap: 0 12px; }
-    .produto-card { height: 400px; padding: 10px; }
+    .produto-card { height: 390px; padding: 10px; }
     
-    .produto-img { height: 150px; margin-bottom: 10px; }
-    .produto-nome-index { font-size: 13px; margin-bottom: 5px; }
+    .produto-img { height: 145px; margin-bottom: 8px; }
+    .produto-nome-index { font-size: 13px; margin-bottom: 4px; }
     .produto-preco-index { font-size: 15px; }
-    .produto-preco-antigo { font-size: 13px; }
+    .produto-preco-antigo { font-size: 12px; }
     .produto-desc { font-size: 11px; }
 }
 
@@ -912,15 +914,20 @@ main.premium-home {
    CELULAR PEQUENO (480px)
 ========================================================= */
 @media (max-width: 480px) {
-    .produtos-container { padding: 0 12px; }
-    .produtos-grid { gap: 0 10px; }
-    .produto-card { height: 380px; padding: 8px; }
+    .produtos-container { padding: 0 10px; }
+    .produtos-grid { gap: 0 8px; }
+    .produto-card { height: 375px; padding: 8px; }
     .produto-img { height: 130px; }
 
-    /* Puxa ainda mais os cards para cima nas telinhas menores pra não bater no fundo preto */
+    .produtos-titulo {
+        top: 15px;
+        font-size: 20px;
+    }
+
+    /* Puxa levemente para cima para não estourar os 100vh da tela */
     .produto-card:nth-child(1),
     .produto-card:nth-child(2) {
-        margin-top: 70px;
+        margin-top: 25px; /* Reduzido de 70px para 25px */
     }
 }
 
