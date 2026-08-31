@@ -444,9 +444,22 @@ main {
    PREMIUM HOME (Storytelling Layout)
    ================================================== */
 
-/* Zera qualquer margem ou padding herdado do base.html */
-header, .header, nav, .navbar {
+/* 1. ZERA QUALQUER ESPAÇAMENTO DO BASE.HTML (Body, Header e Containers) */
+body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+header, .header, nav, .navbar, .site-header, .top-bar {
     margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+}
+
+/* Zera qualquer div intermediária que o base.html possa ter */
+.content, .main-content, .container, .wrapper, .site-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 
 main.premium-home {
@@ -454,6 +467,7 @@ main.premium-home {
     padding-top: 0 !important;
     width: 100%;
     overflow: hidden;
+    background-color: #000000; /* Fundo preto para nunca vazar branco */
 }
 
 /* --- HERO SECTION --- */
@@ -461,14 +475,15 @@ main.premium-home {
     position: relative;
     top: 0;
     margin-top: 0 !important;
+    height: calc(100dvh - 60px);
     height: 100vh;
-    height: 100dvh;
-    min-height: 550px;
+    min-height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 24px;
     box-sizing: border-box;
+    background-color: #000000;
 }
 
 .hero-bg {
@@ -478,19 +493,32 @@ main.premium-home {
     width: 100%; 
     height: 100%;
     background-size: cover;
-    background-position: center top; /* Garante que a foto cole no topo sem folga */
+    background-position: center top;
     background-repeat: no-repeat;
-    background-attachment: fixed;    /* Parallax no Desktop */
+    background-attachment: fixed;
     z-index: 1;
+}
+
+/* Sombra preta no topo para fundir a foto perfeitamente com a navbar preta */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+    pointer-events: none;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     color: #fff;
     max-width: 800px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .hero-content h1 {
@@ -537,10 +565,7 @@ main.premium-home {
     text-decoration: none;
     transition: color 0.3s ease;
 }
-.link-arrow span {
-    margin-left: 8px;
-    transition: transform 0.3s ease;
-}
+.link-arrow span { margin-left: 8px; transition: transform 0.3s ease; }
 .link-arrow:hover { color: var(--primary-color, #555); }
 .link-arrow:hover span { transform: translateX(8px); }
 
@@ -568,9 +593,7 @@ main.premium-home {
     box-sizing: border-box;
 }
 
-.reverse-layout {
-    flex-direction: row-reverse; 
-}
+.reverse-layout { flex-direction: row-reverse; }
 
 .center-layout {
     flex-direction: column;
@@ -579,10 +602,7 @@ main.premium-home {
 }
 .center-layout .story-text { max-width: 700px; margin: 0 auto; }
 
-.story-text {
-    flex: 1;
-}
-
+.story-text { flex: 1; }
 .story-text.text-light { color: #f3f4f6; }
 .story-text.text-light h2 { color: #fff; }
 
@@ -612,11 +632,7 @@ main.premium-home {
 }
 .story-text.text-light p { color: #9ca3af; }
 
-.story-image {
-    flex: 1;
-    position: relative;
-}
-
+.story-image { flex: 1; position: relative; }
 .story-image img, .story-image-wide img {
     width: 100%;
     height: auto;
@@ -624,9 +640,7 @@ main.premium-home {
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     object-fit: cover;
 }
-.story-image img.img-tall {
-    height: 700px;
-}
+.story-image img.img-tall { height: 700px; }
 
 /* ==================================================
    ANIMAÇÕES DE SCROLL
@@ -647,25 +661,19 @@ main.premium-home {
 }
 
 /* ==================================================
-   RESPONSIVO (CORREÇÃO MOBILE DEFINITIVA)
+   RESPONSIVO
    ================================================== */
 
-/* --- TABLETS E MOBILE (até 900px) --- */
 @media (max-width: 900px) {
-    /* CORREÇÃO DO BUG MOBILE: Desativa fixed para a imagem colar no topo */
     .hero-bg {
         background-attachment: scroll !important;
         background-position: center top !important;
     }
 
     .hero-section {
-        height: calc(100dvh - 60px); /* Altura exata da tela descontando a header */
+        height: calc(100dvh - 60px);
         min-height: 480px;
         padding-top: 0 !important;
-    }
-
-    .hero-content {
-        margin-top: 0 !important;
     }
 
     .story-container, .reverse-layout {
@@ -674,9 +682,7 @@ main.premium-home {
         text-align: center;
     }
     
-    .story-section { 
-        padding: 70px 0;
-    }
+    .story-section { padding: 70px 0; }
     
     .story-text {
         display: flex;
@@ -686,25 +692,19 @@ main.premium-home {
 
     .hero-content h1 { font-size: 46px; }
     .story-text h2 { font-size: 36px; }
-    
     .story-image img.img-tall { height: auto; max-height: 450px; }
     .delay-1, .delay-2, .delay-3 { transition-delay: 0s; }
 }
 
-/* --- SMARTPHONES (até 600px) --- */
 @media (max-width: 600px) {
     .story-section { padding: 50px 0; }
-
     .hero-content h1 { font-size: 38px; margin-bottom: 14px; }
     .hero-content p { font-size: 16px; margin-bottom: 28px; }
-    
     .story-text h2 { font-size: 30px; margin-bottom: 14px; }
     .story-text p { font-size: 15px; margin-bottom: 28px; }
-
     .story-image img, .story-image-wide img { border-radius: 8px; }
 }
 
-/* --- SMARTPHONES PEQUENOS (até 480px) --- */
 @media (max-width: 480px) {
     .hero-section {
         height: calc(100dvh - 60px);
