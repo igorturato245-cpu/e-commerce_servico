@@ -37,22 +37,20 @@
                     <div class="produto-desc"><a href="">{{ produto.descricao|truncatechars:160 }}</a></div>
 
                     <div class="product-rating">
-                        {% with avaliacao=Product.Avaliation_product.first %}
-                            {% if avaliacao %}
-                                {% for i in avaliacao.estrelas_cheias %}
-                                    <i class="fa-solid fa-star star-icon"></i>
-                                {% endfor %}
-                                {% if avaliacao.tem_meia %}
-                                    <i class="fa-solid fa-star-half-stroke star-icon"></i>
-                                {% endif %}
-                                {% for i in avaliacao.estrelas_vazias %}
-                                    <i class="fa-regular fa-star star-icon"></i>
-                                {% endfor %}
-                                <div class="avaliacao">{{ avaliacao.media_avaliacoes|floatformat:1 }}</div>
-                            {% else %}
-                                <span>Sem avaliações</span>
+                        {% if Product.media_avaliacao %}
+                            {% for i in Product.estrelas_cheias %}
+                                <i class="fa-solid fa-star star-icon"></i>
+                            {% endfor %}
+                            {% if Product.tem_meia %}
+                                <i class="fa-solid fa-star-half-stroke star-icon"></i>
                             {% endif %}
-                        {% endwith %}
+                            {% for i in Product.estrelas_vazias %}
+                                <i class="fa-regular fa-star star-icon"></i>
+                            {% endfor %}
+                            <div class="avaliacao">{{ Product.media_avaliacoes|floatformat:1 }}</div>
+                        {% else %}
+                            <span>Sem avaliações</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
