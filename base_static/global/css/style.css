@@ -764,7 +764,7 @@ main.premium-home {
     --header-h: 65px; /* Altura do Header do site + barra do navegador */
 }
 
-/* Fundo calculado perfeitamente: 1ª tela compensada, próximas em 100dvh */
+/* Fundo calculado: 1ª tela ajustada com o header, próximas em 100dvh */
 .secao-produtos {
     width: 100%;
     position: relative;
@@ -794,10 +794,10 @@ main.premium-home {
     box-sizing: border-box;
 }
 
-/* TÍTULO */
+/* TÍTULO NO TOPO */
 .produtos-titulo {
     position: absolute;
-    top: 22px;
+    top: 25px;
     left: var(--container-padding, 40px);
     font-size: 28px;
     font-weight: 700;
@@ -807,19 +807,19 @@ main.premium-home {
     line-height: 1.2;
 }
 
-/* GRID: 1ª linha desconta o header; linhas seguintes ocupam 100dvh cheios */
+/* GRID: Centraliza verticalmente todos os cards no meio de cada VH */
 .produtos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: calc(100dvh - var(--header-h, 65px)); /* Linha 1 ajustada */
     grid-auto-rows: 100dvh;                                   /* Linhas 2 em diante */
-    align-items: center;
+    align-items: center; /* Centraliza perfeitamente no meio do VH */
     gap: 0 20px;
     width: 100%;
 }
 
 /* ==========================
-   CARDS
+   CARDS (Todos centralizados naturalmente)
 ========================== */
 .produto-card {
     width: 100%;
@@ -832,15 +832,8 @@ main.premium-home {
     flex-direction: column;
     justify-content: flex-start;
     box-sizing: border-box;
+    margin: 0; /* Sem margens forçadas */
     transition: transform 0.3s;
-}
-
-/* DESKTOP (3 Colunas): Inicia logo abaixo do título com respiro */
-.produtos-grid > .produto-card:nth-child(1),
-.produtos-grid > .produto-card:nth-child(2),
-.produtos-grid > .produto-card:nth-child(3) {
-    align-self: start !important;
-    margin-top: 85px !important;
 }
 
 .produto-card:hover {
@@ -883,12 +876,6 @@ main.premium-home {
     .produtos-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    /* 3º card vai para a 2ª linha (fundo preto) e centraliza */
-    .produtos-grid > .produto-card:nth-child(3) {
-        align-self: center !important;
-        margin-top: 0 !important;
-    }
 }
 
 /* =========================================================
@@ -899,7 +886,7 @@ main.premium-home {
     .produtos-grid { gap: 0 10px; }
 
     .produtos-titulo {
-        top: 18px; 
+        top: 20px; 
         left: 0;
         width: 100%;
         text-align: center;
@@ -907,20 +894,14 @@ main.premium-home {
     }
 
     .produto-card {
-        height: 380px;
+        height: 385px;
         padding: 10px;
+        margin: 0;
     }
-    .produto-img { height: 135px; margin-bottom: 8px; }
+    .produto-img { height: 138px; margin-bottom: 8px; }
     .produto-nome-index { font-size: 13px; margin-bottom: 4px; }
     .produto-preco-index { font-size: 15px; }
     .produto-desc { font-size: 11px; }
-
-    /* Distância de ~30px do título para os cards */
-    .produtos-grid > .produto-card:nth-child(1),
-    .produtos-grid > .produto-card:nth-child(2) {
-        align-self: start !important;
-        margin-top: 78px !important;
-    }
 }
 
 /* =========================================================
@@ -928,7 +909,7 @@ main.premium-home {
 ========================================================= */
 @media (max-width: 480px) {
     .produtos-container { padding: 0 8px; }
-    .produtos-grid { gap: 0 8px; margin-top: 20px; }
+    .produtos-grid { gap: 0 8px; }
 
     .produtos-titulo {
         top: 16px;
@@ -936,17 +917,11 @@ main.premium-home {
     }
 
     .produto-card {
-        height: 370px;
+        height: 375px;
         padding: 8px;
+        margin: 0;
     }
-    .produto-img { height: 125px; margin-bottom: 6px; }
-
-    /* Distância ideal no mobile pequeno */
-    .produtos-grid > .produto-card:nth-child(1),
-    .produtos-grid > .produto-card:nth-child(2) {
-        align-self: start !important;
-        margin-top: 72px !important;
-    }
+    .produto-img { height: 130px; margin-bottom: 6px; }
 }
 
 
