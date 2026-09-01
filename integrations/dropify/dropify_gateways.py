@@ -89,12 +89,12 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     def enviar_pedido(self, pedido,endereco):
         base_url,headers=self._get_config()
         
-        #url=f'{base_url}/api/orders/create'
+        url=f'{base_url}/api/orders/create'
         
-        #adaptador=DropifyAdapter()
-        #payload=adaptador.montar_payload_pedido(pedido,endereco)
+        adaptador=DropifyAdapter()
+        payload=adaptador.montar_payload_pedido(pedido,endereco)
         
-        """
+        
         response=requests.post(url,json=payload,headers=headers,timeout=30)
         
         if response.status_code in (200,201):
@@ -102,7 +102,7 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     
         else:
             raise Exception(f'Falha ao enviar pedido para o fornecedor:{response.text}')
-        """
+        
     
     def checar_estoque(self, produto_erp_id):
         base_url,headers=self._get_config()
