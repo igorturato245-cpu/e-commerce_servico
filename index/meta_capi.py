@@ -77,7 +77,7 @@ class Building(AbstractBuilding):
         
         user_data={
             'client_ip_address':cliente_ip,
-            'client_user_agente':cliente_user
+            'client_user_agent':cliente_user
         }
         
         return user_data
@@ -94,6 +94,13 @@ class Building(AbstractBuilding):
         return event_payload
     
     def cria_payload_response(self,event_payload):
+        if 'custom_data' in event_payload and 'value' in event_payload['custom_data']:
+            try:
+                val=float(event_payload['custom_data']['value'])
+                event_payload['custom_data']['value']=round(val,2)
+            except (ValueError,TypeError):
+                event_payload['custom_data']['value']=0.00
+                
         payload={
             'data':[event_payload],
             'access_token':settings.META_ACCESS_TOKEN

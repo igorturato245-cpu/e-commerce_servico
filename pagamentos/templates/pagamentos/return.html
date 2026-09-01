@@ -62,11 +62,15 @@
 </script>
 
 <script>
+  {% with val=pedido.total_com_frete|default:pedido.total %}
   fbq('track', 'Purchase', {
-    value: {% if pedido.total_com_frete %}{{ pedido.total_com_frete|stringformat:".2f" }}{% else %}{{ pedido.total|stringformat:".2f" }}{% endif %},
+    value: {{val|stringformat:".2f"|default:"0,00"}},
     currency: 'BRL',
-    content_type: 'product'
+    content_type: 'product',
+    'content_ids':[{%for item in pedido.itens_pedido.all%}'{{item.produto.id}}'{%if not forloop.last%},{%endif%}{%endfor%}],
+    'num_items':{{pedido.itens_pedido.count}},
   }, { eventID: '{{ pedido.pk }}' });
+  {% endwith %}
 </script>
 
 {% endblock extra_scripts %}

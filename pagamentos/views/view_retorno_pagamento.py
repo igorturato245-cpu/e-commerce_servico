@@ -35,17 +35,18 @@ class RetornoPagamento(View):
         
             perfil=Perfil.objects.filter(usuario=pedido.usuario).first() if pedido.usuario else None
             telefone=perfil.telefone if perfil and hasattr(perfil,'telefone') else None
+            valor_pedido=float(pedido.total_com_frete) if pedido and pedido.total_com_frete else 0.00
         
             obj=EnviaEvento()
             obj.enviar_evento_data(
                 request=request,
                 event_name='Purchase',
-                event_id=pedido.pk,
+                event_id=str(pedido.pk),
                 user_email=pedido.usuario.email if pedido.usuario else None,
                 user_phone=telefone,
                 custom_data={
                     'currency':'BRL',
-                    'value':float(pedido.total),
+                    'value':valor_pedido,
                     'order_id':str(pedido.pk),
                     'content_type':'product',
                     'content_ids':products_ids,
