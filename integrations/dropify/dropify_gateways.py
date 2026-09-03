@@ -40,12 +40,12 @@ class DropifyStrategy(IntegrationGatewayStrategy):
         base_url,headers=self._get_config()
         
         skus_para_importar=[
-            'DY14151',
+            'DY23310',
             'DY14103-1',
             'DY14281',
             'DY14280-1',
-            'DY14097',
-            'DY23296',
+            'DY23314',
+            'DY14051',
             'DY23347',
             'DY14077',
             'DY14256',
@@ -55,16 +55,14 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             'DY14090',
             'DY14236',
             'DY14084',
-            'DY14235',
-            'DY14051',
+            'DY14097',
+            'DY14110',
             'DY14142',
-            'DY23361',
-            'DY23340',
-            'DY14146',
+            'DY14059',
+            'DY14149',
             'DY14106',
             'DY14101',
-            'DY14070-1',
-            'DY23354'
+            'DY14070-1'
         ]
         
         produtos_brutos=[]
