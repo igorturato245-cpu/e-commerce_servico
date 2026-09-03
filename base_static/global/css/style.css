@@ -1603,14 +1603,19 @@ Endereços
 
 
 
-/* ==========================================
-   BASE DO CARRINHO (Com Variáveis)
-========================================== */
+
+
+
+
+/* ============================================================
+   BASE DO CARRINHO (CORRIGIDO SEM VAZAMENTO E COM SETAS VISÍVEIS)
+============================================================ */
 .carrinho {
     min-height: 100vh;
-    background: var(--bg-gray); /* Fundo cinza para os cards brancos saltarem aos olhos */
+    background: var(--bg-gray);
     padding: var(--section-padding) 20px;
     color: var(--text-color);
+    overflow-x: hidden; /* Evita que qualquer folga crie scroll na página */
 }
 
 .carrinho-titulo {
@@ -1618,19 +1623,35 @@ Endereços
     margin-bottom: 30px;
     font-weight: 700;
     color: var(--text-darkest);
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ==========================================
-   LAYOUT
+   LAYOUT DO CARRINHO
+   🔥 O minmax(0, ...) impede a coluna da esquerda
+   de ser empurrada pelos cards do carrossel!
 ========================================== */
 .carrinho-container {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+    grid-template-areas:
+        "itens frete"
+        "upsell resumo";
     gap: 30px;
     align-items: flex-start;
     max-width: var(--max-width);
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
+
+/* Travas para nenhuma área filha furar o grid */
+.secao-itens  { grid-area: itens; min-width: 0; width: 100%; }
+.secao-frete  { grid-area: frete; min-width: 0; width: 100%; }
+.secao-upsell { grid-area: upsell; min-width: 0; width: 100%; }
+.secao-resumo { grid-area: resumo; min-width: 0; width: 100%; }
 
 /* ==========================================
    CARD GENÉRICO (Para Lista e Resumo)
@@ -1640,6 +1661,7 @@ Endereços
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-soft);
     padding: 30px;
+    box-sizing: border-box;
 }
 
 /* ==========================================
@@ -1806,6 +1828,8 @@ Endereços
 .resumo-linha {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 12px;
     padding: 12px 0;
     color: var(--text-color);
 }
@@ -1819,6 +1843,7 @@ Endereços
     font-size: 18px;
     font-weight: 700;
     color: var(--text-darkest);
+    white-space: nowrap; /* Evita que o R$ quebre em cima do número */
 }
 
 /* ==========================================
@@ -1872,25 +1897,235 @@ Endereços
     transform: scale(0.98);
 }
 
-/* ==========================================
-   MEDIA QUERIES (A MÁGICA RESPONSIVA)
-========================================== */
+/* ============================================================
+   ESTILOS DO CARROSSEL DE PRODUTOS SUGERIDOS
+============================================================ */
+.carrinho-upsell-wrapper {
+    background: var(--bg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: 24px;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0; /* Impede que estique a coluna */
+}
+
+.upsell-titulo {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-darkest);
+}
+
+.carrossel-viewport {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.grid-produtos-carrinho {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 4px 6px 12px 6px;
+    scrollbar-width: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grid-produtos-carrinho::-webkit-scrollbar {
+    display: none;
+}
+
+.card-produto-carrinho {
+    /* (100% da largura - 3 gaps de 16px) dividido por 4 cards */
+    flex: 0 0 calc((100% - 48px) / 4);
+    width: calc((100% - 48px) / 4);
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.card-produto-carrinho:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.card-produto-carrinho .produto-img {
+    width: 100%;
+    height: 120px;
+    background: #fff;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.card-produto-carrinho .produto-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.produto-carrinho-conteudo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    gap: 8px;
+}
+
+.produto-carrinho-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.produto-carrinho-nome {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.produto-carrinho-precos {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3px;
+}
+
+.produto-preco-atual {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-darkest);
+}
+
+.produto-preco-antigo-upsell {
+    font-size: 11px;
+    color: #888;
+    text-decoration: line-through;
+}
+
+.btn-add-upsell {
+    width: 30px;
+    height: 30px;
+    background: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-add-upsell:hover {
+    background: #333;
+    transform: scale(1.08);
+}
+
+.card-produto-carrinho .product-rating {
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+.sem-avaliacao {
+    font-size: 11px;
+    color: #999;
+}
+
+/* SETAS DO CARROSSEL
+   Posicionadas dentro da viewport (left: 2px e right: 2px)
+   com z-index alto para nunca ficarem ocultas ou cortadas */
+.carrossel-btn {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #111;
+    transition: opacity 0.25s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.carrossel-btn:hover {
+    background: #f4f4f4;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.btn-prev { left: 4px; }
+.btn-next { right: 4px; }
+
+.carrossel-btn.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ============================================================
+   MEDIA QUERIES (RESPONSIVIDADE ORIGINAL + AJUSTE DE ORDEM)
+============================================================ */
 
 /* Laptop & Tablet Landscape */
 @media (max-width: 1024px) {
     .carrinho-container {
-        grid-template-columns: 1fr; /* Coloca o resumo embaixo da lista */
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
+
+    /* ORDEM MOBILE/TABLET PEDIDA POR VOCÊ:
+       1. Produtos do Carrinho
+       2. Cálculo de Frete
+       3. Upsell / Carrossel (entre frete e resumo)
+       4. Resumo do Pedido / Botão Comprar
+    */
+    .secao-itens  { order: 1; width: 100%; }
+    .secao-frete  { order: 2; width: 100%; }
+    .secao-upsell { order: 3; width: 100%; }
+    .secao-resumo { order: 4; width: 100%; }
+
+    .carrinho-upsell-wrapper { padding: 16px; }
+    .card-produto-carrinho { 
+        flex: 0 0 calc((100% - 32px) / 3); 
+        width: calc((100% - 32px) / 3); 
+    }
+    .btn-prev { left: 2px; }
+    .btn-next { right: 2px; }
+
     .carrinho-vazio-box { padding: 35px 40px; }
     .carrinho-vazio-box h2 { font-size: 22px; }
 }
 
-/* Tablet Portrait */
+/* Tablet Portrait (Original) */
 @media (max-width: 768px) {
-    .carrinho-header { display: none; } /* Oculta a barra de títulos */
+    .carrinho-header { display: none; }
     
     .carrinho-item {
-        /* Muda a grade para empilhar de forma mais inteligente */
         grid-template-columns: 80px 1fr 100px;
         grid-template-areas:
             "img info remover"
@@ -1898,7 +2133,6 @@ Endereços
         gap: 15px;
     }
 
-    /* Mapeando os 5 itens da div do HTML para as áreas do Grid acima */
     .carrinho-item > div:nth-child(1) { grid-area: img; }
     .carrinho-item > div:nth-child(2) { grid-area: info; }
     .carrinho-item > div:nth-child(3) { grid-area: qtd; }
@@ -1906,17 +2140,33 @@ Endereços
     .carrinho-item > div:nth-child(5) { grid-area: remover; text-align: right; }
 }
 
-/* Mobile Padrão */
+/* Mobile Padrão (Original) */
 @media (max-width: 600px) {
     .carrinho { padding: 20px 10px; }
     .carrinho-card { padding: 20px; }
     .carrinho-vazio-box { padding: 30px 25px; }
     .carrinho-vazio-box h2 { font-size: 20px; }
     .btn-voltar { width: 100%; text-align: center; }
+
+    /* 🔥 2 CARDS OCUPANDO EXATAMENTE 100% DA LARGURA NO CELULAR 🔥 */
+    .grid-produtos-carrinho {
+        gap: 12px;
+        padding: 4px 0 10px 0;
+    }
+
+    .card-produto-carrinho {
+        /* (100% - 1 gap de 12px) dividido por 2 cards */
+        flex: 0 0 calc((100% - 12px) / 2) !important;
+        width: calc((100% - 12px) / 2) !important;
+        padding: 8px;
+    }
+
+    .card-produto-carrinho .produto-img {
+        height: 105px;
+    }
 }
-/* ==========================================
-   MOBILE PEQUENO (O Pedido dos 480px!)
-========================================== */
+
+/* Mobile Pequeno (Original - 480px) */
 @media (max-width: 480px) {
     .carrinho-titulo {
         font-size: 24px;
@@ -1928,7 +2178,6 @@ Endereços
         border-radius: var(--radius-lg);
     }
 
-    /* Transforma a linha do carrinho num Card Vertical bonito */
     .carrinho-item {
         display: grid;
         grid-template-columns: 80px 1fr; 
@@ -1946,7 +2195,7 @@ Endereços
         align-self: start; 
     }
 
-    /* 2. Textos (Nome/Vendedor) na direita */
+    /* 2. Textos na direita */
     .carrinho-item > div:nth-child(2) { 
         grid-area: auto; 
         grid-column: 2; 
@@ -1955,14 +2204,12 @@ Endereços
         text-align: left !important;
     }
 
-    /* 3. e 4. Garantia contra Esticamento (Qtd e Preço) */
+    /* 3. e 4. Qtd e Preço */
     .carrinho-item > div:nth-child(3),
     .carrinho-item > div:nth-child(4) { 
         grid-area: auto; 
         grid-column: 2; 
         justify-self: start !important; 
-        
-        /* 🔥 A MÁGICA: Substitui o 100% por max-content 🔥 */
         width: max-content !important; 
         text-align: left !important; 
     }
@@ -1978,14 +2225,13 @@ Endereços
         font-size: 18px; 
     }
 
-    /* 🔥 TRAVA ABSOLUTA DE SEGURANÇA NA CAIXA 🔥 */
     .quantidade-box {
         width: max-content !important;
         min-width: 0 !important;
         display: inline-block !important;
     }
 
-    /* 5. Elemento do Canto Superior Direito (Preço no seu caso) */
+    /* 5. Preço no canto superior */
     .carrinho-item > div:nth-child(5) { 
         grid-area: auto; 
         position: absolute;
@@ -1994,7 +2240,6 @@ Endereços
         text-align: right;
     }
 
-    /* Formulario de Entrega em coluna */
     .entrega-form {
         flex-direction: column;
     }
@@ -2005,7 +2250,7 @@ Endereços
 
     .item-imagem {
         grid-column: 1;
-        grid-row: 1 / span 3; /* Imagem ocupa a lateral toda */
+        grid-row: 1 / span 3;
     }
 
     .item-info-group {
@@ -2031,15 +2276,16 @@ Endereços
         right: 0;
     }
     .qtd-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    background: #fff;
-    cursor: pointer;
-    font-weight: bold;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        font-weight: bold;
     }
 }
+
 
 
 

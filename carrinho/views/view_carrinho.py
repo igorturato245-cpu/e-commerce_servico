@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from carrinho.models import Carrinho
 from django.views import View
+from produtos.models import Product
 
 
 class _get_card_for_request:
@@ -39,14 +40,13 @@ class carrinho(_get_card_for_request,View):
             itens=carrinho.itens.select_related('produto').all()#type:ignore
             subtotal=carrinho.total()
     
+        produtos=Product.objects.filter(preco__lte=100)
 
         contexto={
             'items':itens,
-            'total':subtotal
+            'total':subtotal,
+            'produtos':produtos
         }
         
         return render(request,'carrinho/carrinho.html', contexto)
-        
-        
-        
             

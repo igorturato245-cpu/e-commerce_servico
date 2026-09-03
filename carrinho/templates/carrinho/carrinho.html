@@ -10,8 +10,8 @@
       <h2 class="carrinho-titulo">Seu Carrinho</h2>
 
       <div class="carrinho-container">
-        <!-- PRODUTOS -->
-        <div class="carrinho-card">
+        <!-- 1. PRODUTOS DO CARRINHO (Esquerda no PC) -->
+        <div class="carrinho-card secao-itens">
           <div class="carrinho-header">
             <span>Imagem</span>
             <span>Produto/Descrição</span>
@@ -20,88 +20,141 @@
             <span></span>
           </div>
 
-        <!-- Procure o loop 'for item in Items' e substitua por este bloco -->
-        {% for item in items %}
-          <div class="carrinho-item">
-            <!-- 1. IMAGEM -->
-            {% if item.produto.imagem %}
-              <div class="item-imagem">
-                <img src="{{item.produto.imagem.url}}" alt="{{ item.produto.imagem }}" />
+          {% for item in items %}
+            <div class="carrinho-item">
+              {% if item.produto.imagem %}
+                <div class="item-imagem">
+                  <img src="{{item.produto.imagem.url}}" alt="{{ item.produto.imagem }}" />
+                </div>
+              {% else %}
+                <div class="item-imagem">
+                  <img src="" alt="Produto sem imagem" />
+                </div>
+              {% endif %}
+
+              <div class="item-info-group">
+                <div class="item-nome">{{ item.produto.name }}</div>
+                <div class="item-info">{{ item.produto.descricao|truncatechars:80 }}</div>
               </div>
-            {% else %}
-              <div class="item-imagem">
-                <img src="" alt="Produto sem imagem" />
+
+              <div class="quantidade-box">
+                <span class="qtd-label">Quantidade</span>
+                <div class="qtd-controle" data-item-id="{{ item.id }}">
+                  <button class="qtd-btn">-</button>
+                  <span class="qtd-num">{{ item.quantidade }}</span>
+                  <button class="qtd-btn">+</button>
+                </div>
               </div>
-            {% endif %}
 
-            <!-- 2. INFO (Agrupamos Nome e Descrição aqui) -->
-            <div class="item-info-group">
-              <div class="item-nome">{{ item.produto.name }}</div>
-              <div class="item-info">{{ item.produto.descricao|truncatechars:80 }}</div>
-            </div>
+              <div class="item-preco">{{ item.preco_unitario | formata_preco}}</div>
 
-            <!-- 3. QUANTIDADE -->
-            <div class="quantidade-box">
-              <span class="qtd-label">Quantidade</span>
-              <div class="qtd-controle" data-item-id="{{ item.id }}">
-                <button class="qtd-btn">-</button>
-                <span class="qtd-num">{{ item.quantidade }}</span>
-                <button class="qtd-btn">+</button>
+              <div class="item-remover">
+                <button class="btn-remover" data-item-id="{{ item.id }}" data-url="{% url 'carrinho:remover_do_carrinho' %}">Remover</button>
               </div>
             </div>
-
-            <!-- 4. PREÇO -->
-            <div class="item-preco">{{ item.preco_unitario | formata_preco}}</div>
-
-            <!-- 5. REMOVER -->
-            <div class="item-remover">
-              <button class="btn-remover" data-item-id="{{ item.id }}" data-url="{% url 'carrinho:remover_do_carrinho' %}">Remover</button>
-            </div>
-          </div>
           {% endfor %}
         </div>
 
-        <!-- LATERAL -->
-        <div class="carrinho-lateral">
-          <div class="carrinho-entrega carrinho-card">
-            <h2>Calculo de frete</h2>
-            <span>O frete será calculado automaticamente no checkout, adicione um endereço na área "Endereço" que você verá o valor do frete.</span>
+        <!-- 2. CÁLCULO DE FRETE -->
+        <div class="carrinho-entrega carrinho-card secao-frete">
+          <h2>Calculo de frete</h2>
+          <span>O frete será calculado automaticamente no checkout, adicione um endereço na área "Endereço" que você verá o valor do frete.</span>
+        </div>
+
+        <!-- 3. CARROSSEL DE UP-SELL / PRODUTOS SUGERIDOS -->
+        {% if produtos %}
+        <div class="carrinho-upsell-wrapper secao-upsell">
+          <h3 class="upsell-titulo">Aproveite o mesmo frete</h3>
+          <div class="carrossel-viewport">
+            <button type="button" class="carrossel-btn btn-prev" aria-label="Anterior">&lt;</button>
+            <div class="grid-produtos-carrinho" id="carrosselUpsell">
+              {% for produto in produtos %}
+                <div class="card-produto-carrinho">
+                  <div class="produto-img">
+                    <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug %}">
+                      {% if produto.imagem %}
+                        <img src="{{produto.imagem.url}}" alt="{{produto.name}}">
+                      {% elif produto.imagem_url %}
+                        <img src="{{produto.imagem_url}}" alt="{{produto.name}}">
+                      {% else %}
+                        <img src="" alt="{{produto.name}}">
+                      {% endif %}
+                    </a>
+                  </div>
+                  
+                  <div class="produto-carrinho-conteudo">
+                    <div class="produto-carrinho-info">
+                      <h4 class="produto-carrinho-nome">
+                        <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug %}">{{produto.name}}</a>
+                      </h4>
+                      <div class="produto-carrinho-precos">
+                        <span class="produto-preco-atual">{{produto.get_preco|formata_preco}}</span>
+                        {% if produto.preco_promocional %}
+                          <span class="produto-preco-antigo-upsell">{{produto.preco|formata_preco}}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <button type="button" class="btn-add-upsell" data-url="{% url 'carrinho:add_ao_carrinho' produto.pk %}" title="Adicionar ao carrinho">+</button>
+                  </div>
+
+                  <div class="product-rating">
+                    {% if produto.media_avaliacoes %}
+                      {% for i in produto.estrelas_cheias %}
+                        <i class="fa-solid fa-star star-icon"></i>
+                      {% endfor %}
+                      {% if produto.tem_meia %}
+                        <i class="fa-solid fa-star-half-stroke star-icon"></i>
+                      {% endif %}
+                      {% for i in produto.estrelas_vazias %}
+                        <i class="fa-regular fa-star star-icon"></i>
+                      {% endfor %}
+                      <span class="avaliacao">{{produto.media_avaliacoes|floatformat:1}}</span>
+                    {% else %}
+                      <div class="sem-avaliacao">Sem avaliações</div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="carrossel-btn btn-next" aria-label="Próximo">&gt;</button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- 4. RESUMO DO PEDIDO -->
+        <div class="carrinho-resumo carrinho-card secao-resumo">
+          <h2>Resumo do pedido</h2>
+
+          <div class="resumo-linha">
+            <span>Subtotal</span>
+            <span class="resumo-total">{{ total | formata_preco}}</span>
           </div>
 
-          <div class="carrinho-resumo carrinho-card">
-            <h2>Resumo do pedido</h2>
-
-            <div class="resumo-linha">
-              <span>Subtotal</span>
-              <span class="resumo-total">{{ total | formata_preco}}</span>
-            </div>
-
-            <div class="resumo-linha resumo-final">
-              <span>Total</span>
-              <span class="resumo-total">{{ total | formata_preco}}</span>
-            </div>
-
-            {% if not user.is_authenticated %}
-              <div class="entrega-form">
-                <form method="get" action="{% url 'cadastro_login:login' %}">
-                  {% csrf_token %}
-                  <button type="submit">Comprar</button>
-                </form>
-              </div>
-            {% else %}
-              <div class="entrega-form">
-                <form method="post" action="{% url 'pagamentos:checkout' %}">
-                  {% csrf_token %}
-                  <button type="submit">Comprar</button>
-                </form>
-              </div>
-            {% endif %}
+          <div class="resumo-linha resumo-final">
+            <span>Total</span>
+            <span class="resumo-total">{{ total | formata_preco}}</span>
           </div>
+
+          {% if not user.is_authenticated %}
+            <div class="entrega-form">
+              <form method="get" action="{% url 'cadastro_login:login' %}">
+                {% csrf_token %}
+                <button type="submit">Comprar</button>
+              </form>
+            </div>
+          {% else %}
+            <div class="entrega-form">
+              <form method="post" action="{% url 'pagamentos:checkout' %}">
+                {% csrf_token %}
+                <button type="submit">Comprar</button>
+              </form>
+            </div>
+          {% endif %}
         </div>
       </div>
     </section>
   {% else %}
-    <!-- 🛒 CARRINHO VAZIO -->
     <section class="carrinho-vazio">
       <div class="carrinho-vazio-box">
         <h2>Seu carrinho está vazio</h2>
@@ -183,6 +236,51 @@
       })
 
       // ==========================================
+      // LÓGICA DO CARROSSEL DE PRODUTOS SUGERIDOS
+      // ==========================================
+      const carrossel = document.getElementById('carrosselUpsell');
+      const btnPrev = document.querySelector('.carrossel-btn.btn-prev');
+      const btnNext = document.querySelector('.carrossel-btn.btn-next');
+
+      if (carrossel && btnPrev && btnNext) {
+        function atualizarVisibilidadeSetas() {
+        // Tolerância de 2px para evitar divergências em telas com zoom/subpixels
+        const scrollLeft = carrossel.scrollLeft;
+        const maxScrollLeft = carrossel.scrollWidth - carrossel.clientWidth - 2;
+
+        // Se estiver no início, esconde a seta da esquerda
+        if (scrollLeft <= 5) {
+          btnPrev.classList.add('hidden');
+        } else {
+          btnPrev.classList.remove('hidden');
+        }
+
+        // Se estiver no fim, esconde a seta da direita
+        if (scrollLeft >= maxScrollLeft) {
+          btnNext.classList.add('hidden');
+        } else {
+          btnNext.classList.remove('hidden');
+        }
+      }
+
+      btnPrev.addEventListener('click', () => {
+        // Rola exatamente a largura visível inteira para não parar com card cortado
+        carrossel.scrollBy({ left: -carrossel.clientWidth, behavior: 'smooth' });
+      });
+
+      btnNext.addEventListener('click', () => {
+        carrossel.scrollBy({ left: carrossel.clientWidth, behavior: 'smooth' });
+      });
+
+      // Ouve tanto o scroll quanto o redimensionamento da janela
+      carrossel.addEventListener('scroll', atualizarVisibilidadeSetas);
+      window.addEventListener('resize', atualizarVisibilidadeSetas);
+
+      // Executa uma vez no início
+        atualizarVisibilidadeSetas();
+      }
+
+      // ==========================================
       // LÓGICA DE REMOVER ITEM
       // ==========================================
       document.querySelectorAll('.btn-remover').forEach((btn) => {
@@ -221,6 +319,41 @@
             })
         })
       })
+
+      // ==========================================
+      // ADICIONAR PRODUTO DO UP-SELL (POST)
+      // ==========================================
+      document.querySelectorAll('.btn-add-upsell').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          const url = btn.dataset.url;
+
+          // Trava o botão para não ter duplo clique
+          btn.disabled = true;
+
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+          .then((res) => {
+            // Se a view redireciona ou retorna JSON com sucesso,
+            // recarregamos a página para o item surgir na tabela de cima
+            if (res.ok) {
+              window.location.reload();
+            } else {
+              btn.disabled = false;
+              alert('Erro ao adicionar produto.');
+            }
+          })
+          .catch((err) => {
+            console.error('Erro:', err);
+            btn.disabled = false;
+          });
+        });
+      });
       
     })
   </script>
