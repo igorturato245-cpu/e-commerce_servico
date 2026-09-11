@@ -15,6 +15,54 @@
             <h1 class="reveal-up delay-1">Ofertas Exclusivas</h1>
             <p class="reveal-up delay-2">Selecionamos produtos de grandes marcas e colocamos alguns deles em condições especiais de preço. Confira as ofertas disponíveis e aproveite enquanto os valores promocionais estiverem ativos.</p>
             <a href="{% url 'produtos:ofertas' %}" class="btn-premium reveal-up delay-3">Explorar Ofertas</a>
+            {% if produtos_oferta %}
+                <div class="hero-ofertas-container reveal-up delay-3">
+                    <div class="hero-ofertas-track" id="heroOfertasTrack">
+                        {% for produto in produtos_oferta %}
+                            <a href="{% url 'produtos:detalhe_produto' produto.category.slug produto.slug %}" class="card-hero-oferta">
+                                <div class="hero-oferta-img">
+                                    {% if produto.imagem %}
+                                        <img src="{{ produto.imagem.url }}" alt="{{ produto.name }}">
+                                    {% elif produto.imagem_url %}
+                                        <img src="{{ produto.imagem_url }}" alt="{{ produto.name }}">
+                                    {% else %}
+                                        <img src="" alt="{{ produto.name }}">
+                                    {% endif %}
+                                </div>
+
+                                <div class="hero-oferta-body">
+                                    <h4 class="hero-oferta-nome">{{ produto.name }}</h4>
+                                
+                                    <div class="hero-oferta-precos">
+                                        <span class="hero-preco-atual">{{ produto.get_preco }}</span>
+                                        {% if produto.preco_promocional %}
+                                            <span class="hero-preco-antigo">{{ produto.preco }}</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="product-rating">
+                                        {% if produto.media_avaliacoes %}
+                                            {% for i in produto.estrelas_cheias %}
+                                                <i class="fa-solid fa-star star-icon"></i>
+                                            {% endfor %}
+                                            {% if produto.tem_meia %}
+                                                <i class="fa-solid fa-star-half-stroke star-icon"></i>
+                                            {% endif %}
+                                            {% for i in produto.estrelas_vazias %}
+                                                <i class="fa-regular fa-star star-icon"></i>
+                                            {% endfor %}
+                                            <span class="avaliacao">{{ produto.media_avaliacoes|floatformat:1 }}</span>
+                                        {% else %}
+                                            <div class="sem-avaliacao">Sem avaliações</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </section>
 
@@ -105,6 +153,63 @@ document.addEventListener("DOMContentLoaded", function() {
     sectionsToReveal.forEach(section => {
         revealObserver.observe(section);
     });
+});
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const track = document.getElementById('heroOfertasTrack');
+    if (!track) return;
+
+    const cards = track.querySelectorAll('.card-hero-oferta');
+    if (cards.length <= 1) return;
+
+    let autoScrollInterval = null;
+    let isPaused = false;
+
+    // Função que calcula o passo exato para rolar 1 card por vez
+    function rolarProximo() {
+        if (isPaused) return;
+
+        const cardWidth = cards[0].offsetWidth;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.columnGap || style.gap) || 0;
+        const scrollStep = cardWidth + gap;
+
+        // Se estiver no final (com margem de 10px de tolerância)
+        const maxScrollLeft = track.scrollWidth - track.clientWidth - 10;
+        
+        if (track.scrollLeft >= maxScrollLeft) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: scrollStep, behavior: 'smooth' });
+        }
+    }
+
+    // Inicia a rotação a cada 4 segundos
+    function iniciarCarrossel() {
+        pararCarrossel();
+        autoScrollInterval = setInterval(rolarProximo, 4000);
+    }
+
+    function pararCarrossel() {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+    }
+
+    // Pausa no Hover (Desktop)
+    track.addEventListener('mouseenter', () => { isPaused = true; });
+    track.addEventListener('mouseleave', () => { isPaused = false; });
+
+    // Pausa no Touch (Mobile/Tablet)
+    track.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+    track.addEventListener('touchend', () => {
+        setTimeout(() => { isPaused = false; }, 2000);
+    }, { passive: true });
+
+    iniciarCarrossel();
 });
 </script>
 
