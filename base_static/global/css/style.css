@@ -603,6 +603,136 @@ main.premium-home {
 
 
 
+/* =======================================================
+   BARRA DE CONFIANÇA - ESTILO GERAL (DESKTOP)
+   ======================================================= */
+.barra-confianca {
+    width: 100%;
+    background-color: #f8f9fa; /* Fundo neutro e suave */
+    border-bottom: 1px solid #e9ecef;
+    border-top: 1px solid #e9ecef;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.barra-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.barra-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05));
+}
+
+.barra-item p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #555555;
+    line-height: 1.3;
+}
+
+.barra-item p strong {
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    font-weight: 600;
+    display: block;
+    letter-spacing: -0.2px;
+}
+
+/* =======================================================
+   RESPONSIVIDADE: TABLETS E TELAS MÉDIAS (<= 900px)
+   ======================================================= */
+@media (max-width: 900px) {
+    .barra-confianca {
+        gap: 24px;
+        padding: 10px 16px;
+    }
+
+    .barra-item p {
+        font-size: 0.74rem;
+    }
+
+    .barra-item p strong {
+        font-size: 0.80rem;
+    }
+
+    .barra-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* =======================================================
+   RESPONSIVIDADE: TELAS INTERMEDIÁRIAS (<= 600px)
+   ======================================================= */
+@media (max-width: 600px) {
+    .barra-confianca {
+        gap: 16px;
+        padding: 10px 12px;
+        justify-content: space-around;
+    }
+
+    .barra-item {
+        gap: 8px;
+    }
+
+    /* Reduz um pouco o subtítulo para caber sem quebrar feio */
+    .barra-item p {
+        font-size: 0.70rem;
+        line-height: 1.2;
+    }
+}
+
+/* =======================================================
+   RESPONSIVIDADE: SMARTPHONES (<= 480px) - FOCO EM VENDAS
+   ======================================================= */
+@media (max-width: 480px) {
+    .barra-confianca {
+        flex-direction: column;       /* Empilha para dar leitura perfeita */
+        align-items: stretch;         /* Ocupa a largura necessária */
+        gap: 8px;                     /* Espaço discreto entre cada benefício */
+        padding: 12px 18px;
+        background-color: #fafafa;
+        border-radius: 0;
+    }
+
+    .barra-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 10px;
+        background-color: #ffffff;    /* Cria cartõezinhos discretos no celular */
+        border: 1px solid #ededed;
+        border-radius: 8px;
+    }
+
+    .barra-icon {
+        font-size: 1.25rem;
+        width: 28px;                  /* Mantém o ícone sempre centralizado */
+        text-align: center;
+    }
+
+    .barra-item p {
+        font-size: 0.75rem;
+        line-height: 1.25;
+    }
+
+    .barra-item p strong {
+        font-size: 0.82rem;
+        color: #111111;
+    }
+}
+
 
 
 
