@@ -80,6 +80,19 @@ celerybeat-schedule.dat
 celerybeat-schedule.dir
 celerybeat.pid
 *.rdb
+# Celery
+celerybeat-schedule
+celerybeat-schedule.db
+celerybeat-schedule.bak
+celerybeat-schedule.dir
+celerybeat-schedule.dat
+*.celerybeat-schedule
+
+# Logs e Processos do Celery
+celery.log
+celery.pid
+celerybeat.pid
+celeryworker.pid
 
 #Arquivos temp:
 *.tmp

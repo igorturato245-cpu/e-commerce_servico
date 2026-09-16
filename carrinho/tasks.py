@@ -33,3 +33,8 @@ class ConcretLimpezaCarrinho(AbstractLimpezaCarrinho):
         ).filter(pedido__isnull=True).delete()
         
         return f'Limpeza concluída:{deletados} anônimos e {deletados_logados} logados removidos.'
+    
+@shared_task(name="task_limpar_carrinhos")
+def task_limpar_carrinho():
+    obj=ConcretLimpezaCarrinho
+    return obj.executa_limpeza_carrinho

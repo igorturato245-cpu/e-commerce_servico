@@ -142,7 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Celery
 CELERY_BROKER_URL = getattr(local_settings, 'CELERY_BROKER_URL', 'redis://127.0.0.1:6379/0')
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
@@ -151,15 +150,13 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
 
-CELERY_BEAT_SCHEDULE = {
-    'verificar-rastreio-a-cada-hora': {
-        'task': 'pagamentos.tasks.check_all_orders_tracking_task',
-        'schedule': crontab(minute=0)
-    },
-    'limpar-carrinhos-diariamente': {
-        'task': 'carrinho.tasks.limpar_carrinhos_abandonados_task',
-        'schedule': crontab(hour=3, minute=0)
-    }
+# Forçar compatibilidade com Redis antigo no Windows (desativa o HELLO 3)
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'protocol': 2
+}
+CELERY_REDIS_BACKEND_USE_SSL = False
+CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = {
+    'protocol': 2
 }
 
 # Internationalization
