@@ -124,28 +124,49 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         return status
     
     def montar_payload_frete(self, cep, itens):
+        # Remove traço e espaços do CEP
         cep_limpo = "".join(filter(str.isdigit, str(cep)))
 
         itens_payload = []
         for item in itens:
+            # 1. Recupera a instância de Product (através do Item_carrinho ou Pedidoitem)
             produto = getattr(item, 'produto', None)
-            preco = getattr(item, 'price', None) or getattr(produto, 'preco', 0)
-            quantidade = getattr(item, 'quantidade', 1)
-            sku = (produto.sku if produto and produto.sku else getattr(item, 'produto_id_str', ''))
 
-            altura = getattr(produto, 'altura', 10) or 10
-            comprimento = getattr(produto, 'comprimento', 20) or 20
-            largura = getattr(produto, 'largura', 15) or 15
-            peso = getattr(produto, 'peso', 300) or 300
+            # 2. Recupera o SKU correto (tenta produto.sku ou produto.erp_id)
+            sku = ''
+            if produto:
+                sku = produto.sku or produto.erp_id or ''
+            if not sku:
+                sku = getattr(item, 'produto_id_str', '')
+
+            # 3. Recupera o Preço usando os campos reais dos seus models
+            # (tenta preco_unitario do Item_carrinho, ou o get_preco() do Product, ou o preco)
+            preco = getattr(item, 'preco_unitario', None)
+            if preco is None and produto:
+                preco = produto.get_preco() if hasattr(produto, 'get_preco') else produto.preco
+            if preco is None:
+                preco = getattr(item, 'price', 0)
+
+            # Converte para centavos em string exigido pela Dropify (ex: 250.57 -> "25057")
+            preco_em_centavos = str(int(round(float(preco) * 100)))
+
+            # 4. Quantidade do Item_carrinho
+            quantidade = getattr(item, 'quantidade', 1)
+
+            # 5. Dimensões padrão exigidas pelo cálculo da Dropify
+            altura = 10
+            comprimento = 20
+            largura = 15
+            peso = 300
 
             itens_payload.append({
                 "sku": str(sku),
-                "price": str(int(round(float(preco) * 100))),
+                "price": preco_em_centavos,
                 "quantity": int(quantidade),
-                "height": int(altura),
-                "length": int(comprimento),
-                "width": int(largura),
-                "weight": int(peso)
+                "height": altura,
+                "length": comprimento,
+                "width": largura,
+                "weight": peso
             })
 
         return {
