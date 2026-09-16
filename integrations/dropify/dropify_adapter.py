@@ -124,7 +124,8 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         
         return status
     
-    def montar_payload_frete(self, cep, itens):  
+    def montar_payload_frete(self, cep, itens):
+        from produtos.models import Product
 
         cep_limpo = "".join(filter(str.isdigit, str(cep)))
         itens_payload = []
@@ -135,20 +136,28 @@ class DropifyAdapter(IntegrationAdapterAbstract):
             preco = 0
             sku = ''
 
-            # CENÁRIO A: Veio como dicionário (ex: {'id': '2', 'quantity': 1})
+            # CENÁRIO A: Veio como dicionário (ex: {'id': 'DY14142', 'quantity': 1})
             if isinstance(item, dict):
-                item_id = item.get('id') or item.get('produto_id')
+                item_id = str(item.get('id') or item.get('produto_id') or '').strip()
                 quantidade = item.get('quantity') or item.get('quantidade', 1)
-                
-                # Busca o produto no banco pelo ID
+
                 if item_id:
-                    produto = Product.objects.filter(pk=item_id).first()
-                
+                    # Se for apenas números (ex: '2'), busca pela chave primária (pk)
+                    if item_id.isdigit():
+                        produto = Product.objects.filter(pk=int(item_id)).first()
+                    # Se tiver letras (ex: 'DY14142'), busca pelo SKU ou erp_id
+                    else:
+                        produto = (
+                            Product.objects.filter(sku=item_id).first() 
+                            or Product.objects.filter(erp_id=item_id).first()
+                        )
+                        sku = item_id  # O próprio item_id já é o SKU!
+
                 if produto:
-                    sku = produto.sku or produto.erp_id or ''
+                    sku = produto.sku or produto.erp_id or sku
                     preco = produto.get_preco() if hasattr(produto, 'get_preco') else produto.preco
                 else:
-                    sku = item.get('sku', '')
+                    sku = sku or item.get('sku', '')
                     preco = item.get('price', item.get('preco', 0))
 
             # CENÁRIO B: Veio como objeto (Item_carrinho ou Pedidoitem)
@@ -165,7 +174,6 @@ class DropifyAdapter(IntegrationAdapterAbstract):
                     sku = getattr(item, 'produto_id_str', '')
                     preco = getattr(item, 'price', 0)
 
-            # Converte o preço em centavos string (ex: 250.57 -> "25057")
             preco_em_centavos = str(int(round(float(preco or 0) * 100)))
 
             itens_payload.append({
