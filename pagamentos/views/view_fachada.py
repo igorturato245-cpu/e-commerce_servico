@@ -41,6 +41,8 @@ class StartPaymentView(View):
             obj=EmailForUser()
             obj.enviar_email_pedido_recebido(pedido)
             
+            pedido.delete_cart_paid()
+            
             return redirect(url_link)
         
         except ValueError as e:

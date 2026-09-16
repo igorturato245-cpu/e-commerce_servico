@@ -68,8 +68,6 @@ class CheckoutService:
         gateway=PagseguroGateway()
         url_redirect=gateway.gerar_pagamento(request,endereco,pedido)
         
-        pedido.delete_cart_paid()
-        
         return url_redirect
         
     @classmethod 
