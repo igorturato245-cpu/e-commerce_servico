@@ -54,7 +54,7 @@ class Pedido(models.Model):
     
     
     def delete_cart_paid(self):
-        if self.status=='paid' and self.carrinho_id:
+        if self.carrinho_id:
             carr_id=self.carrinho_id
             self.carrinho_id=None
             
