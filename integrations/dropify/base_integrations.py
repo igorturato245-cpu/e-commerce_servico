@@ -22,3 +22,7 @@ class IntegrationGatewayStrategy(ABC):
     @abstractmethod
     def status_pedido(self,pedido_id):
         pass
+    
+    @abstractmethod
+    def pega_frete(self,cep_pedido,itens):
+        pass

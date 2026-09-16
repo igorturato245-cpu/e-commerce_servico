@@ -6,6 +6,7 @@ from datetime import timedelta
 from decimal import Decimal
 from produtos.models import Product
 from produtos.models import Avaliation_product
+from integrations.dropify.dropify_gateways import DropifyStrategy
 
 
 class Pedido(models.Model):
@@ -82,19 +83,25 @@ class Pedido(models.Model):
     
     @classmethod
     def calcula_total(cls,cep,itens,total):
-        calcula_frete=False
-                
-        if calcula_frete:
-            frete=Decimal(str(calcula_frete.get('price','0')))
-            prazo_entrega=calcula_frete.get('delivery_days','0')
+        
+        obj=DropifyStrategy()
+        resultado_frete=None
+        
+        try:
+            resultado_frete=obj.pega_frete(cep,itens)
+        except Exception as e:
+            print(f'Erro ao tentar pegar o frete:{e}')
+            
+        if resultado_frete:
+            opcao=resultado_frete['melhor_opcao']
+            frete=opcao['price']
+            prazo_entrega=opcao['delivery_days']
             
         else:
             frete=Decimal('25.00')
             prazo_entrega=15
             
-            
         total_com_frete=total+frete
-        
         
         return{
             'valor_frete':frete,
@@ -102,7 +109,7 @@ class Pedido(models.Model):
             'total_com_frete':total_com_frete,
             'total_produtos':total
         }
-        
+           
         
         
 class Pedidoitem(models.Model):

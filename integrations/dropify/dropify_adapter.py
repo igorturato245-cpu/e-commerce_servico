@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from decimal import Decimal
 
 class IntegrationAdapterAbstract(ABC):
     
@@ -20,6 +21,14 @@ class IntegrationAdapterAbstract(ABC):
     
     @abstractmethod
     def traduzir_status_pedido(self,data):
+        pass
+    
+    @abstractmethod
+    def montar_payload_frete(self,cep,itens):
+        pass
+    
+    @abstractmethod
+    def traduzir_frete(self,data):
         pass
     
     
@@ -113,3 +122,57 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         status=data.get('status', 'PENDING')
         
         return status
+    
+    def montar_payload_frete(self, cep, itens):
+        cep_limpo = "".join(filter(str.isdigit, str(cep)))
+
+        itens_payload = []
+        for item in itens:
+            produto = getattr(item, 'produto', None)
+            preco = getattr(item, 'price', None) or getattr(produto, 'preco', 0)
+            quantidade = getattr(item, 'quantidade', 1)
+            sku = (produto.sku if produto and produto.sku else getattr(item, 'produto_id_str', ''))
+
+            altura = getattr(produto, 'altura', 10) or 10
+            comprimento = getattr(produto, 'comprimento', 20) or 20
+            largura = getattr(produto, 'largura', 15) or 15
+            peso = getattr(produto, 'peso', 300) or 300
+
+            itens_payload.append({
+                "sku": str(sku),
+                "price": str(int(round(float(preco) * 100))),
+                "quantity": int(quantidade),
+                "height": int(altura),
+                "length": int(comprimento),
+                "width": int(largura),
+                "weight": int(peso)
+            })
+
+        return {
+            "zipcode": cep_limpo,
+            "items": itens_payload
+        }
+    
+    def traduzir_frete(self, data):
+        
+        if not data.get('success'):
+            return None
+        
+        metodos=data.get('shippingMethods',[])
+        if not metodos:
+            return None
+        
+        opcoes=[]
+        
+        for m in metodos:
+            opcoes.append({
+                'id': m.get('shippingMethodId'),
+                'name': m.get('shippingMethodName'),
+                'price': Decimal(m.get('shippingCost', 0)) / Decimal(100),  # 3395 vira Decimal('33.95')
+                'delivery_days': m.get('deliveryTime', 0)
+            })
+            
+        melhor_opcao=min(opcoes,key=lambda x:x['price'])
+        
+        
+        return {'melhor_opcao':melhor_opcao}

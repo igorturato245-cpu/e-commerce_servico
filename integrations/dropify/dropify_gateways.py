@@ -147,3 +147,22 @@ class DropifyStrategy(IntegrationGatewayStrategy):
             return adaptador.traduzir_status_pedido(data)
         
         raise ValueError(f'Erro ao buscar status do pedido {pedido_id}')
+    
+    
+    def pega_frete(self, cep_pedido, itens):
+        client_id=getattr(settings,'DESTRIBUIDOR_CLIENT_ID',None)
+        
+        url=f'https://express.dropify.com.br/api/freight?key={client_id}'
+        headers= {'Content-Type': 'application/json'}
+        
+        obj=DropifyAdapter()
+        payload=obj.montar_payload_frete(cep_pedido,itens)
+        
+        response=requests.post(url,json=payload,headers=headers,timeout=30)
+        
+        if response.status_code in (200,201):
+            data=response.json()
+            return obj.traduzir_frete(data)
+            
+        else:
+            raise Exception(f'Falha ao capturar frete do pedido, resposta:{response.text}')
