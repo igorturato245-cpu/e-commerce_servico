@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from decimal import Decimal
+from produtos.models import Product
 
 class IntegrationAdapterAbstract(ABC):
     
@@ -123,57 +124,68 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         
         return status
     
-    def montar_payload_frete(self, cep, itens):
-        # Remove traço e espaços do CEP
+    def montar_payload_frete(self, cep, itens):  
+
         cep_limpo = "".join(filter(str.isdigit, str(cep)))
-
         itens_payload = []
+
         for item in itens:
-            # 1. Recupera a instância de Product (através do Item_carrinho ou Pedidoitem)
-            produto = getattr(item, 'produto', None)
-
-            # 2. Recupera o SKU correto (tenta produto.sku ou produto.erp_id)
+            produto = None
+            quantidade = 1
+            preco = 0
             sku = ''
-            if produto:
-                sku = produto.sku or produto.erp_id or ''
-            if not sku:
-                sku = getattr(item, 'produto_id_str', '')
 
-            # 3. Recupera o Preço usando os campos reais dos seus models
-            # (tenta preco_unitario do Item_carrinho, ou o get_preco() do Product, ou o preco)
-            preco = getattr(item, 'preco_unitario', None)
-            if preco is None and produto:
-                preco = produto.get_preco() if hasattr(produto, 'get_preco') else produto.preco
-            if preco is None:
-                preco = getattr(item, 'price', 0)
+            # CENÁRIO A: Veio como dicionário (ex: {'id': '2', 'quantity': 1})
+            if isinstance(item, dict):
+                item_id = item.get('id') or item.get('produto_id')
+                quantidade = item.get('quantity') or item.get('quantidade', 1)
+                
+                # Busca o produto no banco pelo ID
+                if item_id:
+                    produto = Product.objects.filter(pk=item_id).first()
+                
+                if produto:
+                    sku = produto.sku or produto.erp_id or ''
+                    preco = produto.get_preco() if hasattr(produto, 'get_preco') else produto.preco
+                else:
+                    sku = item.get('sku', '')
+                    preco = item.get('price', item.get('preco', 0))
 
-            # Converte para centavos em string exigido pela Dropify (ex: 250.57 -> "25057")
-            preco_em_centavos = str(int(round(float(preco) * 100)))
+            # CENÁRIO B: Veio como objeto (Item_carrinho ou Pedidoitem)
+            else:
+                produto = getattr(item, 'produto', None)
+                quantidade = getattr(item, 'quantidade', 1)
 
-            # 4. Quantidade do Item_carrinho
-            quantidade = getattr(item, 'quantidade', 1)
+                if produto:
+                    sku = produto.sku or produto.erp_id or ''
+                    preco = getattr(item, 'preco_unitario', None)
+                    if preco is None:
+                        preco = produto.get_preco() if hasattr(produto, 'get_preco') else produto.preco
+                else:
+                    sku = getattr(item, 'produto_id_str', '')
+                    preco = getattr(item, 'price', 0)
 
-            # 5. Dimensões padrão exigidas pelo cálculo da Dropify
-            altura = 10
-            comprimento = 20
-            largura = 15
-            peso = 300
+            # Converte o preço em centavos string (ex: 250.57 -> "25057")
+            preco_em_centavos = str(int(round(float(preco or 0) * 100)))
 
             itens_payload.append({
                 "sku": str(sku),
                 "price": preco_em_centavos,
                 "quantity": int(quantidade),
-                "height": altura,
-                "length": comprimento,
-                "width": largura,
-                "weight": peso
+                "height": 10,
+                "length": 20,
+                "width": 15,
+                "weight": 300
             })
 
-        return {
+        payload_final = {
             "zipcode": cep_limpo,
             "items": itens_payload
         }
-    
+
+        print(f"[DEBUG PAYLOAD PRONTO PARA DROPIFY]: {payload_final}")
+        return payload_final
+        
     def traduzir_frete(self, data):
         
         if not data.get('success'):
