@@ -32,7 +32,7 @@ except ImportError:
 SECRET_KEY = 'django-insecure-zj@+)!xi%qfsvc9v(_q@k&di2=(ud@-&)f_9e2iwt6#k_wt#lb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getattr(local_settings,'DEBUG',False)
 
 ALLOWED_HOSTS = getattr(local_settings,'ALLOWED_HOSTS',[])
 
@@ -59,6 +59,7 @@ DESTRIBUIDOR_URL=getattr(local_settings,'DESTRIBUIDOR_URL',None)
 DESTRIBUIDOR_CLIENT_ID = getattr(local_settings, 'DESTRIBUIDOR_CLIENT_ID', None)
 DESTRIBUIDOR_CLIENT_SECRET = getattr(local_settings, 'DESTRIBUIDOR_CLIENT_SECRET', None)
 DESTRIBUIDOR_TOKEN=getattr(local_settings, 'DESTRIBUIDOR_TOKEN',None)
+DESTRIBUIDOR_CHAVE_FRETE=getattr(local_settings,'DESTRUIBUIDOR_CHAVE_FRETE',None)
 
 
 URL_GOOGLE_SHEETS=getattr(local_settings,'URL_GOOGLE_SHEETS',None)
@@ -206,7 +207,7 @@ CODIGO_ENVIO_GOOGLE_TAG_INDEX=getattr(local_settings,'CODIGO_ENVIO_GOOGLE_TAG_IN
 
 
 # --- SEGURANÇA DE PRODUÇÃO (HTTPS) ---
-if DEBUG:
+if not DEBUG:
     CSRF_TRUSTED_ORIGINS = getattr(local_settings, 'CSRF_TRUSTED_ORIGINS', [])
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -219,7 +220,7 @@ if DEBUG:
 
 # Sentry Init
 SENTRY_DSN = getattr(local_settings, 'SENTRY_DSN', None)
-if SENTRY_DSN and DEBUG:
+if SENTRY_DSN and not DEBUG:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
        integrations=[DjangoIntegration()],

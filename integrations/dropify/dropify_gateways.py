@@ -150,9 +150,9 @@ class DropifyStrategy(IntegrationGatewayStrategy):
     
     
     def pega_frete(self, cep_pedido, itens):
-        client_id=getattr(settings,'DESTRIBUIDOR_CLIENT_ID',None)
+        chave=getattr(settings,'DESTRIBUIDOR_CHAVE_FRETE')
         
-        url='https://express.dropify.com.br/api/freight?key=abc4cce0b5001d09e68f9b4ff98ea19c'
+        url=f'https://express.dropify.com.br/api/freight?key={chave}'
         headers= {'Content-Type': 'application/json'}
         
         obj=DropifyAdapter()
