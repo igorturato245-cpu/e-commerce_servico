@@ -176,15 +176,16 @@ class DropifyAdapter(IntegrationAdapterAbstract):
 
             preco_em_centavos = str(int(round(float(preco or 0) * 100)))
 
-            itens_payload.append({
-                "sku": str(sku),
-                "price": preco_em_centavos,
-                "quantity": int(quantidade),
-                "height": 10,
-                "length": 20,
-                "width": 15,
-                "weight": 300
-            })
+            if produto:
+                itens_payload.append({
+                    "sku": str(sku),
+                    "price": preco_em_centavos,
+                    "quantity": int(quantidade),
+                    "height": produto.heigth,
+                    "length": produto.length,
+                    "width": produto.width,
+                    "weight": produto.weigth,
+                    })
 
         payload_final = {
             "zipcode": cep_limpo,

@@ -41,6 +41,10 @@ class Product(models.Model):
     remote_price=models.DecimalField('Preço remoto', max_digits=10,decimal_places=2,null=True,blank=True)
     remote_stock=models.IntegerField('Estoque remoto', null=True,blank=True)
     last_synced=models.DateTimeField('Última sincronização',auto_now=True,blank=True,null=True)
+    heigth=models.IntegerField('Altura',null=True,blank=True)
+    length=models.IntegerField('Comprimento',null=True,blank=True)
+    width=models.IntegerField('Largura',null=True,blank=True)
+    weigth=models.IntegerField('Peso',null=True,blank=True)
     
     class Meta:
         verbose_name='Produto'
