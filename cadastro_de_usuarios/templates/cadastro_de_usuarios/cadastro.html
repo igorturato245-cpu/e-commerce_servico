@@ -20,7 +20,7 @@
         </p>
       </div>
       {% url 'cadastro_login:index' as url_home %}
-      <button style="margin-top: 20px; text-align: center; border: none; background-color: white;" type="button" onclick="window.location.href='{{ request.GET.next|default:request.META.HTTP_REFERER|default:url_home }}'">Voltar</button>
+      <button style="margin-top: 20px; text-align: center; border: none; background-color: white; cursor: pointer;" type="button" onclick="if (document.referrer) { window.location.href = document.referrer; } else { window.location.href = '{% url 'index:index' %}'; }">Voltar</button>
     </div>
   </div>
 
