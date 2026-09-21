@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /carrinho/
+Disallow: /checkout/
+Disallow: /pagamentos/
+Disallow: /conta/
+Disallow: /api/
+
+# Permite explicitamente o rastreamento das páginas importantes
+Allow: /
+Allow: /produtos/
+Allow: /institucional/
+Allow: /static/
+Allow: /media/
