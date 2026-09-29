@@ -72,3 +72,28 @@ class EmailForUser:
             email=EmailMultiAlternatives(subject,text_content,from_email,to)
             email.attach_alternative(html_content,'text/html')
             email.send()
+            
+    
+    def enviar_email_pedido_abandonado(self,carrinho,etapa=1):
+        
+        if etapa == 1:
+            subject=f'Você tem um pendência em nosso site! Finalize seu pedido antes que seu carrinho seja apagado pelo nosso sistema.'
+            template='emails/email_carrinho_abandonado-1.html'
+        else:
+            subject=f'Última chance:Seu pedido ainda está reservado, mas corra, últimas unidades dísponiveis'
+            template='emails/email_carrinho_abandonado-2.html'
+            
+        from_email=settings.DEFAULT_FROM_EMAIL
+        to=[carrinho.usuario.email]
+        
+        contexto={
+            'carrinho':carrinho,
+            'usuario':carrinho.usuario
+        }
+        
+        html_content=render_to_string(template,contexto)
+        text_content=strip_tags(html_content)
+        
+        email=EmailMultiAlternatives(subject,text_content,from_email,to)
+        email.attach_alternative(html_content,'text/html')
+        email.send()

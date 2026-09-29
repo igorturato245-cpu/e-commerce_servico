@@ -11,6 +11,8 @@ class Carrinho(models.Model):
     session_key=models.CharField(max_length=50,blank=True,null=True,db_index=True, unique=True)
     criado_em=models.DateTimeField(auto_now_add=True)
     atualizado_em=models.DateTimeField(auto_now=True)
+    email_pedido_abandonado_1=models.BooleanField(default=False)
+    email_pedido_abandonado_2=models.BooleanField(default=False)
     
     
     def total(self):
