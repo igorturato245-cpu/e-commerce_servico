@@ -12,3 +12,5 @@ Allow: /produtos/
 Allow: /institucional/
 Allow: /static/
 Allow: /media/
+
+Sitemap: https://luviahome.com.br/sitemap.xml

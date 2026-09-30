@@ -18,6 +18,12 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_view
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
+from produtos.sitemaps import ProductSitemap
+
+sitemaps = {
+    'produtos': ProductSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,5 +40,6 @@ urlpatterns = [
     path('senha/reset/enviado',auth_view.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('senha/reset/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('senha/reset/completo/',auth_view.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
-    path("robots.txt",TemplateView.as_view(template_name='robots.txt',content_type="text/plain"))
+    path("robots.txt",TemplateView.as_view(template_name='robots.txt',content_type="text/plain")),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
