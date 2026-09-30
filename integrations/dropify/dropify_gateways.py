@@ -96,7 +96,9 @@ class DropifyStrategy(IntegrationGatewayStrategy):
         response=requests.post(url,json=payload,headers=headers,timeout=30)
         
         if response.status_code in (200,201):
-            return True
+            data=response.json()
+            order_id=data.get('orderId') or data.get('id')
+            return order_id
     
         else:
             raise Exception(f'Falha ao enviar pedido para o fornecedor:{response.text}')

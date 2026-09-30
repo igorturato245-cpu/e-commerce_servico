@@ -122,7 +122,10 @@ class DropifyAdapter(IntegrationAdapterAbstract):
         
         status=data.get('status', 'PENDING')
         
-        return status
+        dados_envio=data.get('shipment') or {}
+        codigo_rastreio=dados_envio.get('trackingCode','')
+        
+        return status,codigo_rastreio
     
     def montar_payload_frete(self, cep, itens):
         from produtos.models import Product

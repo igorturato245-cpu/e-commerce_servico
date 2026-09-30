@@ -6,5 +6,6 @@
 {% else %}
 <h1>Olá {{pedido.usuario.first_name}}</h1>
 <p>Email relacionado ao pedido:{{pedido.id}}. Status atual de entrega:{{pedido.erp_status}}</p>
+<p>Seu código de rastrio é:<strong>{{pedido.tracking_code}}</strong></p>
 <p>Obrigado por comprar conosco, volte sempre!</p>
 {% endif %}

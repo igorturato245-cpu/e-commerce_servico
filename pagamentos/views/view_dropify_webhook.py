@@ -41,13 +41,14 @@ class DropifyWebhooks(View):
                     )
                 
             elif evento == 'order-status':           
-                erp_id=data.get('product')
+                order_id=data.get('orderId')
             
-                if erp_id:
-                    novo_status=gateway.status_pedido(erp_id)
-                    Pedido.objects.filter(erp_id=erp_id).update(
+                if order_id:
+                    novo_status,codigo_rastreio=gateway.status_pedido(order_id)
+                    Pedido.objects.filter(erp_order_id=order_id).update(
                         status=novo_status,
-                        erp_status=novo_status
+                        erp_status=novo_status,
+                        tracking_code=codigo_rastreio
                     )
         
         except Exception as e:

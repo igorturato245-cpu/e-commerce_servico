@@ -178,7 +178,8 @@ class CheckoutService:
                 obj=DropifyStrategy()
                 if obj.enviar_pedido(pedido,endereco):
                     pedido.enviado_dropify=True
-                    pedido.save(update_fields=['enviado_dropify'])
+                    pedido.erp_order_id=str(order_id)
+                    pedido.save(update_fields=['enviado_dropify','erp_order_id'])
                     logger.info(f'✔ Pedido #{pedido.pk} enviado com sucesso para a Dropify!')                    
             except Exception as e:
                 logger.error(f'❌ FALHA CRÍTICA ao enviar Pedido #{pedido.pk} para Dropify: {str(e)}')

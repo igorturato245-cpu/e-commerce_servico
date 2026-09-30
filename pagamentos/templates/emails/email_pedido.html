@@ -2,7 +2,7 @@
 <p>Email relacionado ao pedido:{{pedido.pk}}. Status Atual:{{pedido.status}}</p>
 {% if pedido.status == 'paid' %}
 <p>Obrigado por comprar conosco!</p>
-{% elif pedido.status == 'erp_confirmed' or 'erp_sent' %}
+{% elif pedido.status == 'erp_confirmed' or pedido.status == 'erp_sent' %}
 <p>Obrigado por comprar conosco!</p>
 {% else %}
 <p>Obrigado pela comprenssão, esperamos que volte sempre.</p>
