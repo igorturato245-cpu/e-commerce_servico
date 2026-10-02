@@ -5474,3 +5474,42 @@ font-size:13px;
       display: block; 
   }
 }
+
+
+
+
+
+
+
+
+
+
+.btn-whatsapp-flutuante {
+    position: fixed;             /* Faz o elemento ficar fixo na tela */
+    bottom: 25px;                /* Distância do fundo da página */
+    right: 25px;                 /* Distância da lateral direita */
+    width: 60px;                 /* Largura do botão */
+    height: 60px;                /* Altura do botão */
+    background-color: #25D366;   /* Cor oficial do WhatsApp */
+    color: white;                /* Cor do ícone */
+    border-radius: 50%;          /* Deixa o botão redondo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* Sombra elegante */
+    z-index: 99999;              /* Garante que fique por cima de tudo */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Animação suave */
+    text-decoration: none;
+}
+
+/* Efeito ao passar o mouse por cima */
+.btn-whatsapp-flutuante:hover {
+    transform: scale(1.1);       /* Aumenta ligeiramente de tamanho */
+    background-color: #20ba5a;   /* Tom de verde um pouco mais escuro */
+}
+
+/* Tamanho do ícone dentro da bolinha */
+.icone-wpp {
+    width: 34px;
+    height: 34px;
+}
