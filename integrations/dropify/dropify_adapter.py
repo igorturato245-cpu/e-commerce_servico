@@ -107,9 +107,18 @@ class DropifyAdapter(IntegrationAdapterAbstract):
     
     
     def extrair_estoque(self, data):
-        estoque=data.get('stockQuantity', 0)          
+        combinacoes = data.get('combinations', [])
+        if combinacoes:
+            total_estoque = sum(
+                comb.get('supply', {}).get('stockQuantity', 0)
+                for comb in combinacoes
+            )
+            return total_estoque
         
-        return estoque
+        if 'supply' in data and isinstance(data['supply'], dict):
+            return data['supply'].get('stockQuantity', 0)
+            
+        return data.get('stockQuantity', 0)
     
     
     def extrair_preco(self, data):
