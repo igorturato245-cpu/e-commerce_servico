@@ -2,7 +2,7 @@ from abc import ABC,abstractmethod
 
 class PayloadAdapter(ABC):
     @abstractmethod
-    def make_payload(self,pedido,endereco,return_url,notification_url,cpf_cliente,cep_cliente,items):
+    def make_payload(self,pedido,endereco,return_url,notification_url,cpf_cliente,cep_cliente):
         pass
     
     @abstractmethod
@@ -14,14 +14,18 @@ class PagSeguroCreatePayload(PayloadAdapter):
     def make_payload(self, pedido, endereco, return_url, notification_url, cpf_cliente, cep_cliente):
         
         items=[]
+        soma_itens_centavos=0
         
         for item in pedido.itens_pedido.all():
+            unit_amount=int(round(item.price * 100))
             items.append({
                 'reference_id':item.produto_id_str or str(item.id),
                 'name':item.produto_name[:100],
                 'quantity':item.quantidade,
-                'unit_amount':int(round(item.price * 100))
+                'unit_amount':unit_amount
             })
+            
+            soma_itens_centavos += unit_amount * item.quantidade
         
         payload={
             'reference_id':f'PED-{pedido.id}',
@@ -54,6 +58,12 @@ class PagSeguroCreatePayload(PayloadAdapter):
                 {'type':'PIX'},
             ],
         }
+        
+        total_produtos_pedido_centavos=int(round(pedido.total*100))
+        desconto_centavos=soma_itens_centavos - total_produtos_pedido_centavos
+        
+        if desconto_centavos > 0:
+            payload['discount_amount']=desconto_centavos
         
         return payload
     

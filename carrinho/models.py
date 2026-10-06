@@ -9,13 +9,14 @@ from produtos.models import Product
 class Carrinho(models.Model):
     usuario=models.ForeignKey(User, blank=True, null=True, db_index=True, on_delete=models.CASCADE)
     session_key=models.CharField(max_length=50,blank=True,null=True,db_index=True, unique=True)
+    cupom=models.ForeignKey('pagamentos.Cupons',on_delete=models.SET_NULL,null=True,blank=True)
     criado_em=models.DateTimeField(auto_now_add=True)
     atualizado_em=models.DateTimeField(auto_now=True)
     email_pedido_abandonado_1=models.BooleanField(default=False)
     email_pedido_abandonado_2=models.BooleanField(default=False)
     
     
-    def total(self):
+    def total(self):       
         total_produtos=self.itens.aggregate(#type:ignore
             soma_total=Sum(
                 ExpressionWrapper(
@@ -25,7 +26,28 @@ class Carrinho(models.Model):
             )
         )
         
-        total=total_produtos['soma_total']
+        total_bruto=total_produtos['soma_total'] or Decimal('0.00')
+        
+        if total_bruto == Decimal('0.00'):
+            return Decimal('0.00')
+        
+        total = total_bruto
+        
+        if self.cupom:
+            if self.cupom.esta_valido():
+                valor_elegivel=self.itens.filter(produto__ofertas_do_dia=False).aggregate(#type:ignore
+                    soma=Sum(
+                        ExpressionWrapper(
+                            F('quantidade')*F('preco_unitario'),
+                            output_field=DecimalField()
+                        )
+                    )
+                )
+                valor_soma=valor_elegivel['soma'] or Decimal('0.00')
+                
+                descontos_cupom=self.cupom.calcular_descontos(valor_soma)
+                
+                total=total_bruto - descontos_cupom
         
         return total or Decimal('0.00')
     

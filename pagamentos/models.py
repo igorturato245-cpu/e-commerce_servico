@@ -135,5 +135,41 @@ class Solicitacao_reembolso(models.Model):
     motivo=models.CharField(max_length=50)
     feedback=models.TextField(null=True,blank=True,max_length=300)
     evidencias=models.FileField(upload_to='evidencias-devolucao/')
-    status=models.CharField(max_length=20,choices=STATUS_CHOICES,default='pending')        
+    status=models.CharField(max_length=20,choices=STATUS_CHOICES,default='pending') 
+    
+    
+    
+    
+class Cupons(models.Model):
+    codigo=models.CharField(max_length=50,unique=True)  
+    valor=models.DecimalField(max_digits=10,decimal_places=2)
+    valor_minimo_pedido=models.DecimalField(max_digits=10,decimal_places=2,default=Decimal('0.00'))
+    ativo=models.BooleanField(default=True)
+    valido_ate=models.DateTimeField(null=True,blank=True)
+    usos_maximo=models.PositiveIntegerField(default=50)
+    usos_atuais=models.PositiveIntegerField(default=0)
+    
+    def esta_valido(self):
+        agora=timezone.now()
         
+        if not self.ativo:
+            return False
+        
+        if self.valido_ate and agora > self.valido_ate:
+            return False
+        
+        if self.usos_atuais >= self.usos_maximo:
+            return False
+        
+        return True
+    
+    def calcular_descontos(self,valor_elegivel):
+        if valor_elegivel < self.valor_minimo_pedido:
+            return Decimal('0.00')
+        
+        desconto=(valor_elegivel*self.valor)/Decimal('100')
+        
+        return min(valor_elegivel,desconto)
+    
+    def __str__(self):
+        return f"{self.codigo} ({self.valor})"

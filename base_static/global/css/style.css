@@ -2161,6 +2161,7 @@ Endereços
 /* Travas para nenhuma área filha furar o grid */
 .secao-itens  { grid-area: itens; min-width: 0; width: 100%; }
 .secao-frete  { grid-area: frete; min-width: 0; width: 100%; }
+.secao-cupom { grid-area: frete; min-width: 0; width: 100%; }
 .secao-upsell { grid-area: upsell; min-width: 0; width: 100%; }
 .secao-resumo { grid-area: resumo; min-width: 0; width: 100%; }
 
@@ -2173,6 +2174,85 @@ Endereços
     box-shadow: var(--shadow-soft);
     padding: 30px;
     box-sizing: border-box;
+}
+
+.form-cupom {
+    width: 100%;
+}
+
+.cupom-card {
+    background: var(--bg);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-soft);
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.label-cupom {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #71717a;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Campo de Digitação (Input) */
+.input-cupom {
+    width: 100%;
+    max-width: 320px;
+    height: 44px;
+    padding: 0 14px;
+    background-color: #fafafa;
+    border: 1px solid #e4e4e7;
+    border-radius: var(--radius-md, 8px);
+    font-size: 0.95rem;
+    color: #18181b;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+/* Efeito ao clicar no campo (Foco limpo) */
+.input-cupom:focus {
+    background-color: #ffffff;
+    border-color: #18181b;
+    box-shadow: 0 0 0 2px rgba(24, 24, 27, 0.08);
+}
+
+.input-cupom::placeholder {
+    color: #a1a1aa;
+    font-size: 0.9rem;
+}
+
+/* Botão Aplicar (Estilo Dark Minimalista) */
+.button-cupom {
+    height: 44px;
+    padding: 0 22px;
+    background-color: #18181b;
+    color: #ffffff;
+    border: 1px solid #18181b;
+    border-radius: var(--radius-md, 8px);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-cupom:hover {
+    background-color: #27272a;
+    border-color: #27272a;
+    transform: translateY(-1px);
+}
+
+.button-cupom:active {
+    transform: translateY(0);
 }
 
 /* ==========================================
@@ -2617,6 +2697,7 @@ Endereços
     */
     .secao-itens  { order: 1; width: 100%; }
     .secao-frete  { order: 2; width: 100%; }
+    .secao-cupom  { order: 2; width: 100%; }
     .secao-upsell { order: 3; width: 100%; }
     .secao-resumo { order: 4; width: 100%; }
 
@@ -2655,9 +2736,25 @@ Endereços
 @media (max-width: 600px) {
     .carrinho { padding: 20px 10px; }
     .carrinho-card { padding: 20px; }
+    .cupom-card { padding: 20px; }
     .carrinho-vazio-box { padding: 30px 25px; }
     .carrinho-vazio-box h2 { font-size: 20px; }
     .btn-voltar { width: 100%; text-align: center; }
+
+    .form-cupom {
+        order: 4; /* Ou a ordem logo antes do resumo */
+        margin-bottom: 15px;
+    }
+
+    .input-cupom {
+        max-width: 100%; /* No tablet/mobile ocupa a largura total */
+        height: 42px;
+    }
+
+    .button-cupom {
+        height: 42px;
+        padding: 0 18px;
+    }
 
     /* 🔥 2 CARDS OCUPANDO EXATAMENTE 100% DA LARGURA NO CELULAR 🔥 */
     .grid-produtos-carrinho {
@@ -2687,6 +2784,29 @@ Endereços
     .carrinho-card {
         padding: 15px;
         border-radius: var(--radius-lg);
+    }
+
+    .cupom-card {
+        padding: 15px;
+        border-radius: var(--radius-lg);
+    }
+
+     .label-cupom {
+        font-size: 0.8rem;
+    }
+
+    .input-cupom {
+        height: 42px;
+        font-size: 0.9rem;
+        padding: 0 12px;
+    }
+
+    /* No celular o botão estica 100% para facilitar o toque com o polegar */
+    .button-cupom {
+        width: 100%;
+        height: 42px;
+        margin-top: 10px;
+        font-size: 0.9rem;
     }
 
     .carrinho-item {

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pedido,Pedidoitem,Solicitacao_reembolso
+from .models import Pedido,Pedidoitem,Solicitacao_reembolso,Cupons
 
 class PedidoitemTabular(admin.TabularInline):
     model=Pedidoitem
@@ -29,3 +29,8 @@ class Soliciacao_reemboladmin(admin.ModelAdmin):
     ordering=('-id',)
     list_per_page=10
     list_max_show_all=200
+    
+    
+@admin.register(Cupons)
+class Cupons_admin(admin.ModelAdmin):
+    pass

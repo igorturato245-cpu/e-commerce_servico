@@ -122,6 +122,17 @@
         </div>
         {% endif %}
 
+        <form action="" method="post" class="form-cupom">
+          {% csrf_token %}
+          <div class="carrinho-entrega cupom-card secao-cupom">
+            <div>
+              <label for="Cupom" class="label-cupom">Cupom:</label>
+              <input class='input-cupom' type="text" id="cupom" name="cupom" placeholder="Aplique seu cupom aqui">
+            </div>
+            <button class="button-cupom" type="submit">Aplicar</button>
+          </div>
+        </form>
+
         <!-- 4. RESUMO DO PEDIDO -->
         <div class="carrinho-resumo carrinho-card secao-resumo">
           <h2>Resumo do pedido</h2>
