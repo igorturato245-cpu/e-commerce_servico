@@ -1,3 +1,4 @@
+import time
 from .models import Product
 from integrations.dropify.dropify_gateways import DropifyStrategy
 
@@ -32,10 +33,15 @@ class Produtos:
     def sincroniza_estoque(self):
         
         strategy=DropifyStrategy()
+        
+        base_url,headers=strategy._get_config()
+        
         produtos=Product.objects.exclude(erp_id__isnull=True).exclude(erp_id='')
         
         for produto in produtos:
             try:
+                
+                time.sleep(0.5)
                 novo_estoque=strategy.checar_estoque(produto.erp_id)
                 produto.estoque=novo_estoque
                 produto.remote_stock=novo_estoque
