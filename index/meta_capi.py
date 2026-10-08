@@ -110,7 +110,8 @@ class Building(AbstractBuilding):
                 
         payload={
             'data':[event_payload],
-            'access_token':settings.META_ACCESS_TOKEN
+            'access_token':settings.META_ACCESS_TOKEN,
+            'test_event_code': 'TEST25564'
         }
         
         return payload
