@@ -39,6 +39,7 @@
 
 {% block extra_scripts %}
 <!-- Event snippet for Compra (1) conversion page -->
+{% if success %}
 <script>
   gtag('set', 'user_data', {
     "email": "{{ pedido.usuario.email }}",
@@ -61,6 +62,7 @@
   });
 </script>
 
+
 <script>
   {% with val=pedido.total_com_frete|default:pedido.total %}
   fbq('track', 'Purchase', {
@@ -72,5 +74,6 @@
   }, { eventID: '{{ pedido.pk }}' });
   {% endwith %}
 </script>
+{% endif %}
 
 {% endblock extra_scripts %}

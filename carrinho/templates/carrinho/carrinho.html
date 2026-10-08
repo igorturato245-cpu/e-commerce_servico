@@ -373,12 +373,12 @@
     gtag('event', 'conversion', {'send_to': '{{Tag_carrinho}}'});
   </script>
 
-  <script>
+  <!--<script>
     fbq('track', 'AddToCart', {
     content_ids: [{% for item in items %}'{{ item.produto.id }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
     content_type: 'product',
     value: {{ total|default:0 }},
     currency: 'BRL'
   });
-  </script>
+  </script>-->
 {% endblock %}

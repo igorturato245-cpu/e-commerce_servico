@@ -54,15 +54,22 @@ class Checkout(View):
         
         valor_subtotal=float(calcular_frete['total_com_frete'])
         
+        produtos_ids=[str(item.produto.id) for item in itens]
+        
+        telefone=getattr(request.user.perfil,'telefone',None) if hasattr(request.user,'perfil') else None
+        
         obj=EnviaEvento()
         obj.enviar_evento_data(
             request=request,
             event_name='InitiateCheckout',
             user_email=request.user.email,
+            user_phone=telefone,
             custom_data={
                 'currency':'BRL',
                 'value':valor_subtotal,
-                'num_items':carrinho.itens.count()#type:ignore
+                'num_items':carrinho.itens.count(),#type:ignore
+                'content_ids':produtos_ids,
+                'content_type':'product'
             }
         )
         

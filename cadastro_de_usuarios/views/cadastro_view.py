@@ -100,13 +100,18 @@ class CriarUser(BaseCadastro,oficial_merg):
                 merge=oficial_merg()
                 merge.marge_cards(old_session_key,usuario)
                 
+        telefone=perfil.telefone if hasattr(perfil,'telefone') else None
+                
         obj=EnviaEvento()
         obj.enviar_evento_data(
             request=self.request,
             event_name='Lead',
+            event_id=str(usuario.pk),
+            user_email=usuario.email,
+            user_phone=telefone,
             )
                 
-        messages.success(self.request,'Sucesso ao criar sua conta, aproveite suas comprar.')
+        messages.success(self.request,'Sucesso ao criar sua conta, aproveite suas compras.')
         
         return redirect('index:index')
     
@@ -154,7 +159,7 @@ class Atualizauser(BaseCadastro):
             if password:
                 autentica=authenticate(
                     self.request,
-                    userneme=usuario.username,
+                    username=usuario.username,
                     password=password
                 )
                 

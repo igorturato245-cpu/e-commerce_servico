@@ -27,10 +27,15 @@ class EnviaEvento:
             
         cliente_user_agent=request.META.get('HTTP_USER_AGENT','')
         
+        fbc=request.COOKIES.get('_fbc')
+        fbp=request.COOKIES.get('_fbp')
+        
         obj_hash=ConverteHash()
         
         obj=Building()
-        user_data=obj.cria_dados_usuarios(cliente_id_address,cliente_user_agent)
+        user_data_bruto=obj.cria_dados_usuarios(cliente_id_address,cliente_user_agent,fbc,fbp)
+        
+        user_data={chave:valor for chave,valor in user_data_bruto.items() if valor is not None}
         
         if user_email:
             user_data["em"]=[obj_hash.hash_data(user_email)]
@@ -59,7 +64,7 @@ class EnviaEvento:
 
 class AbstractBuilding(ABC):
     @abstractmethod
-    def cria_dados_usuarios(self,cliente_ip, cliente_user):
+    def cria_dados_usuarios(self,cliente_ip, cliente_user,fbc,fbp):
         pass
     
     @abstractmethod
@@ -73,11 +78,13 @@ class AbstractBuilding(ABC):
         
         
 class Building(AbstractBuilding):
-    def cria_dados_usuarios(self,cliente_ip, cliente_user):
+    def cria_dados_usuarios(self,cliente_ip, cliente_user,fbc,fbp):
         
         user_data={
             'client_ip_address':cliente_ip,
-            'client_user_agent':cliente_user
+            'client_user_agent':cliente_user,
+            'fbc':fbc,
+            'fbp':fbp,
         }
         
         return user_data
